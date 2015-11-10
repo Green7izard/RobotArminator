@@ -31,3 +31,5 @@
 **/~$*
 # Other temp files
 **/~*.tmp
+
+*.lock
