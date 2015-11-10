@@ -26,3 +26,10 @@
 *.exe
 *.out
 *.app
+
+# Word temp files
+**/~$*
+# Other temp files
+**/~*.tmp
+
+*.lock
