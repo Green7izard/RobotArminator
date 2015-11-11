@@ -41,5 +41,6 @@ Visual Studio/RobotArminator/ipch/*
 **/*.sdf
 Visual Studio/RobotArminator/RobotArminator/Debug/*
 Visual Studio/RobotArminator/Debug/*
+Visual Studio/RobotArminator/packages/*
 *.opensdf
 
