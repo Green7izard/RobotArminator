@@ -35,9 +35,11 @@
 *.lock
 Visual Studio/RobotArminator/.vs/*
 Visual Studio/RobotArminator/ipch/*
-Visual Studio/RobotArminator/RobotArminator.sln
-Visual Studio/RobotArminator/RobotArminator/RobotArminator.vcxproj
-Visual Studio/RobotArminator/RobotArminator/RobotArminator.vcxproj.filters
+*.sln
+*.vcxproj
+*.vcxproj.filters
+**/*.sdf
 Visual Studio/RobotArminator/RobotArminator/Debug/*
 Visual Studio/RobotArminator/Debug/*
-Visual Studio/RobotArminator/RobotArminator.opensdf
+*.opensdf
+
