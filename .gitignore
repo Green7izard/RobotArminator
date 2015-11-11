@@ -43,3 +43,5 @@ Visual Studio/RobotArminator/RobotArminator/Debug/*
 Visual Studio/RobotArminator/Debug/*
 *.opensdf
 
+*.vcxproj.user
+*.aps
