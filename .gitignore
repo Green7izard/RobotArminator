@@ -33,7 +33,9 @@
 **/~*.tmp
 
 *.lock
+
 Visual Studio/RobotArminator/.vs/*
+Visual Studio/RobotArminator/RobotArminator/.vs/*
 Visual Studio/RobotArminator/ipch/*
 *.sln
 *.vcxproj
@@ -41,6 +43,6 @@ Visual Studio/RobotArminator/ipch/*
 **/*.sdf
 Visual Studio/RobotArminator/RobotArminator/Debug/*
 Visual Studio/RobotArminator/Debug/*
-Visual Studio/RobotArminator/packages/*
+Visual Studio/RobotArminator/RobotArminator/packages/*
 *.opensdf
 
