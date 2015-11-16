@@ -48,3 +48,4 @@ Visual Studio/RobotArminator/RobotArminator/packages/*
 
 *.vcxproj.user
 *.aps
+Visual Studio/RobotArminator/packages/*

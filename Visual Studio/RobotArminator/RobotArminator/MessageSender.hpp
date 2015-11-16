@@ -5,8 +5,10 @@ class MessageSender
 public:
     MessageSender();
     ~MessageSender();
-    template <class T>
+   
 protected:
-    void notify(T Object);
+     void notify(T Object);
+private:
+    List<MessageBox> listeners;
 };
 
