@@ -13,7 +13,10 @@ MessageSender<T>::~MessageSender()
 }
 
 template <class T>
-void MessageSender<T>::notify(T Object)
+void MessageSender<T>::notify(T object)
 {
-
+    for each (MessageBox box in listeners)
+    {
+        listerens.addToQueue(object);
+    }
 }
