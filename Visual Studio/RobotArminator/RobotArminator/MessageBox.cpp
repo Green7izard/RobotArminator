@@ -14,7 +14,9 @@ MessageBox<T>::~MessageBox()
 template<class T>
 void MessageBox<T>::addToQueue(T item)
 {
+    queueMutux.lock();
     queue.push(item);
+    queueMutux.unlock();
 }
 
 template<class T>

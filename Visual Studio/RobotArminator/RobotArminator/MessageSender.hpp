@@ -1,4 +1,7 @@
 #pragma once
+#include<list>
+#include "MessageBox.hpp"
+
 template <class T>
 class MessageSender
 {
@@ -7,8 +10,8 @@ public:
     ~MessageSender();
    
 protected:
-     void notify(T Object);
+     void notify(T object);
 private:
-    List<MessageBox> listeners;
+    std::list<MessageBox<T>> listeners;
 };
 
