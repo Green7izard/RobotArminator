@@ -1,8 +1,8 @@
 #pragma once
-
-enum Orientation { UP, SIDE };
-
-class IComputerVision
+#include "Orientation.hpp"
+#include "MessageSender.hpp"
+#include "VisionPosition.hpp"
+class IComputerVision : public MessageSender<VisionPosition>
 {
 public:
    
