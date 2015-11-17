@@ -7,6 +7,10 @@ namespace RobotArminator
     {
     }
 
+	Trajectory::Trajectory(Vector position, Vector speed, time_t time) :position(position), speed(speed), time(time) {
+
+	}
+
 
     Trajectory::~Trajectory()
     {
