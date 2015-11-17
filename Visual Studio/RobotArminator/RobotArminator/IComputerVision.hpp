@@ -1,15 +1,21 @@
 #pragma once
+#include "Orientation.hpp"
+#include "MessageSender.hpp"
+#include "VisionPosition.hpp"
 
-enum Orientation { UP, SIDE };
-
-class IComputerVision
+namespace ComputerVision
 {
-public:
-   
-    IComputerVision(Orientation orientation);
-    virtual ~IComputerVision();
-private:
-    Orientation orientation;
+    using namespace RobotArminator;
 
-};
+    class IComputerVision : public MessageSender<VisionPosition>
+    {
+    public:
+
+        IComputerVision(Orientation orientation);
+        virtual ~IComputerVision();
+    private:
+        Orientation orientation;
+
+    };
+}
 
