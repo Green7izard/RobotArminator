@@ -1,2 +1,5 @@
 #pragma once
-enum Orientation { UP, SIDE };
+namespace RobotArminator
+{
+    enum Orientation { UP, SIDE };
+}

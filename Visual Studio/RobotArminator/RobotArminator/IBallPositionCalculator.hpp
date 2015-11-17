@@ -4,8 +4,10 @@
 #include "VisionPosition.hpp"
 #include "Trajectory.hpp"
 
-namespace RobotArminator
+namespace BallPositionCalculator
 {
+    using namespace RobotArminator;
+
     class IBallPositionCalculator : public MessageSender<VisionPosition>, public MessageBox <Trajectory>
     {
     public:
