@@ -26,7 +26,7 @@ VisionPosition BallPositionCalculator::getPositionsFromQueue()
 
 void BallPositionCalculator::calculateTwoPositionToOnePosition(VisionPosition sideView, VisionPosition topView)
 {
-	float time;
+	time_t time;
 	if(sideView.time >= topView.time)
 	{
 		time = sideView.time;
@@ -35,7 +35,7 @@ void BallPositionCalculator::calculateTwoPositionToOnePosition(VisionPosition si
 	{
 		time = topView.time;
 	}
-	Trajectory newTraject(time, Vector(0, 0, 0), Vector(topView.X, topView.Y, sideView.Y));
+	Trajectory newTraject( Vector(0, 0, 0), Vector(topView.X, topView.Y, sideView.Y), time);
 	std::cout << "X: " << newTraject.position.x << "mm and Y: " << newTraject.position.y << "mm and Z: " << newTraject.position.z << "mm and Time: " << newTraject.time << "ms";
 }
 
