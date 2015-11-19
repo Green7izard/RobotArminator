@@ -1,9 +1,9 @@
 #pragma once
 #include "Orientation.hpp"
-#include "MessageSender.hpp"
+#include "MessageSender.cpp"
 #include "VisionPosition.hpp"
 
-namespace ComputerVision
+namespace Vision
 {
     using namespace RobotArminator;
 
@@ -11,10 +11,12 @@ namespace ComputerVision
     {
     public:
 
-        IComputerVision(Orientation orientation);
+      
         virtual ~IComputerVision();
     private:
         Orientation orientation;
+    protected:
+        IComputerVision(Orientation orientation);
 
     };
 }

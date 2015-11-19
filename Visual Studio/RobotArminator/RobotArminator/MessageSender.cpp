@@ -16,7 +16,7 @@ namespace RobotArminator
     }
 
     template<class T>
-    void MessageSender<T>::addListener(MessageBox<T> listerner)
+    void MessageSender<T>::addListener(IMessageBox<T>* listerner)
     {
         listenersMutex.lock();
         listeners.push_front(listerner);
@@ -24,7 +24,7 @@ namespace RobotArminator
     }
 
     template<class T>
-    void MessageSender<T>::removeListener(MessageBox<T> listerner)
+    void MessageSender<T>::removeListener(IMessageBox<T>* listerner)
     {
         listenersMutex.lock();
         listeners.remove(listerner);
@@ -35,9 +35,9 @@ namespace RobotArminator
     void MessageSender<T>::notify(T object)
     {
         listenersMutex.lock();
-        for each (MessageBox box in listeners)
+        for each (IMessageBox<T> * box in listeners)
         {
-            listerens.addToQueue(object);
+            box->addToMessageBox(object);
         }
         listenersMutex.unlock();
     }

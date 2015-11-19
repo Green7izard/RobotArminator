@@ -1,18 +1,18 @@
 #pragma once
 #include "IRobotControl.hpp"
-#include "MessageBox.hpp"
+#include "IMessageBox.hpp"
 #include "Trajectory.hpp"
-namespace ArmMovementCalculator
+namespace ArmMovement
 {
-    using namespace RobotControl;
+    using namespace Robot;
 
-    class IArmMovementCalculator : public MessageBox<Trajectory>
+    class IArmMovementCalculator : public IMessageBox<Trajectory>
     {
     public:
-        IArmMovementCalculator(IRobotControl robotControl);
-        virtual ~IArmMovementCalculator();
+        IArmMovementCalculator(IRobotControl * robotControl);
+        virtual ~IArmMovementCalculator()=0;
     protected:
-        IRobotControl robotControl;
+        IRobotControl * robotControl;
 
     };
 
