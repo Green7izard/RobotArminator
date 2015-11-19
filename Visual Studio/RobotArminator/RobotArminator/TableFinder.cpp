@@ -4,12 +4,12 @@
 namespace Vision {
 
     using namespace RobotArminator;
-    
-    TableFinder::TableFinder(Orientation orientation, Camera cam) : IComputerVision(orientation), camera(cam)
+
+    TableFinder::TableFinder(Orientation orientation, Camera* cam) : IComputerVision(orientation), camera(cam)
     {
         tabel = detectTable();
     }
-    
+
 
     TableFinder::~TableFinder() {
     }
@@ -20,7 +20,7 @@ namespace Vision {
         notify(position);
     }
 
-    Table TableFinder::detectTable() 
+    Table TableFinder::detectTable()
     {
         //TODO
         return Table();
