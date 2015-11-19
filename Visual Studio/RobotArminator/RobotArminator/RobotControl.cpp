@@ -26,10 +26,17 @@ void RobotControl::hitBall(Position aPosition)
 {
 }
 
-void RobotControl::sendCommand(std::string aCommand)
+void RobotControl::sendData(std::string aData)
 {
-    char buffer = aCommand.size();
+    char buffer = aData.size();
 }
+
+std::string RobotControl::receiveData()
+{
+
+}
+
+
 
 /* setup communication with robotarm via com port. */
 void RobotControl::initCommunication(std::string aComport)

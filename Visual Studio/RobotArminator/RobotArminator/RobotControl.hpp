@@ -12,7 +12,8 @@ public:
     Position getPosition();
     void hitBall(Position aPosition);
 private:
-    void sendCommand(std::string aCommand);
+    void sendData(std::string aData);
+    std::string receiveData();
     void initCommunication(std::string aComport);
     HANDLE createHandle(std::string aComport);
     void setHandleParameters();
