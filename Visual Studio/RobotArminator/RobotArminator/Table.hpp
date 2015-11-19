@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace ComputerVision
+namespace Vision
 {
     /**
     * Specifies a corner location in the image

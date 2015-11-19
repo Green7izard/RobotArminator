@@ -12,12 +12,12 @@ namespace RobotArminator
     public:
         MessageSender();
         ~MessageSender();
-        void addListener(MessageBox<T> listerner);
-        void removeListener(MessageBox<T> listerner);
+        void addListener(IMessageBox<T> * listerner);
+        void removeListener(IMessageBox<T> * listerner);
     protected:
         void notify(T object);
     private:
-        std::list<MessageBox<T>> listeners;
+        std::list<IMessageBox<T> *> listeners;
         std::mutex listenersMutex;
 
     };
