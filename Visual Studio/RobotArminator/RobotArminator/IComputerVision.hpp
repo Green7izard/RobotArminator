@@ -11,10 +11,12 @@ namespace Vision
     {
     public:
 
-        IComputerVision(Orientation orientation);
+      
         virtual ~IComputerVision();
     private:
         Orientation orientation;
+    protected:
+        IComputerVision(Orientation orientation);
 
     };
 }
