@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	RobotArminator::VisionPosition visionPositionTopView = { 1000, 300, time_t(0.1), SIDE };
 
 	ballPositionCalculator.startPositionCalculation();
-	ballPositionCalculator.calculateTwoPositionToOnePosition(visionPositionSideView, visionPositionTopView);
+	ballPositionCalculator.calculateTraject(visionPositionSideView, visionPositionTopView);
 
 	//wait for input
 	std::cin.get();    

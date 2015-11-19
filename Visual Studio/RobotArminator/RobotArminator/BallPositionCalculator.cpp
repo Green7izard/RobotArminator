@@ -24,19 +24,19 @@ VisionPosition BallPositionCalculator::getPositionsFromQueue()
 }
 
 
-void BallPositionCalculator::calculateTwoPositionToOnePosition(VisionPosition sideView, VisionPosition topView)
+void BallPositionCalculator::calculateTraject(VisionPosition sideView, VisionPosition topView)
 {
-	time_t time;
-	if(sideView.time >= topView.time)
-	{
-		time = sideView.time;
-	}
-	else
-	{
-		time = topView.time;
-	}
-	Trajectory newTraject( Vector(0, 0, 0), Vector(topView.X, topView.Y, sideView.Y), time);
-	std::cout << "X: " << newTraject.position.x << "mm and Y: " << newTraject.position.y << "mm and Z: " << newTraject.position.z << "mm and Time: " << newTraject.time << "ms";
+	calculateLiniairTraject(topView);
+}
+
+void BallPositionCalculator::calculateLiniairTraject(VisionPosition pos)
+{
+
+}
+
+void BallPositionCalculator::calculateCircleTraject(VisionPosition pos)
+{
+
 }
 
 
