@@ -3,7 +3,7 @@
 #include "Trajectory.hpp"
 #include "Vector.hpp"
 
-namespace BallPositionCalculator
+namespace BallPosition
 {
 
 	using namespace RobotArminator;
@@ -29,11 +29,15 @@ namespace BallPositionCalculator
 
 	void BallPositionCalculator::calculateTraject(VisionPosition sideView, VisionPosition topView)
 	{
-		//calculateLiniairTraject(topView);
+		calculateLiniairTraject(topView);
 	}
 
 	void BallPositionCalculator::calculateLiniairTraject(VisionPosition pos)
 	{
+		float multiplier = (float)(pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
+		int startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
+		int newY = (multiplier * 2740) + startValue;
+		std::cout << multiplier << " * " << "2740" << " + " << startValue << " = " << newY << std::endl;
 
 	}
 

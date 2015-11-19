@@ -3,7 +3,7 @@
 #include "MessageSender.hpp"
 #include "VisionPosition.hpp"
 
-namespace ComputerVision
+namespace Vision
 {
     using namespace RobotArminator;
 

@@ -2,18 +2,20 @@
 #include "VisionPosition.hpp"
 #include <ctime>
 
-namespace BallPositionCalculator
+namespace BallPosition
 {
 	using namespace RobotArminator;
 
 	class BallPositionCalculator
 	{
 	public:
+		int tableWidth = 2740;
+
 		VisionPosition lastSidePosition = VisionPosition(1000, 300, std::time_t(5), SIDE);
 		VisionPosition lastTopPosition = VisionPosition(1000, 300, std::time_t(5), TOP);
 
-		VisionPosition currentSidePosition = VisionPosition(2000, 200, std::time_t (4.9), SIDE);
-		VisionPosition currentTopPosition = VisionPosition(2000, 500, std::time_t (4.9), TOP);
+		VisionPosition currentSidePosition;
+		VisionPosition currentTopPosition;
 
 		void run();
 		void startPositionCalculation();

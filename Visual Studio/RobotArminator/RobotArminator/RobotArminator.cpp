@@ -6,23 +6,22 @@
 #include "stdafx.h"
 #include "Controller.hpp"
 #include "BallPositionCalculator.hpp"
-#include "VisionPosition.hpp"
 
 using namespace RobotArminator;
-using namespace BallPositionCalculator;
+using namespace BallPosition;
 
 int main(int argc, char* argv[])
 {
 	BallPositionCalculator ballPositionCalculator;
-	RobotArminator::VisionPosition visionPositionSideView = { 1000, 200, time_t(0.1), TOP };
-	RobotArminator::VisionPosition visionPositionTopView = { 1000, 300, time_t(0.1), SIDE };
+	VisionPosition visionPositionSideView = { 2000, 200, std::time_t(4.9), SIDE };
+	VisionPosition visionPositionTopView = { 2000, 500, std::time_t(4.9), TOP };
 
 	ballPositionCalculator.startPositionCalculation();
 	ballPositionCalculator.calculateTraject(visionPositionSideView, visionPositionTopView);
 
 	//wait for input
-	std::cin.get();    
-	
-	return 0;
+	std::cin.get(); 
+    //Controller controller;
+    return 0;
 }
 

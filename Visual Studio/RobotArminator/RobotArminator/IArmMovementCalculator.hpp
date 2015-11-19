@@ -2,9 +2,9 @@
 #include "IRobotControl.hpp"
 #include "MessageBox.hpp"
 #include "Trajectory.hpp"
-namespace ArmMovementCalculator
+namespace ArmMovement
 {
-    using namespace RobotControl;
+    using namespace Robot;
 
     class IArmMovementCalculator : public MessageBox<Trajectory>
     {
