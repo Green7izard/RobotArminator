@@ -10,6 +10,5 @@ namespace RobotArminator
         MessageBox();
         ~MessageBox();
         void addToMessageBox(T item);
-        T MessageBox<T>::popFromMessageBox();
     };
 }
