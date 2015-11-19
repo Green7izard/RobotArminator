@@ -1,23 +1,29 @@
 #pragma once
 #include "IRobotControl.hpp"
 #include <iostream>
+#include "Vector.hpp"
 #include <Windows.h>
+
 
 class RobotControl : public IRobotControl
 {
 public:
     RobotControl();
     ~RobotControl();
-    void moveArm(Position aPosition);
-    Position getPosition();
-    void hitBall(Position aPosition);
-private:
+    void moveArm(Vector aPosition);
+    Vector getPosition();
+    void hitBall(Vector aPosition);
+    void setupCommunication(std::string aComport);
     void sendData(std::string aData);
-    std::string receiveData();
-    void initCommunication(std::string aComport);
+    void receiveData(const int aDataSize);
+private:
+    
     HANDLE createHandle(std::string aComport);
-    void setHandleParameters();
-    void setHandleTimeouts();
+    void setupHandleParameters();
+    void setupHandleTimeouts();
+    void closeHandle(HANDLE aHandle);
+    
     HANDLE handle;
 };
+
 
