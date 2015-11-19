@@ -9,11 +9,12 @@
 #include "VisionPosition.hpp"
 
 using namespace RobotArminator;
+using namespace BallPositionCalculator;
 
 int main(int argc, char* argv[])
 {
 	BallPositionCalculator ballPositionCalculator;
-	RobotArminator::VisionPosition visionPositionSideView = { 1000, 200, time_t(0.1), UP };
+	RobotArminator::VisionPosition visionPositionSideView = { 1000, 200, time_t(0.1), TOP };
 	RobotArminator::VisionPosition visionPositionTopView = { 1000, 300, time_t(0.1), SIDE };
 
 	ballPositionCalculator.startPositionCalculation();

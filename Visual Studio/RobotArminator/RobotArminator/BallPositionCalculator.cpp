@@ -3,53 +3,57 @@
 #include "Trajectory.hpp"
 #include "Vector.hpp"
 
-using namespace RobotArminator;
-
-//run thread
-void BallPositionCalculator::run()
-{
-}
-
-//start threadfunction
-void BallPositionCalculator::startPositionCalculation()
-{
-	std::cout << "Start!" << std::endl;
-}
-
-
-VisionPosition BallPositionCalculator::getPositionsFromQueue()
-{
-	currentPosition = VisionPosition();
-	return currentPosition;
-}
-
-
-void BallPositionCalculator::calculateTraject(VisionPosition sideView, VisionPosition topView)
-{
-	calculateLiniairTraject(topView);
-}
-
-void BallPositionCalculator::calculateLiniairTraject(VisionPosition pos)
+namespace BallPositionCalculator
 {
 
-}
+	using namespace RobotArminator;
 
-void BallPositionCalculator::calculateCircleTraject(VisionPosition pos)
-{
+	//run thread
+	void BallPositionCalculator::run()
+	{
+	}
 
-}
-
-
-void BallPositionCalculator::sendPosition()
-{
-}
-
-
-BallPositionCalculator::BallPositionCalculator()
-{
-}
+	//start threadfunction
+	void BallPositionCalculator::startPositionCalculation()
+	{
+		std::cout << "Start!" << std::endl;
+	}
 
 
-BallPositionCalculator::~BallPositionCalculator()
-{
+	VisionPosition BallPositionCalculator::getPositionsFromQueue()
+	{
+		currentTopPosition = VisionPosition();
+		return currentTopPosition;
+	}
+
+
+	void BallPositionCalculator::calculateTraject(VisionPosition sideView, VisionPosition topView)
+	{
+		//calculateLiniairTraject(topView);
+	}
+
+	void BallPositionCalculator::calculateLiniairTraject(VisionPosition pos)
+	{
+
+	}
+
+	void BallPositionCalculator::calculateCircleTraject(VisionPosition pos)
+	{
+
+	}
+
+
+	void BallPositionCalculator::sendPosition()
+	{
+	}
+
+
+	BallPositionCalculator::BallPositionCalculator()
+	{
+	}
+
+
+	BallPositionCalculator::~BallPositionCalculator()
+	{
+	}
 }

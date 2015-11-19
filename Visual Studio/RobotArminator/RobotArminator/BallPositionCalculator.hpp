@@ -1,24 +1,29 @@
 #pragma once
 #include "VisionPosition.hpp"
+#include <ctime>
 
-
-class BallPositionCalculator
+namespace BallPositionCalculator
 {
-public:
-	RobotArminator::VisionPosition lastSidePosition = VisionPosition(0,2,3,UP);
-	RobotArminator::VisionPosition lastTopPosition;
-	RobotArminator::VisionPosition currentSidePosition;
-	RobotArminator::VisionPosition currentTopPosition;
+	using namespace RobotArminator;
 
-	void run();
-	void startPositionCalculation();
-	RobotArminator::VisionPosition getPositionsFromQueue();
-	void calculateTraject(RobotArminator::VisionPosition pos1, RobotArminator::VisionPosition pos2);
-	void calculateLiniairTraject(VisionPosition pos);
-	void calculateCircleTraject(VisionPosition pos);
-	void sendPosition();
+	class BallPositionCalculator
+	{
+	public:
+		VisionPosition lastSidePosition = VisionPosition(1000, 300, std::time_t(5), SIDE);
+		VisionPosition lastTopPosition = VisionPosition(1000, 300, std::time_t(5), TOP);
 
-	BallPositionCalculator();
-	virtual ~BallPositionCalculator();
-};
+		VisionPosition currentSidePosition = VisionPosition(2000, 200, std::time_t (4.9), SIDE);
+		VisionPosition currentTopPosition = VisionPosition(2000, 500, std::time_t (4.9), TOP);
 
+		void run();
+		void startPositionCalculation();
+		VisionPosition getPositionsFromQueue();
+		void calculateTraject(RobotArminator::VisionPosition pos1, VisionPosition pos2);
+		void calculateLiniairTraject(VisionPosition pos);
+		void calculateCircleTraject(VisionPosition pos);
+		void sendPosition();
+
+		BallPositionCalculator();
+		virtual ~BallPositionCalculator();
+	};
+}
