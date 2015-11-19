@@ -4,7 +4,7 @@
 #include "VisionPosition.hpp"
 #include "Trajectory.hpp"
 
-namespace BallPositionCalculator
+namespace BallPosition
 {
     using namespace RobotArminator;
 
