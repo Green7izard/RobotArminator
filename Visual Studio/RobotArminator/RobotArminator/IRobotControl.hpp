@@ -2,7 +2,7 @@
 
 #include "Vector.hpp"
 
-namespace RobotControl 
+namespace Robot
 {
     using namespace RobotArminator;
 
