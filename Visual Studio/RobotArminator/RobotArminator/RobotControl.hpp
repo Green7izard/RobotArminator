@@ -4,6 +4,7 @@
 #include "Vector.hpp"
 #include <Windows.h>
 
+using namespace Robot;
 
 class RobotControl : public IRobotControl
 {

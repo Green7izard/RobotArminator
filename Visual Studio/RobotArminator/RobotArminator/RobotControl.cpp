@@ -1,6 +1,5 @@
 
 #include "RobotControl.hpp"
-#include <vector>
 
 RobotControl::RobotControl() : handle(NULL)
 {

@@ -42,6 +42,7 @@ Visual Studio/RobotArminator/ipch/*
 *.vcxproj.filters
 **/*.sdf
 Visual Studio/RobotArminator/RobotArminator/Debug/*
+Visual Studio/RobotArminator/RobotArminator/Release/*
 Visual Studio/RobotArminator/RobotArminator/x64/*
 Visual Studio/RobotArminator/Debug/*
 Visual Studio/RobotArminator/RobotArminator/packages/*
