@@ -16,5 +16,6 @@ namespace Robot
     protected:
         IRobotControl();
     };
-
+    inline IRobotControl::IRobotControl() {};
+    inline IRobotControl::~IRobotControl() {};
 }
