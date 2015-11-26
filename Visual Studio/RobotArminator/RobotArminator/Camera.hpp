@@ -16,7 +16,7 @@ namespace Vision
         bool mirrored;
 
         //The Camera
-        //cv::VideoCapture camera;
+        cv::VideoCapture camera;
 
     public:
         Camera(int cameraNumber, bool mirrored);

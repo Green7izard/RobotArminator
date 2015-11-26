@@ -3,7 +3,7 @@
 namespace Vision
 {
 
-    Camera::Camera(int cameraNumber, bool mirrored = false) : cameraNumber(cameraNumber), mirrored(mirrored)
+	Camera::Camera(int cameraNumber, bool mirrored = false) : cameraNumber(cameraNumber), mirrored(mirrored), camera(cameraNumber)
     {
     }
 
