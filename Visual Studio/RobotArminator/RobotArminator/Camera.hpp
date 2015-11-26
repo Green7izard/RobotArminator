@@ -21,6 +21,8 @@ namespace Vision
     public:
         Camera(int cameraNumber, bool mirrored);
         virtual ~Camera();
+        virtual bool isMirrored();
+        void getCurrentImage(cv::Mat output);
 
     };
 }

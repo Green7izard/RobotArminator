@@ -4,24 +4,20 @@
 #include <iostream>
 #include <ctime>
 #include "stdafx.h"
-#include "Controller.hpp"
-#include "BallPositionCalculator.hpp"
+#include "opencv2/opencv.hpp"
+#include "Camera.hpp"
 
-using namespace RobotArminator;
-using namespace BallPosition;
 
 int main(int argc, char* argv[])
 {
-	BallPositionCalculator ballPositionCalculator;
-	VisionPosition visionPositionSideView = { 2000, 200, std::time_t(4.9), SIDE };
-	VisionPosition visionPositionTopView = { 2000, 500, std::time_t(4.9), TOP };
 
-	ballPositionCalculator.startPositionCalculation();
-	ballPositionCalculator.calculateTraject(visionPositionSideView, visionPositionTopView);
-
-	//wait for input
-	std::cin.get(); 
-    //Controller controller;
+    Vision::Camera cam(0, false);
+    std::cout << "Start Camera";
+    while (true) {
+        cv::Mat cameraFrame;
+        cam.getCurrentImage(cameraFrame);
+        imshow("cam", cameraFrame);
+    }
     return 0;
 }
 
