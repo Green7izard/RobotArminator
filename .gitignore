@@ -51,3 +51,5 @@ Visual Studio/RobotArminator/RobotArminator/packages/*
 *.vcxproj.user
 *.aps
 Visual Studio/RobotArminator/packages/*
+Cosimir/RV-2AJ/RV-2AJ.INI
+*RV-2AJ.INI
