@@ -1,4 +1,3 @@
-#pragma once
 #define ASIO_STANDALONE 
 #define ASIO_HAS_STD_ADDRESSOF
 #define ASIO_HAS_STD_ARRAY
