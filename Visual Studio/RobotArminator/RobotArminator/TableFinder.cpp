@@ -1,4 +1,5 @@
 #include "TableFinder.hpp"
+#include <ctime>
 
 
 namespace Vision {
@@ -15,6 +16,16 @@ namespace Vision {
     }
 
     void TableFinder::run() {
+        cv::Mat cameraFrame;
+        Position2D position;
+        std::time_t time;
+        while (true) {
+            time = std::time(nullptr);
+            camera->getCurrentImage(cameraFrame);
+            locateObject(cameraFrame, position);
+            setPosition(convertToCoordinate(position.X, position.Y, time));
+            if (cv::waitKey(1) >= 0) break;
+        }
         //TODO
     }
 

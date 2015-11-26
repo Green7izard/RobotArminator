@@ -72,8 +72,8 @@ namespace Vision
         * @param image the incomming image
         * @return the location
         */
-        virtual VisionPosition* locateObject(cv::Mat &image) = 0;
-
+        virtual void locateObject(cv::Mat &image, Position2D &position) = 0;
+        
         /**
         * Sets the image size
         */
