@@ -18,11 +18,48 @@ namespace Vision
         //The Camera
         cv::VideoCapture camera;
 
+        //The height of the image
+        int width = FRAME_WIDTH;
+        int height = FRAME_HEIGHT;
+
     public:
-        Camera(int cameraNumber, bool mirrored);
+        //Default height
+        const static int FRAME_WIDTH = 640;
+        //Default width
+        const static int FRAME_HEIGHT = 480;
+
+        /**
+        * Creates the camera
+        *
+        * @param cameraNumber the ID of the Camera (example: 0 for the laptop camera)
+        * @param mirrored set it to true if the camera is mirrored like the laptop camera
+        * @param width the width of the image
+        * @param height the height of the image
+        */
+        Camera(int cameraNumber, bool mirrored = false, int width = FRAME_WIDTH, int height = FRAME_HEIGHT);
+
+        //Deconstructor, closes the camera and terminates it
         virtual ~Camera();
+
+        //Whether it is mirrored or not
         virtual bool isMirrored();
-        void getCurrentImage(cv::Mat output);
+
+        /**
+        * Gets the current image
+        * @param output where to store it
+        */
+        void getCurrentImage(cv::Mat& output);
+
+        /**
+        * Sets the image size
+        */
+        void setSize(int width = FRAME_WIDTH, int height = FRAME_HEIGHT);
+
+        //Gets the hight of the image
+        int getHeight();
+
+        //Gets the width of the image
+        int getWidth();
 
     };
 }

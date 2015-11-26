@@ -4,10 +4,12 @@
 namespace Vision
 {
 
-	Camera::Camera(int cameraNumber, bool mirrored = false) : cameraNumber(cameraNumber), mirrored(mirrored), camera(cameraNumber)
+	Camera::Camera(int cameraNumber, bool mirrored, int width, int height) : height(height), width(width), cameraNumber(cameraNumber), mirrored(mirrored)
     {
+        camera.open(cameraNumber);
+        camera.set(CV_CAP_PROP_FRAME_WIDTH, width);
+        camera.set(CV_CAP_PROP_FRAME_HEIGHT, height);
     }
-
 
     Camera::~Camera()
     {
@@ -20,15 +22,22 @@ namespace Vision
         return mirrored;
     }
 
-    void Camera::getCurrentImage(cv::Mat output)
+    void Camera::getCurrentImage(cv::Mat& output)
     {
         if (!camera.isOpened())
         {
             camera.open(cameraNumber);
+            camera.set(CV_CAP_PROP_FRAME_WIDTH, width);
+            camera.set(CV_CAP_PROP_FRAME_HEIGHT, height);
         }
         if(camera.isOpened())
         {
-            camera.read(output);
+            if (!camera.read(output))
+            {
+                char * sender = "Camera # ";
+                sender[8] = cameraNumber;
+                RobotArminator::Logger::logWarning(sender, "Camera could not read!");
+            }
         }
         else
         {
@@ -36,5 +45,21 @@ namespace Vision
             sender[8] = cameraNumber;
             RobotArminator::Logger::logWarning(sender, "Camera could not be opened!");
         }
+    }
+
+    int Camera::getHeight() {
+        return height;
+    }
+
+    int Camera::getWidth() {
+        return width;
+    }
+
+    void Camera::setSize(int newWidth, int newHeight)
+    {
+        height = newHeight;
+        width = newWidth;
+        camera.set(CV_CAP_PROP_FRAME_WIDTH, newWidth);
+        camera.set(CV_CAP_PROP_FRAME_HEIGHT, newHeight);
     }
 }
