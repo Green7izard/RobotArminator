@@ -3,16 +3,17 @@
 #include "RobotControl.hpp"
 
 
-RobotControl::RobotControl() : handle(NULL)
+RobotControl::RobotControl(std::string port, unsigned int baud_rate)
+    : io(), serial(io, port)
 {
+    serial.set_option(asio::serial_port_base::baud_rate(baud_rate));
+    serial.set_option(asio::serial_port_base::stop_bits(asio::serial_port_base::stop_bits::two));
+    serial.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::even));
 }
 
 RobotControl::~RobotControl()
 {
-    if (handle != NULL)
-    {
-        closeHandle(handle);
-    }
+    serial.close();
 }
 
 void RobotControl::moveArm(Vector aPosition)
@@ -28,98 +29,37 @@ void RobotControl::hitBall(Vector aPosition)
 {
 }
 
-void RobotControl::setupCommunication(std::string aComport)
+void RobotControl::setupRobot()
 {
-    createHandle(aComport);
-    setupHandleParameters();
-    setupHandleTimeouts();
+    writeData("1;1;OPEN=usertool\r");
+    writeData("1;1;CNTLON\r");
+    writeData("1;1;RUN1\r");
+    writeData("1;2;RUN2\r");
 }
 
-HANDLE RobotControl::createHandle(std::string aComport)
+void RobotControl::writeData(std::string aData)
 {
-    HANDLE hSerial;
+    asio::write(serial, asio::buffer(aData.c_str(), aData.size()));
+}
 
-    hSerial = CreateFile((LPCSTR)aComport.c_str(),
-        GENERIC_READ | GENERIC_WRITE,
-        0,
-        0,
-        OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL,
-        0);
-    if (hSerial == INVALID_HANDLE_VALUE)
+std::string RobotControl::readData()
+{
+    //Reading data char by char, code is optimized for simplicity, not speed
+    using namespace boost;
+    char c;
+    std::string result;
+
+    for (;;)
     {
-        if (GetLastError() == ERROR_FILE_NOT_FOUND)
+        asio::read(serial, asio::buffer(&c, 1));
+        switch (c)
         {
-            //TODO: Logger serial port does not exist
+        case '\r':
+            break;
+        case '\n':
+            return result;
+        default:
+            result += c;
         }
-        //TODO: Logger some other error occurred.
-        return false;
     }
-    return hSerial;
-}
-
-void RobotControl::setupHandleParameters()
-{
-    DCB dcbSerialParams = { 0 };
-    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
-
-    if (!GetCommState(handle, &dcbSerialParams))
-    {
-        //TODO: Logger error getting state.
-    }
-    dcbSerialParams.BaudRate = CBR_9600;
-    dcbSerialParams.ByteSize = 8;
-    dcbSerialParams.StopBits = TWOSTOPBITS;
-    dcbSerialParams.Parity = EVENPARITY;
-
-    if (!SetCommState(handle, &dcbSerialParams))
-    {
-        //TODO: Logger error setting serial port state.
-    }
-}
-
-void RobotControl::setupHandleTimeouts()
-{
-    COMMTIMEOUTS timeouts = { 0 };
-
-    timeouts.ReadIntervalTimeout = 50;
-    timeouts.ReadTotalTimeoutConstant = 50;
-    timeouts.ReadTotalTimeoutMultiplier = 10;
-
-    timeouts.WriteTotalTimeoutConstant = 50;
-    timeouts.WriteTotalTimeoutMultiplier = 10;
-
-    if (!SetCommTimeouts(handle, &timeouts))
-    {
-        //TODO: Logger error occurred.
-    }
-}
-
-void RobotControl::closeHandle(HANDLE aHandle)
-{
-    CloseHandle(aHandle);
-}
-
-void RobotControl::sendData(char *aBuffer, int aBufferSize)
-{
-
-    std::cout << aBuffer << std::endl;
-    DWORD dwBytesSend = 0;
-    OutputDebugString(aBuffer);
-    if (!WriteFile(handle, (void *)aBuffer, aBufferSize, &dwBytesSend, 0))
-    {
-        //TODO: Logger
-    }
-}
-
-void RobotControl::receiveData(const int aDataSize)
-{
-    char szBuff[10 + 1] = { 0 };
-    DWORD dwBytesRead = 0;
-
-    if (!ReadFile(handle, szBuff, 10, &dwBytesRead, NULL))
-    {
-        //TODO: Logger error occurred.
-    }
-    std::cout << "Data received: " << szBuff << std::endl;
 }

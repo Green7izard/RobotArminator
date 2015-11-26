@@ -1,30 +1,35 @@
+#define ASIO_STANDALONE 
+#define ASIO_HAS_STD_ADDRESSOF
+#define ASIO_HAS_STD_ARRAY
+#define ASIO_HAS_CSTDINT
+#define ASIO_HAS_STD_SHARED_PTR
+#define ASIO_HAS_STD_TYPE_TRAITS
+
+#define _WEBSOCKETPP_NOEXCEPT_
+#define WEBSOCKETPP_CPP11_CHRONO
+
 #pragma once
 #include "IRobotControl.hpp"
 #include <iostream>
 #include "Vector.hpp"
-#include <Windows.h>
+#include "asio.hpp"
 
 using namespace Robot;
 
 class RobotControl : public IRobotControl
 {
 public:
-    RobotControl();
+    RobotControl(std::string port, unsigned int baud_rate);
     ~RobotControl();
     void moveArm(Vector aPosition);
     Vector getPosition();
     void hitBall(Vector aPosition);
-    void setupCommunication(std::string aComport);
-    void sendData(char *aBuffer, int aBufferSize);
-    void receiveData(const int aDataSize);
+    void setupRobot();
+    void writeData(std::string aData);
+    std::string readData();
 private:
-    
-    HANDLE createHandle(std::string aComport);
-    void setupHandleParameters();
-    void setupHandleTimeouts();
-    void closeHandle(HANDLE aHandle);
-    
-    HANDLE handle;
+    asio::io_service io;
+    asio::serial_port serial;
 };
 
 

@@ -24,6 +24,13 @@ public:
         : io(), serial(io, port)
     {
         serial.set_option(asio::serial_port_base::baud_rate(baud_rate));
+        serial.set_option(asio::serial_port_base::stop_bits(asio::serial_port_base::stop_bits::two));
+        serial.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::even));
+    }
+
+    ~SimpleSerial()
+    {
+        serial.close();
     }
 
     /**
@@ -48,6 +55,7 @@ public:
         using namespace boost;
         char c;
         std::string result;
+
         for (;;)
         {
             asio::read(serial, asio::buffer(&c, 1));
