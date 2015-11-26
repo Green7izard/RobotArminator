@@ -1,5 +1,7 @@
 
+
 #include "RobotControl.hpp"
+
 
 RobotControl::RobotControl() : handle(NULL)
 {
@@ -65,10 +67,10 @@ void RobotControl::setupHandleParameters()
     {
         //TODO: Logger error getting state.
     }
-    dcbSerialParams.BaudRate = CBR_115200;
+    dcbSerialParams.BaudRate = CBR_9600;
     dcbSerialParams.ByteSize = 8;
-    dcbSerialParams.StopBits = ONESTOPBIT;
-    dcbSerialParams.Parity = NOPARITY;
+    dcbSerialParams.StopBits = TWOSTOPBITS;
+    dcbSerialParams.Parity = EVENPARITY;
 
     if (!SetCommState(handle, &dcbSerialParams))
     {
@@ -98,16 +100,24 @@ void RobotControl::closeHandle(HANDLE aHandle)
     CloseHandle(aHandle);
 }
 
-void RobotControl::sendData(std::string aData)
+void RobotControl::sendData(char *aBuffer, int aBufferSize)
 {
+
+    std::cout << aBuffer << std::endl;
+    DWORD dwBytesSend = 0;
+    OutputDebugString(aBuffer);
+    if (!WriteFile(handle, (void *)aBuffer, aBufferSize, &dwBytesSend, 0))
+    {
+        //TODO: Logger
+    }
 }
 
 void RobotControl::receiveData(const int aDataSize)
 {
-    char szBuff[100 + 1] = { 0 };
+    char szBuff[10 + 1] = { 0 };
     DWORD dwBytesRead = 0;
 
-    if (!ReadFile(handle, szBuff, 100, &dwBytesRead, NULL))
+    if (!ReadFile(handle, szBuff, 10, &dwBytesRead, NULL))
     {
         //TODO: Logger error occurred.
     }

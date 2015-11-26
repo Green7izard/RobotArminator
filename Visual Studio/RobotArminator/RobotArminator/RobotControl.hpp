@@ -15,7 +15,7 @@ public:
     Vector getPosition();
     void hitBall(Vector aPosition);
     void setupCommunication(std::string aComport);
-    void sendData(std::string aData);
+    void sendData(char *aBuffer, int aBufferSize);
     void receiveData(const int aDataSize);
 private:
     
