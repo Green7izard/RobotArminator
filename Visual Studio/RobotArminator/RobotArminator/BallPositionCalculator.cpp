@@ -1,55 +1,81 @@
 #include <iostream>
+#include <math.h>
 #include "BallPositionCalculator.hpp"
 #include "Trajectory.hpp"
 #include "Vector.hpp"
 
-using namespace RobotArminator;
-
-//run thread
-void BallPositionCalculator::run()
+namespace BallPosition
 {
-}
 
-//start threadfunction
-void BallPositionCalculator::startPositionCalculation()
-{
-	std::cout << "Start!" << std::endl;
-}
+	using namespace RobotArminator;
 
-
-VisionPosition BallPositionCalculator::getPositionsFromQueue()
-{
-	currentPosition = VisionPosition();
-	return currentPosition;
-}
-
-
-void BallPositionCalculator::calculateTwoPositionToOnePosition(VisionPosition sideView, VisionPosition topView)
-{
-	float time;
-	if(sideView.time >= topView.time)
+	//run thread
+	void BallPositionCalculator::run()
 	{
-		time = sideView.time;
 	}
-	else
+
+	//start threadfunction
+	void BallPositionCalculator::startPositionCalculation()
 	{
-		time = topView.time;
+		std::cout << "Start!" << std::endl;
 	}
-	Trajectory newTraject(time, Vector(0, 0, 0), Vector(topView.X, topView.Y, sideView.Y));
-	std::cout << "X: " << newTraject.position.x << "mm and Y: " << newTraject.position.y << "mm and Z: " << newTraject.position.z << "mm and Time: " << newTraject.time << "ms";
-}
 
 
-void BallPositionCalculator::sendPosition()
-{
-}
+	VisionPosition BallPositionCalculator::getPositionsFromQueue()
+	{
+		currentTopPosition = VisionPosition();
+		return currentTopPosition;
+	}
 
 
-BallPositionCalculator::BallPositionCalculator()
-{
-}
+	void BallPositionCalculator::calculateTraject(VisionPosition sideView, VisionPosition topView)
+	{
+		calculateLiniairTraject(topView);
+		calculateCircleTraject(sideView);
+	}
+
+	void BallPositionCalculator::calculateLiniairTraject(VisionPosition pos)
+	{
+		float multiplier = (float)(pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
+		int startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
+		int newY = (multiplier * tableWidth) + startValue;
+		std::cout << multiplier << " * " << tableWidth << " + " << startValue << " = " << newY << std::endl;
+
+	}
+
+	void BallPositionCalculator::calculateCircleTraject(VisionPosition pos)
+	{
+		//http://www.hhofstede.nl/modules/projectielbanen.htm
+		
+		float corner = 20; //degrese
+		float height = 0.2; //meters
+		float speed = 5; //meter/seconds
+
+		float PI = 3.14159265358979;
+		float a = (-9.81 / (2 * speed * speed)) * (tan(corner * PI / 180) + 1);
+		float b = tan(corner * PI / 180);
+		float c = height;
+
+		//y = (b * x) + (a * x^2) + c;
+		float xPlus = (-b + sqrt((b*b) - (4 * a * c))) / (2 * a);
+		float xMin = (-b - sqrt((b*b) - (4 * a * c))) / (2 * a);
+
+		std::cout << xPlus;
+		std::cout << xMin;
+	}
 
 
-BallPositionCalculator::~BallPositionCalculator()
-{
+	void BallPositionCalculator::sendPosition()
+	{
+	}
+
+
+	BallPositionCalculator::BallPositionCalculator()
+	{
+	}
+
+
+	BallPositionCalculator::~BallPositionCalculator()
+	{
+	}
 }

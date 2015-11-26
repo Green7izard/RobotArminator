@@ -1,19 +1,31 @@
 #pragma once
 #include "VisionPosition.hpp"
+#include <ctime>
 
-
-class BallPositionCalculator
+namespace BallPosition
 {
-public:
-	RobotArminator::VisionPosition currentPosition;
+	using namespace RobotArminator;
 
-	void run();
-	void startPositionCalculation();
-	RobotArminator::VisionPosition getPositionsFromQueue();
-	void calculateTwoPositionToOnePosition(RobotArminator::VisionPosition pos1, RobotArminator::VisionPosition pos2);
-	void sendPosition();
+	class BallPositionCalculator
+	{
+	public:
+		int tableWidth = 2740;
 
-	BallPositionCalculator();
-	virtual ~BallPositionCalculator();
-};
+		VisionPosition lastSidePosition = VisionPosition(1000, 300, std::time_t(5), SIDE);
+		VisionPosition lastTopPosition = VisionPosition(1000, 300, std::time_t(5), TOP);
 
+		VisionPosition currentSidePosition;
+		VisionPosition currentTopPosition;
+
+		void run();
+		void startPositionCalculation();
+		VisionPosition getPositionsFromQueue();
+		void calculateTraject(RobotArminator::VisionPosition pos1, VisionPosition pos2);
+		void calculateLiniairTraject(VisionPosition pos);
+		void calculateCircleTraject(VisionPosition pos);
+		void sendPosition();
+
+		BallPositionCalculator();
+		virtual ~BallPositionCalculator();
+	};
+}
