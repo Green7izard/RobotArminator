@@ -2,6 +2,7 @@
 #include "IComputerVision.hpp"
 #include "Table.hpp"
 #include "Camera.hpp"
+#include "opencv2/opencv.hpp"
 
 namespace Vision
 {
@@ -20,6 +21,7 @@ namespace Vision
 
         //The camera wrapper that is used
         Camera* camera;
+
     protected:
 
         /**
@@ -50,6 +52,12 @@ namespace Vision
         Table detectTable();
 
         /**
+        * //TODO
+        * The main function of the class
+        */
+        virtual void run();
+
+        /**
         * Converts a X and Y position from the camera into a VisionPosition based on the coordinate system
         *
         * @param X the coordinate on the horizontal level
@@ -58,7 +66,18 @@ namespace Vision
         * @return VisionPosition in the worldspace
         */
         VisionPosition convertToCoordinate(unsigned int X, unsigned int Y, std::time_t time);
-        virtual void locateObject() = 0;
+
+        /**
+        * Function for finding the ball.
+        * @param image the incomming image
+        * @return the location
+        */
+        virtual VisionPosition* locateObject(cv::Mat &image) = 0;
+
+        /**
+        * Sets the image size
+        */
+        void updateImageSize(unsigned int width = Camera::FRAME_WIDTH, unsigned int height = Camera::FRAME_HEIGHT);
     };
 }
 

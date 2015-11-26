@@ -19,8 +19,8 @@ namespace Vision
         cv::VideoCapture camera;
 
         //The height of the image
-        int width = FRAME_WIDTH;
-        int height = FRAME_HEIGHT;
+        unsigned int width = FRAME_WIDTH;
+        unsigned int height = FRAME_HEIGHT;
 
     public:
         //Default height
@@ -36,7 +36,7 @@ namespace Vision
         * @param width the width of the image
         * @param height the height of the image
         */
-        Camera(int cameraNumber, bool mirrored = false, int width = FRAME_WIDTH, int height = FRAME_HEIGHT);
+        Camera(int cameraNumber, bool mirrored = false, unsigned int width = FRAME_WIDTH, unsigned int height = FRAME_HEIGHT);
 
         //Deconstructor, closes the camera and terminates it
         virtual ~Camera();
@@ -53,7 +53,7 @@ namespace Vision
         /**
         * Sets the image size
         */
-        void setSize(int width = FRAME_WIDTH, int height = FRAME_HEIGHT);
+        void setSize(unsigned int width = FRAME_WIDTH, unsigned  int height = FRAME_HEIGHT);
 
         //Gets the hight of the image
         int getHeight();

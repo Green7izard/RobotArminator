@@ -14,10 +14,14 @@ namespace Vision {
     TableFinder::~TableFinder() {
     }
 
+    void TableFinder::run() {
+        //TODO
+    }
+
     void TableFinder::setPosition(VisionPosition position)
     {
         lastPosition = position;
-        notify(position);
+        notify(lastPosition);
     }
 
     Table TableFinder::detectTable()
@@ -30,6 +34,12 @@ namespace Vision {
     {
         //TODO
         return VisionPosition();
+    }
+
+    void TableFinder::updateImageSize(unsigned int X, unsigned int Y)
+    {
+        camera->setSize(X, Y);
+        tabel = detectTable();
     }
 
 }
