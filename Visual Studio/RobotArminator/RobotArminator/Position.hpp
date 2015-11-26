@@ -7,6 +7,7 @@ namespace RobotArminator
     public:
         Position();
         Position(double x, double y, double z, int rotation);
+		Position(Vector vector, int rotation);
         ~Position();
         int rotation;
     };
