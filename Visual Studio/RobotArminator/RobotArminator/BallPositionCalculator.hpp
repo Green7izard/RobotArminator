@@ -1,5 +1,6 @@
 #pragma once
 #include "VisionPosition.hpp"
+#include "Position.hpp"
 #include <ctime>
 
 namespace BallPosition
@@ -20,9 +21,9 @@ namespace BallPosition
 		void run();
 		void startPositionCalculation();
 		VisionPosition getPositionsFromQueue();
-		void calculateTraject(RobotArminator::VisionPosition pos1, VisionPosition pos2);
-		void calculateLiniairTraject(VisionPosition pos);
-		void calculateCircleTraject(VisionPosition pos);
+		Position calculateTraject(RobotArminator::VisionPosition pos1, VisionPosition pos2);
+		int calculateLiniairTraject(VisionPosition pos);
+		int calculateCircleTraject(VisionPosition pos);
 		void sendPosition();
 
 		BallPositionCalculator();

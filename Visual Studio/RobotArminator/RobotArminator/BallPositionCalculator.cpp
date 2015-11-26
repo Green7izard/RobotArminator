@@ -28,24 +28,28 @@ namespace BallPosition
 	}
 
 
-	void BallPositionCalculator::calculateTraject(VisionPosition sideView, VisionPosition topView)
+	Position BallPositionCalculator::calculateTraject(VisionPosition sideView, VisionPosition topView)
 	{
 		calculateLiniairTraject(topView);
 		calculateCircleTraject(sideView);
+
+
+		Position p = Position(Vector(0.0, 0.0, 0.0), 0);
+		return p;
 	}
 
-	void BallPositionCalculator::calculateLiniairTraject(VisionPosition pos)
+	int BallPositionCalculator::calculateLiniairTraject(VisionPosition pos)
 	{
 		float multiplier = (float)(pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
 		int startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
 		int newY = (multiplier * tableWidth) + startValue;
 		std::cout << multiplier << " * " << tableWidth << " + " << startValue << " = " << newY << std::endl;
-
+		return 0;
 	}
 
-	void BallPositionCalculator::calculateCircleTraject(VisionPosition pos)
+	int BallPositionCalculator::calculateCircleTraject(VisionPosition pos)
 	{
-		//http://www.hhofstede.nl/modules/projectielbanen.htm
+		//www.hhofstede.nl/modules/projectielbanen.htm
 		
 		float corner = 20; //degrese
 		float height = 0.2; //meters
@@ -60,8 +64,15 @@ namespace BallPosition
 		float xPlus = (-b + sqrt((b*b) - (4 * a * c))) / (2 * a);
 		float xMin = (-b - sqrt((b*b) - (4 * a * c))) / (2 * a);
 
-		std::cout << xPlus;
-		std::cout << xMin;
+		int position = NULL;
+		if (xMin > xPlus) {
+			position = xMin;
+		}
+		else {
+			position = xPlus;
+		}
+		
+		return position;
 	}
 
 
