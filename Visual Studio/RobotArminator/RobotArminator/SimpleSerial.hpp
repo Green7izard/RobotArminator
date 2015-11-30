@@ -62,8 +62,6 @@ public:
             switch (c)
             {
             case '\r':
-                break;
-            case '\n':
                 return result;
             default:
                 result += c;

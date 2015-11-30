@@ -9,23 +9,29 @@
 #include <iostream>
 #include "conio.h"
 #include <sstream>
-#include "RobotControl.hpp"
+//#include "RobotControl.hpp"
 
 using namespace RobotArminator;
 
 int main(int argc, char* argv[])
 {
     SimpleSerial serial("COM3", 19200);
+    Sleep(500);
     //serial.setupRobot();
     serial.writeString("1;1;OPEN=usertool\r");
+    std::cout << serial.readLine() << std::endl;
+    Sleep(500);
     serial.writeString("1;1;CNTLON\r");
-    serial.writeString("1;1;RUN1\r");
+    std::cout << serial.readLine() << std::endl;
+    Sleep(500);
     serial.writeString("1;2;RUN2\r");
+    std::cout << serial.readLine() << std::endl;
+    Sleep(500);
     serial.writeString("PRN 1,(0,0,0,0,0,0)\r");
-    Sleep(2000);
-    //serial.writeString("PRN 1,(90,-30,90,0,90,90)\r");
-    //Sleep(500);
-    //serial.writeString("PRN 1,(0,0,0,0,0,0)\r");
+    std::cout << serial.readLine() << std::endl;
+    Sleep(500);
+    
+
     char input;
     int j1 = 0;
     int j2 = 0;
@@ -34,6 +40,7 @@ int main(int argc, char* argv[])
     int j6 = 0;
     while (1)
     {
+        fflush(stdin);
         input = _getch();
 
         if (input == 'q' && j1 <= 145)
@@ -61,9 +68,9 @@ int main(int argc, char* argv[])
         if (input == 'g' && j6 >= -195)
             j6 -= 5;
 
-        if (input == 'z' && j6 <= 195)
+        if (input == 'z' && j6 <= 150)
             j6 += 50;
-        if (input == 'x' && j6 >= -195)
+        if (input == 'x' && j6 >= -150)
             j6 -= 50;
 
         if (input == 'p')
@@ -77,6 +84,7 @@ int main(int argc, char* argv[])
         std::stringstream ss;
         ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 << ")\r";
         serial.writeString(ss.str());
+        std::cout << serial.readLine() << std::endl;
         Sleep(200);
     }
    

@@ -33,7 +33,6 @@ void RobotControl::setupRobot()
 {
     writeData("1;1;OPEN=usertool\r");
     writeData("1;1;CNTLON\r");
-    writeData("1;1;RUN1\r");
     writeData("1;2;RUN2\r");
 }
 
