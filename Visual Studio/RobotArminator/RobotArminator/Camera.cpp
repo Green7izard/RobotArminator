@@ -4,7 +4,7 @@
 namespace Vision
 {
 
-	Camera::Camera(int cameraNumber, bool mirrored, unsigned int width, unsigned int height) : height(height), width(width), cameraNumber(cameraNumber), mirrored(mirrored)
+    Camera::Camera(int cameraNumber, bool mirrored, unsigned int width, unsigned int height) : height(height), width(width), cameraNumber(cameraNumber), mirrored(mirrored)
     {
         camera.open(cameraNumber);
         camera.set(CV_CAP_PROP_FRAME_WIDTH, width);
@@ -30,7 +30,7 @@ namespace Vision
             camera.set(CV_CAP_PROP_FRAME_WIDTH, width);
             camera.set(CV_CAP_PROP_FRAME_HEIGHT, height);
         }
-        if(camera.isOpened())
+        if (camera.isOpened())
         {
             if (!camera.read(output))
             {
@@ -61,5 +61,22 @@ namespace Vision
         width = newWidth;
         camera.set(CV_CAP_PROP_FRAME_WIDTH, newWidth);
         camera.set(CV_CAP_PROP_FRAME_HEIGHT, newHeight);
+    }
+
+
+
+    //FILE CAMERA
+
+    FileCamera::FileCamera(char * filename) :Camera(0), filename(filename)
+    {
+    }
+
+    FileCamera::~FileCamera() {
+
+    }
+
+    void FileCamera::getCurrentImage(cv::Mat& output)
+    {
+        output = cv::imread(filename, 1);
     }
 }

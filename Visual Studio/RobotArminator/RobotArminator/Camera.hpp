@@ -48,7 +48,7 @@ namespace Vision
         * Gets the current image
         * @param output where to store it
         */
-        void getCurrentImage(cv::Mat& output);
+        virtual void getCurrentImage(cv::Mat& output);
 
         /**
         * Sets the image size
@@ -61,5 +61,24 @@ namespace Vision
         //Gets the width of the image
         int getWidth();
 
+    };
+
+
+    class FileCamera : public Camera
+    {
+    private:
+        char * filename;
+
+    public:
+
+        FileCamera(char * filename);
+        //Deconstructor, closes the camera and terminates it
+        virtual ~FileCamera();
+
+        /**
+        * Regets the image from a file
+        * @param output where to store it
+        */
+        virtual void getCurrentImage(cv::Mat& output) override;
     };
 }

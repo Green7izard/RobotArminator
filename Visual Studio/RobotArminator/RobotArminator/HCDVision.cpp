@@ -10,4 +10,9 @@ namespace Vision {
     HCDVision::~HCDVision()
     {
     }
+
+    void HCDVision::locateObject(cv::Mat &image, Position2D &position)
+    {
+        //TODO
+    }
 }

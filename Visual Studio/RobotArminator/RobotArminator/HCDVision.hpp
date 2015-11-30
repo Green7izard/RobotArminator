@@ -11,6 +11,8 @@ namespace Vision {
     public:
         HCDVision(Orientation orientation, Camera* cam);
         virtual ~HCDVision();
+
+        virtual void locateObject(cv::Mat &image, Position2D &position) override;
     };
 }
 

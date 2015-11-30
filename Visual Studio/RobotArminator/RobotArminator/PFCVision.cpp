@@ -10,4 +10,9 @@ namespace Vision {
     PFCVision::~PFCVision()
     {
     }
+
+    void PFCVision::locateObject(cv::Mat &image, Position2D &position)
+    {
+        //TODO
+    }
 }
