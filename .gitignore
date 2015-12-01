@@ -38,6 +38,7 @@ Visual Studio/RobotArminator/.vs/*
 Visual Studio/RobotArminator/RobotArminator/.vs/*
 Visual Studio/RobotArminator/ipch/*
 *.sln
+*.suo
 *.vcxproj
 *.vcxproj.filters
 **/*.sdf

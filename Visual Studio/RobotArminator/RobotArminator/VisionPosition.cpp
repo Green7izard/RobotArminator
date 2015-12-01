@@ -8,7 +8,7 @@ namespace RobotArminator
     {
     }
 
-    VisionPosition::VisionPosition(float X, float Y, std::time_t time, Orientation orientation)
+    VisionPosition::VisionPosition(float X, float Y, timePoint, Orientation orientation)
         : X(X), Y(Y), time(time), orientation(orientation)
     {
     }

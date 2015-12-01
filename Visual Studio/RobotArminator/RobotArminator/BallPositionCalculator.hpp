@@ -1,6 +1,8 @@
 #pragma once
+#include "stdafx.h"
+
 #include "VisionPosition.hpp"
-#include <ctime>
+
 
 namespace BallPosition
 {
@@ -11,8 +13,8 @@ namespace BallPosition
 	public:
 		int tableWidth = 2740;
 
-		VisionPosition lastSidePosition = VisionPosition(1000, 300, std::time_t(5), SIDE);
-		VisionPosition lastTopPosition = VisionPosition(1000, 300, std::time_t(5), TOP);
+		VisionPosition lastSidePosition = VisionPosition(1000, 300, Clock::now(), SIDE);
+		VisionPosition lastTopPosition = VisionPosition(1000, 300, Clock::now(), TOP);
 
 		VisionPosition currentSidePosition;
 		VisionPosition currentTopPosition;

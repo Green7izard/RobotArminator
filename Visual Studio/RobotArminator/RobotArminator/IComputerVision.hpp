@@ -1,4 +1,6 @@
 #pragma once
+#include "stdafx.h"
+
 #include "Orientation.hpp"
 #include "MessageSender.cpp"
 #include "VisionPosition.hpp"
