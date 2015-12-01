@@ -52,6 +52,11 @@ namespace Vision {
         return circles.size() > 0;
     }
 
+    void CannyHCDVision::calibrate()
+    {
+        //TODO
+    }
+
     //Color Filter
     ColorHCDVision::ColorHCDVision(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
     {
@@ -105,5 +110,10 @@ namespace Vision {
             }
         }
         return circles.size() > 0;
+    }
+
+    void ColorHCDVision::calibrate()
+    {
+        //TODO
     }
 }

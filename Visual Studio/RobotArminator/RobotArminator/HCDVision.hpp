@@ -26,6 +26,8 @@ namespace Vision {
         virtual ~CannyHCDVision();
 
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
+
+        virtual void calibrate() override;
     };
 
     /**
@@ -58,6 +60,8 @@ namespace Vision {
         virtual ~ColorHCDVision();
 
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
+
+        virtual void calibrate() override;
     };
 }
 

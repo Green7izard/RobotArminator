@@ -18,11 +18,11 @@ namespace Vision {
     void TableFinder::run() {
         cv::Mat cameraFrame;
         Position2D position;
-        std::time_t time;
+        timePoint time;
         //FIXME STOPCOMMAND?
         while (true) {
             
-            time(&time);
+            time = Clock::now();
             camera->getCurrentImage(cameraFrame);
             if (locateObject(cameraFrame, position))
             {
@@ -45,7 +45,7 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(Position2D &position, std::time_t time)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, timePoint time)
     {
         //TODO Change it based on the table
         VisionPosition pos;

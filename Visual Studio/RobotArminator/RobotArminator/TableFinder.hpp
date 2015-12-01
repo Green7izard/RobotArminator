@@ -64,7 +64,7 @@ namespace Vision
         * @param time the systemtime
         * @return VisionPosition in the worldspace
         */
-        VisionPosition convertToCoordinate(Position2D &position, std::time_t time);
+        VisionPosition convertToCoordinate(Position2D &position, timePoint time);
 
         /**
         * Function for finding the ball.
