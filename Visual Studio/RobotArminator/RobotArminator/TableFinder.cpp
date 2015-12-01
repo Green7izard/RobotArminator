@@ -21,7 +21,8 @@ namespace Vision {
         std::time_t time;
         //FIXME STOPCOMMAND?
         while (true) {
-            time = std::time(nullptr);
+            
+            time(&time);
             camera->getCurrentImage(cameraFrame);
             if (locateObject(cameraFrame, position))
             {

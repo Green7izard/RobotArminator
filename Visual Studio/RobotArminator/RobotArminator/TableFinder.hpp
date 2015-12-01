@@ -72,6 +72,12 @@ namespace Vision
         * @return the location
         */
         virtual bool locateObject(cv::Mat &image, Position2D &position) = 0;
+
+        /**
+        * Opens a menu to calibrate the system
+        *
+        */
+        virtual void calibrate()=0;
         
         /**
         * Sets the image size
