@@ -19,11 +19,14 @@ namespace Vision {
         cv::Mat cameraFrame;
         Position2D position;
         std::time_t time;
+        //FIXME STOPCOMMAND?
         while (true) {
             time = std::time(nullptr);
             camera->getCurrentImage(cameraFrame);
-            locateObject(cameraFrame, position);
-            setPosition(convertToCoordinate(position.X, position.Y, time));
+            if (locateObject(cameraFrame, position))
+            {
+                setPosition(convertToCoordinate(position, time));
+            }
             if (cv::waitKey(1) >= 0) break;
         }
         //TODO
@@ -41,10 +44,14 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(unsigned int X, unsigned int Y, std::time_t time)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, std::time_t time)
     {
-        //TODO
-        return VisionPosition();
+        //TODO Change it based on the table
+        VisionPosition pos;
+        pos.X = (float)position.X;
+        pos.Y = (float)position.Y;
+        pos.time = time;
+        return pos;
     }
 
     void TableFinder::updateImageSize(unsigned int X, unsigned int Y)

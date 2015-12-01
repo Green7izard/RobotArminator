@@ -11,7 +11,7 @@ namespace Vision {
     public:
         PFCVision(Orientation orientation, Camera* cam);
         virtual ~PFCVision();
-        virtual void locateObject(cv::Mat &image, Position2D &position) override;
+        virtual bool locateObject(cv::Mat &image, Position2D &position) override;
     };
 }
 

@@ -11,8 +11,9 @@ namespace Vision {
     {
     }
 
-    void PFCVision::locateObject(cv::Mat &image, Position2D &position)
+    bool PFCVision::locateObject(cv::Mat &image, Position2D &position)
     {
         //TODO
+        return false;
     }
 }

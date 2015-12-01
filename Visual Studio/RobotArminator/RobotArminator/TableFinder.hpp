@@ -60,19 +60,18 @@ namespace Vision
         /**
         * Converts a X and Y position from the camera into a VisionPosition based on the coordinate system
         *
-        * @param X the coordinate on the horizontal level
-        * @param Y the coordinate on the vertical level
+        * @param position the location in the screen
         * @param time the systemtime
         * @return VisionPosition in the worldspace
         */
-        VisionPosition convertToCoordinate(unsigned int X, unsigned int Y, std::time_t time);
+        VisionPosition convertToCoordinate(Position2D &position, std::time_t time);
 
         /**
         * Function for finding the ball.
         * @param image the incomming image
         * @return the location
         */
-        virtual void locateObject(cv::Mat &image, Position2D &position) = 0;
+        virtual bool locateObject(cv::Mat &image, Position2D &position) = 0;
         
         /**
         * Sets the image size
