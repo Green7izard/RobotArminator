@@ -7,86 +7,60 @@
 #include "Controller.hpp"
 #include "SimpleSerial.hpp"
 #include <iostream>
-#include "conio.h"
+#include <math.h>
 #include <sstream>
 //#include "RobotControl.hpp"
 
 using namespace RobotArminator;
 
-int main(int argc, char* argv[])
+double degToRad(int deg)
 {
+    return deg * (3.14159265/180);
+}
+std::string bruteForce(int resultX, int resultY)
+{
+    for (int j2 = -60; j2 <= 120; j2++)//
+    {
+        for (int j3 = -110; j3 <= 120; j3++)//
+        {
+            for (int j5 = -90; j5 <= 90; j5++)//
+            {
+                int j2y = sin(degToRad(j2)) * 250;
+                int j3y = sin(degToRad(j2) + degToRad(j3)) * 160;
+                int j5y = sin(degToRad(j2) + degToRad(j3) + degToRad(j5)) * 72;
+                int y = j2y + j3y + j5y;
+                
+                int x = (cos(degToRad(j2)) * 250) + (cos(degToRad(j2) + degToRad(j3)) * 160) + (cos(degToRad(j2) + degToRad(j3) + degToRad(j5)) * 72);
+                if (resultX == x && resultY == y)
+                {
+                    
+                    std::cout << j2y << "-" << j3y << "-" << j5y << std::endl;
+                    std::stringstream ss;
+                    ss << "PRN 1,(90," << j2 << "," << j3 << ",0," << j5 << ",90)\r";
+                    std::cout << ss.str() << std::endl;
+                    return ss.str();
+                }
+            }
+        }
+    }
+    return "PRN 1,(90,0,0,0,0,0)\r";
+}
+int main(int argc, char* argv[])
+{ 
     SimpleSerial serial("COM3", 19200);
     Sleep(500);
     //serial.setupRobot();
-    serial.writeString("1;1;OPEN=usertool\r");
+
+    serial.writeString("PRN 1,(90,0,0,0,0,0)\r");
     std::cout << serial.readLine() << std::endl;
     Sleep(500);
-    serial.writeString("1;1;CNTLON\r");
+    //std::cout << sin(degToRad(180)) *250 << "  " << sin(180) *250 << std::endl;
+
+ 
+    //serial.writeString(bruteForce(40, 20));
+    serial.writeString(bruteForce(322, 160));
     std::cout << serial.readLine() << std::endl;
-    Sleep(500);
-    serial.writeString("1;2;RUN2\r");
-    std::cout << serial.readLine() << std::endl;
-    Sleep(500);
-    serial.writeString("PRN 1,(0,0,0,0,0,0)\r");
-    std::cout << serial.readLine() << std::endl;
-    Sleep(500);
-    
-
-    char input;
-    int j1 = 0;
-    int j2 = 0;
-    int j3 = 0;
-    int j5 = 0;
-    int j6 = 0;
-    while (1)
-    {
-        fflush(stdin);
-        input = _getch();
-
-        if (input == 'q' && j1 <= 145)
-            j1 += 5;
-        if (input == 'a' && j1 >= -145)
-            j1 -= 5;
-
-        if (input == 'w' && j2 <= 115)
-            j2 += 5;
-        if (input == 's' && j2 >= -55)
-            j2 -= 5;
-
-        if (input == 'e' && j3 <= 115)
-            j3 += 5;
-        if (input == 'd' && j3 >= -105)
-            j3 -= 5;
-
-        if (input == 'r' && j5 <= 85)
-            j5 += 5;
-        if (input == 'f' && j5 >= -85)
-            j5 -= 5;
-
-        if (input == 't' && j6 <= 195)
-            j6 += 5;
-        if (input == 'g' && j6 >= -195)
-            j6 -= 5;
-
-        if (input == 'z' && j6 <= 150)
-            j6 += 50;
-        if (input == 'x' && j6 >= -150)
-            j6 -= 50;
-
-        if (input == 'p')
-        {
-            j1 = 0;
-            j2 = 0;
-            j3 = 0;
-            j5 = 0;
-            j6 = 0;
-        }
-        std::stringstream ss;
-        ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 << ")\r";
-        serial.writeString(ss.str());
-        std::cout << serial.readLine() << std::endl;
-        Sleep(200);
-    }
-   
+    std::cin.get();
+    //serial.run();
     return 0;
 }

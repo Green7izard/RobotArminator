@@ -9,6 +9,7 @@
 #define WEBSOCKETPP_CPP11_CHRONO
 
 #include <asio.hpp>
+#include "conio.h"
 
 class SimpleSerial
 {
@@ -65,6 +66,68 @@ public:
                 return result;
             default:
                 result += c;
+            }
+        }
+    }
+
+    void run()
+    {
+        while (1)
+        {
+            char input;
+            int j1 = 0;
+            int j2 = 0;
+            int j3 = 0;
+            int j5 = 0;
+            int j6 = 0;
+            while (1)
+            {
+                fflush(stdin);
+                input = _getch();
+
+                if (input == 'q' && j1 <= 145)
+                    j1 += 5;
+                if (input == 'a' && j1 >= -145)
+                    j1 -= 5;
+
+                if (input == 'w' && j2 <= 115)
+                    j2 += 5;
+                if (input == 's' && j2 >= -55)
+                    j2 -= 5;
+
+                if (input == 'e' && j3 <= 115)
+                    j3 += 5;
+                if (input == 'd' && j3 >= -105)
+                    j3 -= 5;
+
+                if (input == 'r' && j5 <= 85)
+                    j5 += 5;
+                if (input == 'f' && j5 >= -85)
+                    j5 -= 5;
+
+                if (input == 't' && j6 <= 195)
+                    j6 += 5;
+                if (input == 'g' && j6 >= -195)
+                    j6 -= 5;
+
+                if (input == 'z' && j6 <= 150)
+                    j6 += 50;
+                if (input == 'x' && j6 >= -150)
+                    j6 -= 50;
+
+                if (input == 'p')
+                {
+                    j1 = 0;
+                    j2 = 0;
+                    j3 = 0;
+                    j5 = 0;
+                    j6 = 0;
+                }
+                std::stringstream ss;
+                ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 << ")\r";
+                writeString(ss.str());
+                std::cout << readLine() << std::endl;
+                Sleep(200);
             }
         }
     }
