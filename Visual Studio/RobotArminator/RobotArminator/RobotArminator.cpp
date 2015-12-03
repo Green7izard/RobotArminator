@@ -9,8 +9,10 @@
 #include <iostream>
 #include <math.h>
 #include <sstream>
+#include <chrono>
 //#include "RobotControl.hpp"
 
+typedef std::chrono::high_resolution_clock Clock;
 using namespace RobotArminator;
 
 double degToRad(int deg)
@@ -19,13 +21,15 @@ double degToRad(int deg)
 }
 std::string bruteForce(int resultX, int resultY)
 {
+
+
     for (int j1 = -90; j1 <= 90; j1 += 180)
     {
-        for (int j2 = -60; j2 <= 120; j2++)//
+        for (int j2 = -60; j2 <= 120; j2+=5)//
         {
-            for (int j3 = -110; j3 <= 120; j3++)//
+            for (int j3 = -110; j3 <= 120; j3+=5)//
             {
-                for (int j5 = -90; j5 <= 90; j5++)//
+                for (int j5 = -90; j5 <= 90; j5+=5)//
                 {
                     for (int j6 = -90; j6 <= 90; j6 += 180)
                     {
@@ -59,7 +63,7 @@ std::string bruteForce(int resultX, int resultY)
                             double j6x = sin(degToRad(j2) + degToRad(j3) + degToRad(j5) + degToRad(j6)) * 390;
                             x = j2x + j3x + j5x + j6x;
                         }
-                        if (resultX == x && resultY == y)
+                        if (resultX >= x - 50 && resultX <= x + 50  && resultY >= y - 50 && resultY <= y + 50)
                         {
                             std::stringstream ss;
                             if (j1 < 0)
@@ -79,6 +83,7 @@ std::string bruteForce(int resultX, int resultY)
         }
     }
     return "PRN 1,(90,0,0,0,0,0)\r";
+
 }
 int main(int argc, char* argv[])
 { 
@@ -95,7 +100,12 @@ int main(int argc, char* argv[])
     int x = 000;
     int y = 400;
     //serial.writeString(bruteForce(40, 20));
+    auto t1 = Clock::now();
     serial.writeString(bruteForce(x, y));
+    auto t2 = Clock::now();
+    std::cout << "Delta t2-t1: "
+        << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count()
+        << " nanoseconds" << std::endl;
     std::cout << serial.readLine() << std::endl;
 
     char input;
