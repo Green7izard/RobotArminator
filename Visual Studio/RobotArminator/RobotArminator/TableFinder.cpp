@@ -74,6 +74,8 @@ namespace Vision {
 
     void TableFinder::calibrate() 
     {
+        Table newTable;
+
         //TODO
         std::cout << "FAIL";
     }

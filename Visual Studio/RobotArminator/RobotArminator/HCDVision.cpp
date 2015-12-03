@@ -21,7 +21,7 @@ namespace Vision {
         //Turn it to greys
         cvtColor(image, image, COLOR_BGR2GRAY);
         //Blur it
-        //GaussianBlur(image, image, Size(3, 3), 0,0);
+        GaussianBlur(image, image, Size(3, 3), 0,0);
         
 
         std::vector<Vec3f> circles;
@@ -51,41 +51,41 @@ namespace Vision {
 
     void CannyHCDVision::calibrate()
     {
+        TableFinder::calibrate();
         const char * windowName = "HCDVision:" + camera->getCameraNumber();
+        const char * windowNameCanny = "HCDVision Canny:" + camera->getCameraNumber();
         Vision::Position2D pos;
         Mat cameraFrame;
+        Mat cannyFrame;
         namedWindow(windowName, cv::WINDOW_AUTOSIZE);
+        namedWindow(windowNameCanny, cv::WINDOW_AUTOSIZE);
         createTrackbar("Min Radius", windowName, &minRadius, 256, 0);
         createTrackbar("Max Radius", windowName, &maxRadius, 500, 0);
-        createTrackbar("Canny Threshhold", windowName, &cannyUpperThreshhold, 300, 0);
+        createTrackbar("Canny Threshhold", windowNameCanny, &cannyUpperThreshhold, 400, 0);
         createTrackbar("accumulator threshold", windowName, &accumulatorThreshold, 100, 0);
         while (true) {
             camera->getCurrentImage(cameraFrame);
+
             if (locateObject(cameraFrame, pos))
             {
                 circle(cameraFrame, Point(pos.X, pos.Y), 10, Scalar(0, 255, 0), -1, 8, 0);
             }
+
+            Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
             
             imshow(windowName, cameraFrame);
+            imshow(windowNameCanny, cannyFrame);
             //Wait till escape is 
             if (waitKey(33) >= (char)27) break;
         }
         destroyWindow(windowName);
+        destroyWindow(windowNameCanny);
     }
 
     //Color Filter
     ColorHCDVision::ColorHCDVision(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
     {
-        createTrackbar("Min Hue", "window", &minHue, 180, 0);
-        createTrackbar("Max Hue", "window", &maxHue, 180, 0);
-        createTrackbar("Min Sat", "window", &minSat, 256, 0);
-        createTrackbar("Max Sat", "window", &maxSat, 256, 0);
-        createTrackbar("Min Int", "window", &minInt, 256, 0);
-        createTrackbar("Max Int", "window", &maxInt, 256, 0);
-        createTrackbar("Min Radius", "window", &minRadius, 256, 0);
-        createTrackbar("Max Radius", "window", &maxRadius, 500, 0);
-        createTrackbar("Canny Threshhold", "window", &cannyUpperThreshhold, 300, 0);
-        createTrackbar("accumulator threshold", "window", &accumulatorThreshold, 100, 0);
+        calibrate();
     }
 
 
@@ -95,12 +95,14 @@ namespace Vision {
 
     bool ColorHCDVision::locateObject(Mat &image, Position2D &position)
     {
-        GaussianBlur(image, image, Size(9,9), 2,2);
+        
         //Turn To HSV colors
         cvtColor(image, image, CV_BGR2HSV);
         //Filter colors
         //Scalar in HSV: Hue(tint), Saturation(verzadiging), Value/intensity
         inRange(image, Scalar(minHue, minSat, minInt,0), Scalar(maxHue, maxSat, maxInt, 100), image);
+
+        GaussianBlur(image, image, Size(9, 9), 0, 0);
         
         //bitwise_not(image, image);
 
@@ -130,6 +132,38 @@ namespace Vision {
 
     void ColorHCDVision::calibrate()
     {
-        //TODO
+        TableFinder::calibrate();
+        const char * windowName = "ColorHCDVision:" + camera->getCameraNumber();
+        const char * windowNameCanny = "ColorHCDVision Canny:" + camera->getCameraNumber();
+        Vision::Position2D pos;
+        Mat cameraFrame;
+        Mat cannyFrame;
+        namedWindow(windowName, cv::WINDOW_AUTOSIZE);
+        namedWindow(windowNameCanny, cv::WINDOW_AUTOSIZE);
+        createTrackbar("Min Hue", windowName, &minHue, 180, 0);
+        createTrackbar("Max Hue", windowName, &maxHue, 180, 0);
+        createTrackbar("Min Sat", windowName, &minSat, 256, 0);
+        createTrackbar("Max Sat", windowName, &maxSat, 256, 0);
+        createTrackbar("Min Int", windowName, &minInt, 256, 0);
+        createTrackbar("Max Int", windowName, &maxInt, 256, 0);
+        createTrackbar("Min Radius", windowName, &minRadius, 256, 0);
+        createTrackbar("Max Radius", windowName, &maxRadius, 500, 0);
+        createTrackbar("Canny Threshhold", windowNameCanny, &cannyUpperThreshhold, 300, 0);
+        createTrackbar("accumulator threshold", windowName, &accumulatorThreshold, 100, 0);
+        while (true) {
+            camera->getCurrentImage(cameraFrame);
+            if (locateObject(cameraFrame, pos))
+            {
+                circle(cameraFrame, Point(pos.X, pos.Y), 10, Scalar(0, 255, 0), -1, 8, 0);
+            }
+
+            Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
+            imshow(windowName, cameraFrame);imshow(windowNameCanny, cannyFrame);
+            //Wait till escape is 
+            if (waitKey(33) >= (char)27) break;
+        }
+        destroyWindow(windowName);
+        destroyWindow(windowNameCanny);
     }
+
 }
