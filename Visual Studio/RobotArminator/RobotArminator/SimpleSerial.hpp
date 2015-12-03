@@ -84,7 +84,7 @@ public:
             {
                 fflush(stdin);
                 input = _getch();
-
+                
                 if (input == 'q' && j1 <= 145)
                     j1 += 5;
                 if (input == 'a' && j1 >= -145)
@@ -114,7 +114,7 @@ public:
                     j6 += 50;
                 if (input == 'x' && j6 >= -150)
                     j6 -= 50;
-
+                
                 if (input == 'p')
                 {
                     j1 = 0;
