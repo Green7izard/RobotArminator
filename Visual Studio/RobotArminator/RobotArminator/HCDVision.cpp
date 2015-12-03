@@ -8,10 +8,7 @@ namespace Vision {
     //Canny Edge Detection
     CannyHCDVision::CannyHCDVision(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
     {
-        createTrackbar("Min Radius", "window", &minRadius, 256, 0);
-        createTrackbar("Max Radius", "window", &maxRadius, 500, 0);
-        createTrackbar("Canny Threshhold", "window", &cannyUpperThreshhold, 300, 0);
-        createTrackbar("accumulator threshold", "window", &accumulatorThreshold, 100, 0);
+        calibrate();
     }
 
 
@@ -24,7 +21,7 @@ namespace Vision {
         //Turn it to greys
         cvtColor(image, image, COLOR_BGR2GRAY);
         //Blur it
-        GaussianBlur(image, image, Size(9, 9), 2, 2);
+        //GaussianBlur(image, image, Size(3, 3), 0,0);
         
 
         std::vector<Vec3f> circles;
@@ -54,7 +51,26 @@ namespace Vision {
 
     void CannyHCDVision::calibrate()
     {
-        //TODO
+        const char * windowName = "HCDVision:" + camera->getCameraNumber();
+        Vision::Position2D pos;
+        Mat cameraFrame;
+        namedWindow(windowName, cv::WINDOW_AUTOSIZE);
+        createTrackbar("Min Radius", windowName, &minRadius, 256, 0);
+        createTrackbar("Max Radius", windowName, &maxRadius, 500, 0);
+        createTrackbar("Canny Threshhold", windowName, &cannyUpperThreshhold, 300, 0);
+        createTrackbar("accumulator threshold", windowName, &accumulatorThreshold, 100, 0);
+        while (true) {
+            camera->getCurrentImage(cameraFrame);
+            if (locateObject(cameraFrame, pos))
+            {
+                circle(cameraFrame, Point(pos.X, pos.Y), 10, Scalar(0, 255, 0), -1, 8, 0);
+            }
+            
+            imshow(windowName, cameraFrame);
+            //Wait till escape is 
+            if (waitKey(33) >= (char)27) break;
+        }
+        destroyWindow(windowName);
     }
 
     //Color Filter

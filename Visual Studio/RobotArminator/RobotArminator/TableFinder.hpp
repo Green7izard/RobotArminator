@@ -19,16 +19,19 @@ namespace Vision
         //The tables position in the screen
         Table tabel;
 
-        //The camera wrapper that is used
-        Camera* camera;
-
-    protected:
-
         /**
         * Updates the last known position and pushes the change
         * @param position the new VisionPosition
         */
         void setPosition(VisionPosition position);
+
+        //Whether its running or not
+        bool running;
+
+    protected:
+
+        //The camera wrapper that is used
+        Camera* camera;
 
     public:
 
@@ -56,6 +59,11 @@ namespace Vision
         * The main function of the class
         */
         virtual void run();
+
+        /**
+        * Stops the thread action
+        */
+        virtual void stop();
 
         /**
         * Converts a X and Y position from the camera into a VisionPosition based on the coordinate system

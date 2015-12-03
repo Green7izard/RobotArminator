@@ -11,9 +11,9 @@ namespace Vision {
 
     private:
         //If values have a gradient higher then this it is accepted as a edge
-        int cannyUpperThreshhold = 314;
+        int cannyUpperThreshhold = 300;
         //The lower this value, the more circles it should find
-        int accumulatorThreshold = 37;
+        int accumulatorThreshold = 30;
 
         //Parameters for ball size
         int maxRadius = 300;
@@ -21,6 +21,7 @@ namespace Vision {
 
         float lastX = 0;
         float lastY = 0;
+
     public:
         CannyHCDVision(Orientation orientation, Camera* cam);
         virtual ~CannyHCDVision();

@@ -63,6 +63,11 @@ namespace Vision
         camera.set(CV_CAP_PROP_FRAME_HEIGHT, newHeight);
     }
 
+    int Camera::getCameraNumber() 
+    {
+        return cameraNumber;
+    }
+
 
 
     //FILE CAMERA

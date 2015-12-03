@@ -8,19 +8,29 @@ namespace Vision {
 
     TableFinder::TableFinder(Orientation orientation, Camera* cam) : IComputerVision(orientation), camera(cam)
     {
-        tabel = detectTable();
+        //calibrate();
+        //tabel = detectTable();
+        running = false;
     }
 
 
     TableFinder::~TableFinder() {
     }
 
+    void TableFinder::stop() 
+    {
+        //TODO
+        running = false;
+    }
+
     void TableFinder::run() {
+        running=true;
         cv::Mat cameraFrame;
         Position2D position;
         timePoint time;
+        calibrate();
         //FIXME STOPCOMMAND?
-        while (true) {
+        while (running) {
             
             time = Clock::now();
             camera->getCurrentImage(cameraFrame);
@@ -58,7 +68,14 @@ namespace Vision {
     void TableFinder::updateImageSize(unsigned int X, unsigned int Y)
     {
         camera->setSize(X, Y);
-        tabel = detectTable();
+        calibrate();
+        //tabel = detectTable();
+    }
+
+    void TableFinder::calibrate() 
+    {
+        //TODO
+        std::cout << "FAIL";
     }
 
 }

@@ -61,6 +61,9 @@ namespace Vision
         //Gets the width of the image
         int getWidth();
 
+        //Get the number of the camera
+        int getCameraNumber();
+
     };
 
 

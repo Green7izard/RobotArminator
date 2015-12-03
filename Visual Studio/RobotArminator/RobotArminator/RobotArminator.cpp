@@ -12,13 +12,16 @@
 int main(int argc, char* argv[])
 {
     char * win= "window";
-    cv::namedWindow(win, cv::WINDOW_AUTOSIZE);
+    
     Vision::Camera cam(0);
+    cam.setSize(1280, 720);
     Vision::Position2D pos;
     std::cout << "Start Camera with size " <<cam.getWidth()<<"x"<< cam.getHeight()<<"\n";
     cv::Mat cameraFrame;
     Vision::CannyHCDVision HCD(RobotArminator::SIDE, &cam);
     std::cout << "Frame Created\n";
+
+    cv::namedWindow(win, cv::WINDOW_AUTOSIZE);
     while (true) {
         cam.getCurrentImage(cameraFrame);
         cv::Size s = cameraFrame.size();
