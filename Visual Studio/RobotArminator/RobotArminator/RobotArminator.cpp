@@ -23,7 +23,7 @@ std::string bruteForce(int resultX, int resultY)
 {
 
 
-    for (int j1 = -90; j1 <= 90; j1 += 180)
+    for (int j1 = -90; j1 <= 90; j1 += 1)
     {
         for (int j2 = -60; j2 <= 120; j2+=5)//
         {
@@ -35,6 +35,7 @@ std::string bruteForce(int resultX, int resultY)
                     {
                         int x;
                         int y;
+                        int z;
                         if (j1 < 0)
                         {
                             double j2y = cos(degToRad(j2 * -1)) * 250;
@@ -63,7 +64,17 @@ std::string bruteForce(int resultX, int resultY)
                             double j6x = sin(degToRad(j2) + degToRad(j3) + degToRad(j5) + degToRad(j6)) * 390;
                             x = j2x + j3x + j5x + j6x;
                         }
-                        if (resultX >= x - 50 && resultX <= x + 50  && resultY >= y - 50 && resultY <= y + 50)
+
+                        z = cos(degToRad(j1)) * x;
+                        
+                        if (j1 > 0)
+                        {
+                            x = cos(degToRad(90 - j1))*x;
+                        }
+                        else
+                            x = cos(degToRad(-90 - j1))*x;
+                        
+                        if (resultX >= x - 50 && resultX <= x + 50  && resultY >= y - 50 && resultY <= y + 50 && z == 200 )
                         {
                             std::stringstream ss;
                             if (j1 < 0)
@@ -82,7 +93,9 @@ std::string bruteForce(int resultX, int resultY)
             }
         }
     }
-    return "PRN 1,(90,0,0,0,0,0)\r";
+    std::cout << "Not found." << std::endl;
+    return "PRN 1,(0,0,0,0,0,0)\r";
+
 
 }
 int main(int argc, char* argv[])
@@ -91,14 +104,14 @@ int main(int argc, char* argv[])
     Sleep(500);
     //serial.setupRobot();
 
-    serial.writeString("PRN 1,(-90,0,0,0,0,0)\r");
+    serial.writeString("PRN 1,(0,0,0,0,0,0)\r");
     std::cout << serial.readLine() << std::endl;
     Sleep(500);
     //std::cout << sin(degToRad(180)) *250 << "  " << sin(180) *250 << std::endl;
 
 
-    int x = 000;
-    int y = 400;
+    int x = 0;
+    int y = 0;
     //serial.writeString(bruteForce(40, 20));
     auto t1 = Clock::now();
     serial.writeString(bruteForce(x, y));
