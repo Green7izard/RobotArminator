@@ -1,5 +1,6 @@
 #pragma once
 #include "IComputerVision.hpp"
+#include "Thread.hpp"
 #include "Table.hpp"
 #include "Camera.hpp"
 #include "opencv2/opencv.hpp"
@@ -7,7 +8,7 @@
 namespace Vision
 {
     class TableFinder :
-        public IComputerVision
+        public IComputerVision, public RobotArminator::Thread
     {
 
         friend class Camera;
@@ -24,9 +25,6 @@ namespace Vision
         * @param position the new VisionPosition
         */
         void setPosition(VisionPosition position);
-
-        //Whether its running or not
-        bool running;
 
         //Check if the table is valid
         static bool validTable(Table * table);
@@ -66,15 +64,9 @@ namespace Vision
         Table detectTable();
 
         /**
-        * //TODO
         * The main function of the class
         */
-        virtual void run();
-
-        /**
-        * Stops the thread action
-        */
-        virtual void stop();
+        virtual void run() override;
 
         /**
         * Converts a X and Y position from the camera into a VisionPosition based on the coordinate system
@@ -97,8 +89,8 @@ namespace Vision
         * Opens a menu to calibrate the system
         *
         */
-        virtual void calibrate()=0;
-        
+        virtual void calibrate();
+
         /**
         * Sets the image size
         */

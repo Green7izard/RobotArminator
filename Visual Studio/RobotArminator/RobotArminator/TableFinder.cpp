@@ -10,27 +10,18 @@ namespace Vision {
     {
         //calibrate();
         //tabel = detectTable();
-        running = false;
     }
 
 
     TableFinder::~TableFinder() {
     }
 
-    void TableFinder::stop()
-    {
-        //TODO
-        running = false;
-    }
-
     void TableFinder::run() {
-        running = true;
         cv::Mat cameraFrame;
         Position2D position;
         timePoint time;
         calibrate();
-        //FIXME STOPCOMMAND?
-        while (running) {
+        while (RobotArminator::Thread::isRunning()) {
 
             time = Clock::now();
             camera->getCurrentImage(cameraFrame);
@@ -40,7 +31,6 @@ namespace Vision {
             }
             if (cv::waitKey(1) >= 0) break;
         }
-        //TODO
     }
 
     void TableFinder::setPosition(VisionPosition position)
@@ -177,10 +167,10 @@ namespace Vision {
                     cout << "Top on Robot Side removed, Reset it!" << endl;
                 }
                 else {
-                    cout << "No valid Points, please click the top on the robot side"<<endl;
+                    cout << "No valid Points, please click the top on the robot side" << endl;
                 }
-                 
-                
+
+
             }
         }
     }
@@ -223,7 +213,7 @@ namespace Vision {
                 cv::circle(cameraFrame, cv::Point(newTable.TopLeft.X, newTable.TopLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
                 cv::putText(cameraFrame, "Robot Top", cv::Point(newTable.TopLeft.X, newTable.TopLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
             }
-            if (validPoint(&newTable.BotLeft)&&orientation==TOP)
+            if (validPoint(&newTable.BotLeft) && orientation == TOP)
             {
                 cv::circle(cameraFrame, cv::Point(newTable.BotLeft.X, newTable.BotLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
                 cv::putText(cameraFrame, "Robot Bot", cv::Point(newTable.BotLeft.X, newTable.BotLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
