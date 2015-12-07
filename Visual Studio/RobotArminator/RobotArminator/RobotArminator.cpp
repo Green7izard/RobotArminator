@@ -21,9 +21,9 @@ double degToRad(int deg)
 }
 std::string bruteForce(int resultX, int resultY)
 {
+    std::cout << "bruteforce" << std::endl;
 
-
-    for (int j1 = -90; j1 <= 90; j1 += 1)
+    for (int j1 = -90; j1 <= 90; j1 += 5)
     {
         for (int j2 = -60; j2 <= 120; j2+=5)//
         {
@@ -31,7 +31,7 @@ std::string bruteForce(int resultX, int resultY)
             {
                 for (int j5 = -90; j5 <= 90; j5+=5)//
                 {
-                    for (int j6 = -90; j6 <= 90; j6 += 180)
+                    for (int j6 = -200; j6 <= 200; j6 += 5)
                     {
                         int x;
                         int y;
@@ -74,7 +74,7 @@ std::string bruteForce(int resultX, int resultY)
                         else
                             x = cos(degToRad(-90 - j1))*x;
                         
-                        if (resultX >= x - 50 && resultX <= x + 50  && resultY >= y - 50 && resultY <= y + 50 && z == 200 )
+                        if (resultX >= x - 50 && resultX <= x + 50  && resultY >= y - 50 && resultY <= y + 50 && z >= 150 && z <= 250 && (j1 >30 || j1 < -30 ))
                         {
                             std::stringstream ss;
                             if (j1 < 0)
@@ -84,9 +84,14 @@ std::string bruteForce(int resultX, int resultY)
                                 j5 *= -1;
                                 j6 *= -1;
                             }
-                            ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
-                            std::cout << ss.str() << std::endl;
-                            return ss.str();
+                            if ((j2 + j3 + j5 >= 180 && (j6 < -30 || j6 > 30)) || 
+                                (j2 + j3 + j5 <= -180 && (j6 < 150 && j6 > -150))
+                                || (j2 + j3 + j5 <= 180 && (j2 + j3 + j5 >= -180)))
+                            {
+                                ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
+                                std::cout << ss.str() << std::endl;
+                                return ss.str();
+                            }
                         }
                     }
                 }
@@ -110,8 +115,8 @@ int main(int argc, char* argv[])
     //std::cout << sin(degToRad(180)) *250 << "  " << sin(180) *250 << std::endl;
 
 
-    int x = 0;
-    int y = 0;
+    int x = 200;
+    int y = 200;
     //serial.writeString(bruteForce(40, 20));
     auto t1 = Clock::now();
     serial.writeString(bruteForce(x, y));
