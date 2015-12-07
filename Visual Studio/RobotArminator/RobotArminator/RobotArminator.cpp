@@ -1,23 +1,20 @@
 // RobotArminator.cpp : Defines the entry point for the console application.
 //
 
-#include <iostream>
-#include <ctime>
 #include "stdafx.h"
 #include "Controller.hpp"
 #include "BallPositionCalculator.hpp"
-
+#include <chrono>
+#include <iostream>
+#include <ctime>
 using namespace RobotArminator;
 using namespace BallPosition;
 
 int main(int argc, char* argv[])
 {
-	BallPositionCalculator ballPositionCalculator;
-	VisionPosition visionPositionSideView = { 2000, 200, Clock::now(), SIDE };
-	VisionPosition visionPositionTopView = { 2000, 500, Clock::now(), TOP };
+    Controller t();
 
-	ballPositionCalculator.startPositionCalculation();
-	ballPositionCalculator.calculateTraject(visionPositionSideView, visionPositionTopView);
+
 
 	//wait for input
 	std::cin.get(); 
