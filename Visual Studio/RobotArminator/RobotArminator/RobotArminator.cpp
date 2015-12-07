@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     Vision::Position2D pos;
     std::cout << "Start Camera with size " <<cam.getWidth()<<"x"<< cam.getHeight()<<"\n";
     cv::Mat cameraFrame;
-    Vision::ColorHCDVision HCD(RobotArminator::SIDE, &cam);
+    Vision::ColorHCDVision HCD(RobotArminator::TOP, &cam);
     std::cout << "Frame Created\n";
 
     cv::namedWindow(win, cv::WINDOW_AUTOSIZE);

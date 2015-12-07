@@ -57,6 +57,10 @@ namespace Vision {
         Vision::Position2D pos;
         Mat cameraFrame;
         Mat cannyFrame;
+
+        std::cout << "Starting calibrating: " << windowName << endl;
+        std::cout << "Adjust the sliders in the windows and press 'esc' when the values are correct!" << endl;
+
         namedWindow(windowName, cv::WINDOW_AUTOSIZE);
         namedWindow(windowNameCanny, cv::WINDOW_AUTOSIZE);
         createTrackbar("Min Radius", windowName, &minRadius, 256, 0);
@@ -138,6 +142,10 @@ namespace Vision {
         Vision::Position2D pos;
         Mat cameraFrame;
         Mat cannyFrame;
+
+        std::cout << "Starting calibrating: " << windowName << endl;
+        std::cout << "Adjust the sliders in the windows and press 'esc' when the values are correct!" << endl;
+
         namedWindow(windowName, cv::WINDOW_AUTOSIZE);
         namedWindow(windowNameCanny, cv::WINDOW_AUTOSIZE);
         createTrackbar("Min Hue", windowName, &minHue, 180, 0);

@@ -28,6 +28,17 @@ namespace Vision
         //Whether its running or not
         bool running;
 
+        //Check if the table is valid
+        static bool validTable(Table * table);
+
+        //check if point is valid
+        static bool validPoint(Position2D * point);
+
+        struct BigTable {
+            Table * table;
+            Orientation orientation;
+        };
+
     protected:
 
         //The camera wrapper that is used
@@ -70,9 +81,10 @@ namespace Vision
         *
         * @param position the location in the screen
         * @param time the systemtime
+        * @param imageHeight the height fo the current image in pixels
         * @return VisionPosition in the worldspace
         */
-        VisionPosition convertToCoordinate(Position2D &position, timePoint time);
+        VisionPosition convertToCoordinate(Position2D &position, timePoint time, int imageHeight);
 
         /**
         * Function for finding the ball.
@@ -91,6 +103,11 @@ namespace Vision
         * Sets the image size
         */
         void updateImageSize(unsigned int width = Camera::FRAME_WIDTH, unsigned int height = Camera::FRAME_HEIGHT);
+
+        /**
+        * catches mouse clicks
+        */
+        static void mouseClick(int event, int x, int y, int flags, void *userdata);
     };
 }
 

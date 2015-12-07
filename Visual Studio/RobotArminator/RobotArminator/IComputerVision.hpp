@@ -15,10 +15,10 @@ namespace Vision
 
       
         virtual ~IComputerVision();
-    private:
-        Orientation orientation;
+
     protected:
         IComputerVision(Orientation orientation);
+        Orientation orientation;
 
     };
 }
