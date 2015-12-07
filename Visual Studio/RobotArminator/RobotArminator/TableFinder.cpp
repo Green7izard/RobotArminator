@@ -21,15 +21,15 @@ namespace Vision {
         Position2D position;
         timePoint time;
         calibrate();
-        while (RobotArminator::Thread::isRunning()) {
-
+        while (isRunning())
+        {
             time = Clock::now();
             camera->getCurrentImage(cameraFrame);
             if (locateObject(cameraFrame, position))
             {
                 setPosition(convertToCoordinate(position, time, cameraFrame.rows));
             }
-            if (cv::waitKey(1) >= 0) break;
+            cv::waitKey(1);
         }
     }
 
