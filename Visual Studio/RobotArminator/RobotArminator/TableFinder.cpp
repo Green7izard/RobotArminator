@@ -20,14 +20,14 @@ namespace Vision {
         cv::Mat cameraFrame;
         Position2D position;
         timePoint time;
-        calibrate();
         while (isRunning())
         {
             time = Clock::now();
             camera->getCurrentImage(cameraFrame);
+            cv::Size s = cameraFrame.size();
             if (locateObject(cameraFrame, position))
             {
-                setPosition(convertToCoordinate(position, time, cameraFrame.rows));
+                setPosition(convertToCoordinate(position, time, s.width, s.height));
             }
             cv::waitKey(1);
         }
@@ -45,9 +45,14 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(Position2D &position, timePoint time, int imageHeight)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, timePoint time, int imageWidth, int imageHeight)
     {
+        float X = (float)position.X;
+        float Y = (float)position.Y;
+        bool robotIsLeft = (tabel.TopLeft.X > tabel.TopRight.X);
         //TODO Change it based on the table
+        // http://math.stackexchange.com/questions/613725/a-formula-for-perspective-measurement
+        // https://en.wikipedia.org/wiki/3D_projection
         VisionPosition pos;
         pos.X = (float)position.X;
         pos.Y = (float)position.Y;
@@ -55,7 +60,7 @@ namespace Vision {
         return pos;
     }
 
-    void TableFinder::updateImageSize(unsigned int X, unsigned int Y)
+    void TableFinder::updateImageSize(int X, int Y)
     {
         camera->setSize(X, Y);
         calibrate();
@@ -187,9 +192,8 @@ namespace Vision {
 
     void TableFinder::calibrate()
     {
-        Table newTable;
         BigTable big;
-        big.table = &newTable;
+        big.table = &tabel;
         big.orientation = orientation;
         std::string name;
         if (orientation == TOP)
@@ -208,31 +212,37 @@ namespace Vision {
         cv::setMouseCallback(name, &Vision::TableFinder::mouseClick, &big);
         while (true) {
             camera->getCurrentImage(cameraFrame);
-            if (validPoint(&newTable.TopLeft))
+            if (validPoint(&tabel.TopLeft))
             {
-                cv::circle(cameraFrame, cv::Point(newTable.TopLeft.X, newTable.TopLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
-                cv::putText(cameraFrame, "Robot Top", cv::Point(newTable.TopLeft.X, newTable.TopLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                cv::circle(cameraFrame, cv::Point(tabel.TopLeft.X, tabel.TopLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
+                cv::putText(cameraFrame, "Robot Top", cv::Point(tabel.TopLeft.X, tabel.TopLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
             }
-            if (validPoint(&newTable.BotLeft) && orientation == TOP)
+            if (validPoint(&tabel.BotLeft) && orientation == TOP)
             {
-                cv::circle(cameraFrame, cv::Point(newTable.BotLeft.X, newTable.BotLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
-                cv::putText(cameraFrame, "Robot Bot", cv::Point(newTable.BotLeft.X, newTable.BotLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                cv::circle(cameraFrame, cv::Point(tabel.BotLeft.X, tabel.BotLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
+                cv::putText(cameraFrame, "Robot Bot", cv::Point(tabel.BotLeft.X, tabel.BotLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
             }
-            if (validPoint(&newTable.TopRight))
+            if (validPoint(&tabel.TopRight))
             {
-                cv::circle(cameraFrame, cv::Point(newTable.TopRight.X, newTable.TopRight.Y), 15, cv::Scalar(80, 255, 80), -1);
-                cv::putText(cameraFrame, "Opposing Top", cv::Point(newTable.TopRight.X, newTable.TopRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                cv::circle(cameraFrame, cv::Point(tabel.TopRight.X, tabel.TopRight.Y), 15, cv::Scalar(80, 255, 80), -1);
+                cv::putText(cameraFrame, "Opposing Top", cv::Point(tabel.TopRight.X, tabel.TopRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
             }
-            if (validPoint(&newTable.BotRight) && orientation == TOP)
+            if (validPoint(&tabel.BotRight) && orientation == TOP)
             {
-                cv::circle(cameraFrame, cv::Point(newTable.BotRight.X, newTable.BotRight.Y), 15, cv::Scalar(80, 255, 80), -1);
-                cv::putText(cameraFrame, "Opposing Bot", cv::Point(newTable.BotRight.X, newTable.BotRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                cv::circle(cameraFrame, cv::Point(tabel.BotRight.X, tabel.BotRight.Y), 15, cv::Scalar(80, 255, 80), -1);
+                cv::putText(cameraFrame, "Opposing Bot", cv::Point(tabel.BotRight.X, tabel.BotRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
             }
             cv::imshow(name, cameraFrame);
             //Wait till escape is 
-            if (cv::waitKey(33) >= (char)27 && validTable(&newTable)) break;
+            if (cv::waitKey(33) >= (char)27 && validTable(&tabel)) break;
         }
         cv::destroyWindow(name);
+    }
+
+    void TableFinder::updateTableSize(int width, int height)
+    {
+        tableWidth = width;
+        tableHeight = height;
     }
 
 }

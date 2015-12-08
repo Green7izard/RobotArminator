@@ -37,12 +37,22 @@ namespace Vision
             Orientation orientation;
         };
 
+        //The width of the table in mm
+        int tableWidth = DEFAULT_WIDTH;
+        //The height of the table in mm
+        int tableHeight = DEFAULT_HEIGHT;
+
     protected:
 
         //The camera wrapper that is used
         Camera* camera;
 
     public:
+
+        //default width
+        const static int DEFAULT_WIDTH = 1525;
+        //default height
+        const static int DEFAULT_HEIGHT = 2740;
 
         /**
         * Create a TableFinder
@@ -73,10 +83,11 @@ namespace Vision
         *
         * @param position the location in the screen
         * @param time the systemtime
+        * @param imageWidth the wdith for the current image in pixels
         * @param imageHeight the height fo the current image in pixels
         * @return VisionPosition in the worldspace
         */
-        VisionPosition convertToCoordinate(Position2D &position, timePoint time, int imageHeight);
+        VisionPosition convertToCoordinate(Position2D &position, timePoint time, int imageWidth, int imageHeight);
 
         /**
         * Function for finding the ball.
@@ -94,7 +105,12 @@ namespace Vision
         /**
         * Sets the image size
         */
-        void updateImageSize(unsigned int width = Camera::FRAME_WIDTH, unsigned int height = Camera::FRAME_HEIGHT);
+        void updateImageSize(int width = Camera::FRAME_WIDTH, int height = Camera::FRAME_HEIGHT);
+
+        /**
+        * Sets the table size in mm
+        */
+        void updateTableSize(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
 
         /**
         * catches mouse clicks

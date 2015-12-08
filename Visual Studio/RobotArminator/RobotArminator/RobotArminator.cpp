@@ -29,11 +29,13 @@ int main(int argc, char* argv[])
         //std::cout << s.width << "x" << s.height << "\n";
         if (HCD.locateObject(cameraFrame, pos))
         {
-            std::cout << "Found at: " << pos.X << "," << pos.Y << "\n";
+            std::cout << "Found at: " << pos.X << "," << pos.Y << std::endl;
+            RobotArminator::VisionPosition newPos = HCD.convertToCoordinate(pos, RobotArminator::Clock::now(), s.width, s.height);
+            std::cout << "Converted to: " << newPos.X << "," << newPos.Y << std::endl;
         }
         else
         {
-            std::cout << "Could not find the ball... Last at: " << pos.X << "," << pos.Y << "\n";
+            std::cout << "Could not find the ball... Last at: " << pos.X << "," << pos.Y << std::endl;
         }
         imshow(win, cameraFrame);
         //std::cout << "Shown the data\n";

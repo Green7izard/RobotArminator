@@ -36,8 +36,8 @@ namespace Vision {
             {
                 closestDistance = pytho;
                 Point center(cvRound(x), cvRound(y));
-                position.X = x;
-                position.Y = y;
+                position.X = center.x;
+                position.Y = center.y;
 #ifdef _DEBUG
                 int radius = cvRound(circles[i][2]);
                 circle(image, center, 3, Scalar(0, 255, 0), -1, 8, 0);
