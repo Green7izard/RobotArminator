@@ -68,19 +68,22 @@ namespace Vision {
         createTrackbar("Canny Threshhold", windowNameCanny, &cannyUpperThreshhold, 400, 0);
         createTrackbar("accumulator threshold", windowName, &accumulatorThreshold, 100, 0);
         while (true) {
-            camera->getCurrentImage(cameraFrame);
-
-            if (locateObject(cameraFrame, pos))
+            if (camera->getCurrentImage(cameraFrame))
             {
-                circle(cameraFrame, Point(pos.X, pos.Y), 10, Scalar(0, 255, 0), -1, 8, 0);
+
+                if (locateObject(cameraFrame, pos))
+                {
+                    circle(cameraFrame, Point(pos.X, pos.Y), 10, Scalar(0, 255, 0), -1, 8, 0);
+                }
+
+                Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
+
+                imshow(windowName, cameraFrame);
+                imshow(windowNameCanny, cannyFrame);
             }
-
-            Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
-
-            imshow(windowName, cameraFrame);
-            imshow(windowNameCanny, cannyFrame);
             //Wait till escape is 
             if (waitKey(33) >= (char)27) break;
+
         }
         destroyWindow(windowName);
         destroyWindow(windowNameCanny);
@@ -159,17 +162,19 @@ namespace Vision {
         createTrackbar("Canny Threshhold", windowNameCanny, &cannyUpperThreshhold, 300, 0);
         createTrackbar("accumulator threshold", windowName, &accumulatorThreshold, 100, 0);
         while (true) {
-            camera->getCurrentImage(cameraFrame);
-            if (locateObject(cameraFrame, pos))
+            if (camera->getCurrentImage(cameraFrame))
             {
-                circle(cameraFrame, Point(pos.X, pos.Y), 10, Scalar(0, 255, 0), -1, 8, 0);
-            }
+                if (locateObject(cameraFrame, pos))
+                {
+                    circle(cameraFrame, Point(pos.X, pos.Y), 10, Scalar(0, 255, 0), -1, 8, 0);
+                }
 
-            Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
-            imshow(windowName, cameraFrame);
-            imshow(windowNameCanny, cannyFrame);
-            //Wait till escape is 
-            if (waitKey(33) >= (char)27) break;
+                Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
+                imshow(windowName, cameraFrame);
+                imshow(windowNameCanny, cannyFrame);
+                //Wait till escape is 
+                if (waitKey(33) >= (char)27) break;
+            }
         }
         destroyWindow(windowName);
         destroyWindow(windowNameCanny);

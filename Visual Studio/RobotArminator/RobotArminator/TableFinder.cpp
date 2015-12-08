@@ -23,12 +23,14 @@ namespace Vision {
         while (isRunning())
         {
             time = Clock::universal_time();
-            camera->getCurrentImage(cameraFrame);
-            if (locateObject(cameraFrame, position))
+            if (camera->getCurrentImage(cameraFrame))
             {
-                setPosition(convertToCoordinate(position, time));
+                if (locateObject(cameraFrame, position))
+                {
+                    setPosition(convertToCoordinate(position, time));
+                }
+                //cv::waitKey(1);
             }
-            cv::waitKey(1);
         }
     }
 
@@ -65,10 +67,10 @@ namespace Vision {
         }
         else
         {
-           anchor = tabel.BotLeft;
-           opposite = tabel.TopRight;
-           totalXLen = std::abs(anchor.X - opposite.X);
-           X = ((anchor.X-X) / totalXLen)*tableWidth;
+            anchor = tabel.BotLeft;
+            opposite = tabel.TopRight;
+            totalXLen = std::abs(anchor.X - opposite.X);
+            X = ((anchor.X - X) / totalXLen)*tableWidth;
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
@@ -85,13 +87,13 @@ namespace Vision {
         }
         else
         {
-            Y = ((Y-anchor.Y) / totalXLen)*tableWidth;
+            Y = ((Y - anchor.Y) / totalXLen)*tableWidth;
         }
 
         VisionPosition pos;
         pos.X = X;
         pos.Y = Y;
-        pos.time = time;        
+        pos.time = time;
         return pos;
     }
 
@@ -246,28 +248,30 @@ namespace Vision {
 
         cv::setMouseCallback(name, &Vision::TableFinder::mouseClick, &big);
         while (true) {
-            camera->getCurrentImage(cameraFrame);
-            if (validPoint(&tabel.TopLeft))
+            if (camera->getCurrentImage(cameraFrame))
             {
-                cv::circle(cameraFrame, cv::Point(tabel.TopLeft.X, tabel.TopLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
-                cv::putText(cameraFrame, "Robot Top", cv::Point(tabel.TopLeft.X, tabel.TopLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                if (validPoint(&tabel.TopLeft))
+                {
+                    cv::circle(cameraFrame, cv::Point(tabel.TopLeft.X, tabel.TopLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
+                    cv::putText(cameraFrame, "Robot Top", cv::Point(tabel.TopLeft.X, tabel.TopLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                }
+                if (validPoint(&tabel.BotLeft) && orientation == TOP)
+                {
+                    cv::circle(cameraFrame, cv::Point(tabel.BotLeft.X, tabel.BotLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
+                    cv::putText(cameraFrame, "Robot Bot", cv::Point(tabel.BotLeft.X, tabel.BotLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                }
+                if (validPoint(&tabel.TopRight))
+                {
+                    cv::circle(cameraFrame, cv::Point(tabel.TopRight.X, tabel.TopRight.Y), 15, cv::Scalar(80, 255, 80), -1);
+                    cv::putText(cameraFrame, "Opposing Top", cv::Point(tabel.TopRight.X, tabel.TopRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                }
+                if (validPoint(&tabel.BotRight) && orientation == TOP)
+                {
+                    cv::circle(cameraFrame, cv::Point(tabel.BotRight.X, tabel.BotRight.Y), 15, cv::Scalar(80, 255, 80), -1);
+                    cv::putText(cameraFrame, "Opposing Bot", cv::Point(tabel.BotRight.X, tabel.BotRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
+                }
+                cv::imshow(name, cameraFrame);
             }
-            if (validPoint(&tabel.BotLeft) && orientation == TOP)
-            {
-                cv::circle(cameraFrame, cv::Point(tabel.BotLeft.X, tabel.BotLeft.Y), 15, cv::Scalar(255, 80, 80), -1);
-                cv::putText(cameraFrame, "Robot Bot", cv::Point(tabel.BotLeft.X, tabel.BotLeft.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
-            }
-            if (validPoint(&tabel.TopRight))
-            {
-                cv::circle(cameraFrame, cv::Point(tabel.TopRight.X, tabel.TopRight.Y), 15, cv::Scalar(80, 255, 80), -1);
-                cv::putText(cameraFrame, "Opposing Top", cv::Point(tabel.TopRight.X, tabel.TopRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
-            }
-            if (validPoint(&tabel.BotRight) && orientation == TOP)
-            {
-                cv::circle(cameraFrame, cv::Point(tabel.BotRight.X, tabel.BotRight.Y), 15, cv::Scalar(80, 255, 80), -1);
-                cv::putText(cameraFrame, "Opposing Bot", cv::Point(tabel.BotRight.X, tabel.BotRight.Y - 15), cv::FONT_HERSHEY_DUPLEX, 1.2, cv::Scalar(80, 140, 255));
-            }
-            cv::imshow(name, cameraFrame);
             //Wait till escape is 
             if (cv::waitKey(33) >= (char)27 && validTable(&tabel)) break;
         }

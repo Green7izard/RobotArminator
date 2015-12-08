@@ -22,7 +22,7 @@ namespace Vision
         return mirrored;
     }
 
-    void Camera::getCurrentImage(cv::Mat& output)
+    bool Camera::getCurrentImage(cv::Mat& output)
     {
         if (!camera.isOpened())
         {
@@ -36,12 +36,18 @@ namespace Vision
             {
                 std::string sender ="Camera " + std::to_string( cameraNumber);
                 RobotArminator::Logger::logWarning((char *)sender.c_str(), "Camera could not read!");
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
         else
         {
             std::string sender = "Camera " + std::to_string(cameraNumber);
             RobotArminator::Logger::logWarning((char *)sender.c_str(), "Camera could not be opened!");
+            return true;
         }
     }
 
@@ -78,8 +84,9 @@ namespace Vision
 
     }
 
-    void FileCamera::getCurrentImage(cv::Mat& output)
+    bool FileCamera::getCurrentImage(cv::Mat& output)
     {
         output = cv::imread(filename, 1);
+        return true;
     }
 }

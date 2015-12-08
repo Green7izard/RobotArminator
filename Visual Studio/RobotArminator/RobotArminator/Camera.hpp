@@ -48,7 +48,7 @@ namespace Vision
         * Gets the current image
         * @param output where to store it
         */
-        virtual void getCurrentImage(cv::Mat& output);
+        virtual bool getCurrentImage(cv::Mat& output);
 
         /**
         * Sets the image size
@@ -82,6 +82,6 @@ namespace Vision
         * Regets the image from a file
         * @param output where to store it
         */
-        virtual void getCurrentImage(cv::Mat& output) override;
+        virtual bool getCurrentImage(cv::Mat& output) override;
     };
 }
