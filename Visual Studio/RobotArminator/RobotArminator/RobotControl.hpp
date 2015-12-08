@@ -13,6 +13,7 @@
 #include <iostream>
 #include "Vector.hpp"
 #include "asio.hpp"
+#include "Windows.h"
 
 using namespace Robot;
 
@@ -24,10 +25,11 @@ public:
     void moveArm(Vector aPosition);
     Vector getPosition();
     void hitBall(Vector aPosition);
-    void setupRobot();
     void writeData(std::string aData);
     std::string readData();
+    std::string calculateAngles(Vector aPosition);
 private:
+    double getRadian(double aDegree);
     asio::io_service io;
     asio::serial_port serial;
 };

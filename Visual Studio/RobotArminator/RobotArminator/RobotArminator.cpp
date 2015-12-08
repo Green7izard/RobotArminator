@@ -10,139 +10,28 @@
 #include <math.h>
 #include <sstream>
 #include <chrono>
-//#include "RobotControl.hpp"
+#include "RobotControl.hpp"
 
 typedef std::chrono::high_resolution_clock Clock;
 using namespace RobotArminator;
 
-double degToRad(int deg)
-{
-    return deg * (3.14159265/180);
-}
-std::string bruteForce(int resultX, int resultY)
-{
-    std::cout << "bruteforce" << std::endl;
-
-    for (int j1 = -90; j1 <= 90; j1 += 5)
-    {
-        for (int j2 = -60; j2 <= 120; j2+=5)//
-        {
-            for (int j3 = -110; j3 <= 120; j3+=5)//
-            {
-                for (int j5 = -90; j5 <= 90; j5+=5)//
-                {
-                    for (int j6 = -200; j6 <= 200; j6 += 5)
-                    {
-                        int x;
-                        int y;
-                        int z;
-                        if (j1 < 0)
-                        {
-                            double j2y = cos(degToRad(j2 * -1)) * 250;
-                            double j3y = cos(degToRad(j2 * -1) + degToRad(j3 * -1)) * 160;
-                            double j5y = cos(degToRad(j2 * -1) + degToRad(j3 * -1) + degToRad(j5 * -1)) * 72;
-                            double j6y = cos(degToRad(j2 * -1) + degToRad(j3 * -1) + degToRad(j5 * -1) + degToRad(j6 * -1)) * 390;
-                            y = j2y + j3y + j5y + j6y;
-
-                            double j2x = sin(degToRad(j2 * -1)) * 250;
-                            double j3x = sin(degToRad(j2 * -1) + degToRad(j3 * -1)) * 160;
-                            double j5x = sin(degToRad(j2 * -1) + degToRad(j3 * -1) + degToRad(j5 * -1)) * 72;
-                            double j6x = sin(degToRad(j2 * -1) + degToRad(j3 * -1) + degToRad(j5 * -1) + degToRad(j6 * -1)) * 390;
-                            x = j2x + j3x + j5x + j6x;
-                        }
-                        else
-                        {
-                            double j2y = cos(degToRad(j2)) * 250;
-                            double j3y = cos(degToRad(j2) + degToRad(j3)) * 160;
-                            double j5y = cos(degToRad(j2) + degToRad(j3) + degToRad(j5)) * 72;
-                            double j6y = cos(degToRad(j2) + degToRad(j3) + degToRad(j5) + degToRad(j6)) * 390;
-                            y = j2y + j3y + j5y + j6y;
-
-                            double j2x = sin(degToRad(j2)) * 250;
-                            double j3x = sin(degToRad(j2) + degToRad(j3)) * 160;
-                            double j5x = sin(degToRad(j2) + degToRad(j3) + degToRad(j5)) * 72;
-                            double j6x = sin(degToRad(j2) + degToRad(j3) + degToRad(j5) + degToRad(j6)) * 390;
-                            x = j2x + j3x + j5x + j6x;
-                        }
-
-                        z = cos(degToRad(j1)) * x;
-                        
-                        if (j1 > 0)
-                        {
-                            x = cos(degToRad(90 - j1))*x;
-                        }
-                        else
-                            x = cos(degToRad(-90 - j1))*x;
-                        
-                        if (resultX >= x - 50 && resultX <= x + 50  && resultY >= y - 50 && resultY <= y + 50 && z >= 150 && z <= 250 && (j1 >30 || j1 < -30 ))
-                        {
-                            std::stringstream ss;
-                            if (j1 < 0)
-                            {
-                                j2 *= -1;
-                                j3 *= -1;
-                                j5 *= -1;
-                                j6 *= -1;
-                            }
-                            if ((j2 + j3 + j5 >= 180 && (j6 < -30 || j6 > 30)) || 
-                                (j2 + j3 + j5 <= -180 && (j6 < 150 && j6 > -150))
-                                || (j2 + j3 + j5 <= 180 && (j2 + j3 + j5 >= -180)))
-                            {
-                                ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
-                                std::cout << ss.str() << std::endl;
-                                return ss.str();
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    std::cout << "Not found." << std::endl;
-    return "PRN 1,(0,0,0,0,0,0)\r";
-
-
-}
 int main(int argc, char* argv[])
 { 
-    SimpleSerial serial("COM3", 19200);
+    RobotControl robotControl("COM3", 19200);
     Sleep(500);
-    //serial.setupRobot();
 
-    serial.writeString("PRN 1,(0,0,0,0,0,0)\r");
-    std::cout << serial.readLine() << std::endl;
+    robotControl.writeData("PRN 1,(0,0,0,0,0,0)\r");
+    std::cout << robotControl.readData() << std::endl;
     Sleep(500);
-    //std::cout << sin(degToRad(180)) *250 << "  " << sin(180) *250 << std::endl;
 
-
-    int x = 200;
-    int y = 200;
-    //serial.writeString(bruteForce(40, 20));
+    Vector aPosition(200, 200, 0);
     auto t1 = Clock::now();
-    serial.writeString(bruteForce(x, y));
+    robotControl.writeData(robotControl.calculateAngles(aPosition));
     auto t2 = Clock::now();
     std::cout << "Delta t2-t1: "
-        << std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count()
-        << " nanoseconds" << std::endl;
-    std::cout << serial.readLine() << std::endl;
-
-    char input;
-    while (1)
-    {
-
-        fflush(stdin);
-        input = _getch();
-        if (input == 'w')
-            x += 5;
-        if (input == 's')
-            x -= 5;
-        if (input == 'a')
-            y -= 5;
-        if (input == 'd')
-            y += 5;
-        serial.writeString(bruteForce(x, y));
-        std::cout << serial.readLine() << std::endl;
-    }
-    std::cin.get();
+        << (double)(std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count() * 0.000000001)
+        << " seconds" << std::endl;
+    std::cout << robotControl.readData() << std::endl;
+    std::cin.get(); //wait for user input
     return 0;
 }
