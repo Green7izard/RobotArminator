@@ -34,16 +34,14 @@ namespace Vision
         {
             if (!camera.read(output))
             {
-                char * sender = "Camera # ";
-                sender[8] = cameraNumber;
-                RobotArminator::Logger::logWarning(sender, "Camera could not read!");
+                std::string sender ="Camera " + std::to_string( cameraNumber);
+                RobotArminator::Logger::logWarning((char *)sender.c_str(), "Camera could not read!");
             }
         }
         else
         {
-            char * sender = "Camera # ";
-            sender[8] = cameraNumber;
-            RobotArminator::Logger::logWarning(sender, "Camera could not be opened!");
+            std::string sender = "Camera " + std::to_string(cameraNumber);
+            RobotArminator::Logger::logWarning((char *)sender.c_str(), "Camera could not be opened!");
         }
     }
 
