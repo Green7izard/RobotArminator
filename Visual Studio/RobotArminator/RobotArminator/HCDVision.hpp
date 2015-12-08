@@ -39,21 +39,21 @@ namespace Vision {
     {
     public:
         //If values have a gradient higher then this it is accepted as a edge
-        int cannyUpperThreshhold = 200;
+        int cannyUpperThreshhold = 300;
         //The lower this value, the more circles it should find
-        int accumulatorThreshold = 50;
+        int accumulatorThreshold = 25;
         //Hue/Color 0-180
-        int minHue = 84;
-        int maxHue = 106;
+        int minHue = 7;
+        int maxHue = 42;
         //Saturation 0-255
-        int minSat = 0;
-        int maxSat = 256;
+        int minSat = 10;
+        int maxSat = 222;
         //Value/Intensity 0-255
-        int minInt = 117;
+        int minInt = 125;
         int maxInt = 255;
 
         //Parameters for ball size
-        int maxRadius = 100;
+        int maxRadius = 300;
         int minRadius = 10;
 
 
