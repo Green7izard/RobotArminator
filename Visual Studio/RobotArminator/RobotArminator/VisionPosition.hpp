@@ -10,11 +10,11 @@ namespace RobotArminator
     {
     public:
         VisionPosition();
-        VisionPosition(float X, float Y, timePoint time, Orientation orientation);
+        VisionPosition(float X, float Y, Time time, Orientation orientation);
         ~VisionPosition();
         float X;
         float Y;
-        timePoint time;
+        Time time;
         Orientation orientation;
     };
 }
