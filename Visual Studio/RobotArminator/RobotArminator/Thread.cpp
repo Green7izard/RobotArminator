@@ -17,8 +17,8 @@ namespace RobotArminator
 
     void Thread::stop()
     {
-        thread.join();
         running = false;
+        thread.join();
     }
 
     Thread::~Thread()
