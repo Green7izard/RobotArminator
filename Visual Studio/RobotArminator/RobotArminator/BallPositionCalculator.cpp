@@ -40,9 +40,13 @@ namespace BallPosition
 		abcCalculator.setFormule(newSideView, lastSidePosition, newSideView.X);
 		float tempXValue = abcCalculator.getLargestXPosition(0);
 		float tempYValue = abcCalculator.getYPosition((tempXValue - 1));
+		float time = 0;
 
 		std::cout << "From top-coordinates (" << lastTopPosition.X << "," << lastTopPosition.Y << ") to (" << newTopView.X << "," << newTopView.Y << ")" << std::endl;
 		std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << newSideView.X << "," << newSideView.Y << ")" << std::endl;
+
+		//Get Time and Length
+		time += abcCalculator.getTime(0, tempXValue);
 
 		/*
 		TODO SET TIME!
@@ -50,6 +54,11 @@ namespace BallPosition
 		abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, std::time_t(0), SIDE), VisionPosition(tempXValue, 0, std::time_t(0), SIDE),tempXValue);
 		float zValue = abcCalculator.getYPosition(tableWidth);
 
+		//Get Time and Length
+		time += abcCalculator.getTime(tempXValue + 1, tableWidth);
+		std::cout << "Time: " << time << " Milliseconds" << std::endl;
+
+		std::cout << "( tableWidth , tableDepth , Height )." << std::endl;
 		std::cout << "Hit the table at: ("<< tableWidth << "," << yValue << "," << zValue << ")." << std::endl;
 		Position p = Position(Vector(tableWidth, yValue, zValue), 0);
 		return p;
@@ -57,7 +66,7 @@ namespace BallPosition
 
 	float BallPositionCalculator::calculateLiniairPosition(VisionPosition pos)
 	{
-		float multiplier = (float)(pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
+		float multiplier = (pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
 		float startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
 		float newY = (multiplier * tableWidth) + startValue;
 		return newY;

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <math.h>
+#include <ctime>
 #include "ABCFormule.hpp"
 
 ABCFormule::ABCFormule()
@@ -13,32 +14,44 @@ ABCFormule::~ABCFormule()
 
 void ABCFormule::setFormule(VisionPosition newSideView, VisionPosition oldSideView, float startValue)
 {
-	float corner; //degrees
-	float height; //meters
-	float speed; //meter/seconds
-	float distance; //meters
+	float corner; //In degrees
+	float height; //In meters
+	float speed; //In meter/seconds
+	float distance; //In meters
 	float PI = 3.14159265358979;
-	startPositionX = startValue; // Millimeters
+	startPositionX = startValue; //In mMillimeters
 
 	corner = atan((newSideView.Y - oldSideView.Y) / (newSideView.X - oldSideView.X)) * 180 / PI;
-	height = newSideView.Y / 1000;
-	/*
-	TODO Fix Time comparison
+	height = newSideView.Y / 1000; //To meters
 
-	distance = sqrt(((newSideView.Y - lastSideView.Y) * (newSideView.Y - lastSideView.Y)) + ((newSideView.X - lastSideView.X) * (newSideView.X - lastSideView.X))) / 1000; //meters
-	speed = distance / (pos.time - lastSidePosition.time);
-	*/
-	speed = 5;
+	distance = sqrt(((newSideView.Y - oldSideView.Y) * (newSideView.Y - oldSideView.Y)) + ((newSideView.X - oldSideView.X) * (newSideView.X - oldSideView.X))) / 1000; //To meters
+	if (newSideView.time != 0 && oldSideView.time != 0)
+	{
+		speed = distance / (difftime(std::time_t(newSideView.time), std::time_t(oldSideView.time)) / 1000000); //To meter/seconds
+	}
+	else if (lastSpeed != NULL)
+	{
+		speed = lastSpeed * 0.6;
+		/*
+		Bij 14 cm hoogte kaatst hij tot 9 cm
+		Bij 12 cm hoogte kaatst hij tot 7,5 cm
+		*/
+	}
+	else
+	{
+		speed = 5;
+	}
 
 	a = (-9.81 / (2 * speed * speed)) * (tan(corner * PI / 180) + 1);
 	b = tan(corner * PI / 180);
 	c = height;
+	lastSpeed = speed;
 }
 
 float ABCFormule::getLargestXPosition(float y)
 {
-	float xPlus = (-b + sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To Millimeters
-	float xMin = (-b - sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To Millimeters
+	float xPlus = (-b + sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To millimeters
+	float xMin = (-b - sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To millimeters
 
 	if (xMin >= xPlus) {
 		return xMin + startPositionX;
@@ -54,4 +67,30 @@ float ABCFormule::getYPosition(float x)
 	float xInMeters = (x-startPositionX) / 1000;
 	float yValue = ((b * xInMeters) + (a * (xInMeters * xInMeters)) + c) * 1000;
 	return yValue; // Return y in millimeters
+}
+
+float ABCFormule::getTime(int startXValue, int endXValue)
+{
+	int firstY;
+	int secondY;
+
+	int fisrtX = startXValue;
+
+	int deltaX;
+	int deltaY;
+
+	float distance = 0;
+
+	for (int secondX = startXValue + 10; secondX < endXValue; secondX += 10)
+	{
+		firstY = getYPosition(fisrtX);
+		secondY = getYPosition(secondX);
+
+		deltaX = secondX - fisrtX;
+		deltaY = secondY - firstY;
+
+		fisrtX = secondX;
+		distance += sqrt(deltaX * deltaX + deltaY * deltaY);
+	}
+	return ((distance / 1000) / lastSpeed) * 1000; // In milliseconds
 }

@@ -10,6 +10,7 @@ public:
 	float b;
 	float c;
 	float startPositionX;
+	float lastSpeed;
 
 	ABCFormule();
 	virtual ~ABCFormule();
@@ -17,5 +18,6 @@ public:
 	void setFormule(VisionPosition newSideView, VisionPosition oldSideView, float startValue);
 	float getLargestXPosition(float y);
 	float getYPosition(float x);
+	float getTime(int startXValue, int endXValue);
 };
 

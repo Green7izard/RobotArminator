@@ -13,8 +13,8 @@ using namespace BallPosition;
 int main(int argc, char* argv[])
 {
 	BallPositionCalculator ballPositionCalculator;
-	VisionPosition visionPositionSideView = { 2000, 200, std::time_t(900), SIDE };
-	VisionPosition visionPositionTopView = { 2000, 500, std::time_t(900), TOP };
+	VisionPosition visionPositionSideView = { 2000, 200, std::time_t(900000), SIDE };
+	VisionPosition visionPositionTopView = { 2000, 500, std::time_t(900000), TOP };
 
 	ballPositionCalculator.startPositionCalculation();
 	ballPositionCalculator.calculateHitPosition(visionPositionSideView, visionPositionTopView);
