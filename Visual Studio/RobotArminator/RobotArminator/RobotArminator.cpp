@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
         if (HCD.locateObject(cameraFrame, pos))
         {
             std::cout << "Found at: " << pos.X << "," << pos.Y << std::endl;
-            RobotArminator::VisionPosition newPos = HCD.convertToCoordinate(pos, RobotArminator::Clock::now(), s.width, s.height);
+            RobotArminator::VisionPosition newPos = HCD.convertToCoordinate(pos, RobotArminator::Clock::universal_time());
             std::cout << "Converted to: " << newPos.X << "," << newPos.Y << std::endl;
         }
         else

@@ -19,10 +19,10 @@ namespace Vision {
     void TableFinder::run() {
         cv::Mat cameraFrame;
         Position2D position;
-        timePoint time;
+        Time time;
         while (isRunning())
         {
-            time = Clock::now();
+            time = Clock::universal_time();
             camera->getCurrentImage(cameraFrame);
             if (locateObject(cameraFrame, position))
             {
@@ -44,7 +44,7 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(Position2D &position, timePoint time)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time)
     {
         float X = (float)position.X;
         float Y = (float)position.Y;
