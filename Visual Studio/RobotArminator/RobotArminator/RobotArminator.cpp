@@ -6,6 +6,7 @@
 #include "opencv2/opencv.hpp"
 #include "Camera.hpp"
 #include "HCDVision.hpp"
+#include "PFCVision.hpp"
 #include "Orientation.hpp"
 
 
@@ -13,11 +14,14 @@ int main(int argc, char* argv[])
 {
     char * win= "window";
     
+	//Camera aanmaken.
     Vision::Camera cam(0);
     cam.setSize(1280, 720);
     Vision::Position2D pos;
-    std::cout << "Start Camera with size " <<cam.getWidth()<<"x"<< cam.getHeight()<<"\n";
+	std::cout << "Start Camera with size " << cam.getWidth() << "x" << cam.getHeight() << std::endl;
     cv::Mat cameraFrame;
+    //Vision::PFCVision HCD(RobotArminator::TOP, &cam);
+    //Vision::CannyHCDVision HCD(RobotArminator::TOP, &cam);
     Vision::ColorHCDVision HCD(RobotArminator::TOP, &cam);
     std::cout << "Frame Created\n";
 
