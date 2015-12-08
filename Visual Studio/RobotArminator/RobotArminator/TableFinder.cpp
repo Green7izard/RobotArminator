@@ -25,11 +25,11 @@ namespace Vision {
         //TODO
         return Table();
     }
-
+    /*
     VisionPosition TableFinder::convertToCoordinate(unsigned int X, unsigned int Y, timePoint)
     {
         //TODO
         return VisionPosition();
     }
-
+    */
 }

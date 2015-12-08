@@ -1,3 +1,5 @@
+#pragma once
+
 #define ASIO_STANDALONE 
 #define ASIO_HAS_STD_ADDRESSOF
 #define ASIO_HAS_STD_ARRAY
@@ -8,7 +10,6 @@
 #define _WEBSOCKETPP_NOEXCEPT_
 #define WEBSOCKETPP_CPP11_CHRONO
 
-#pragma once
 #include "IRobotControl.hpp"
 #include <iostream>
 #include "asio.hpp"

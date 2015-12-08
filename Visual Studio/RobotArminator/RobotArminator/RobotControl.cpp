@@ -37,7 +37,7 @@ void RobotControl::writeData(std::string aData)
 std::string RobotControl::readData()
 {
     //Reading data char by char, code is optimized for simplicity, not speed
-    using namespace boost;
+
     char c;
     std::string result;
 
@@ -80,11 +80,13 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
                         double j6x = sin(getRadian(j2) + getRadian(j3) + getRadian(j5) + getRadian(j6)) * 390;
                         x = j2x + j3x + j5x + j6x;
                         
+                        /*
                         if (j1 > 0)
                         {
-                            y * -1;
-                            x * -1;
+                            y *= -1;
+                            x *= -1;
                         }
+                        */
 
                         if (aTrajectory.position.x >= x - 50 && aTrajectory.position.x <= x + 50 && aTrajectory.position.y >= y - 50 && aTrajectory.position.y <= y + 50)
                         {
