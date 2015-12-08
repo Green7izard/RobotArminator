@@ -1,6 +1,5 @@
 1;1;OPEN=usertool
 1;1;CNTLON
-1;1;SRVON
 1;1;RUN1
 1;2;RUN2
 1;1;STATE

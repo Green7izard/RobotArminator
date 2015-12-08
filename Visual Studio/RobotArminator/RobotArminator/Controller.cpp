@@ -5,6 +5,8 @@ namespace RobotArminator
 
     Controller::Controller()
     {
+        
+
     }
 
 
