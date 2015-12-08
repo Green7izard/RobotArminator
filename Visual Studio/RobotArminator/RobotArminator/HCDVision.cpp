@@ -21,18 +21,18 @@ namespace Vision {
         //Turn it to greys
         cvtColor(image, image, COLOR_BGR2GRAY);
         //Blur it
-        GaussianBlur(image, image, Size(3, 3), 0,0);
-        
+        GaussianBlur(image, image, Size(3, 3), 0, 0);
+
 
         std::vector<Vec3f> circles;
-        HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, std::max(cannyUpperThreshhold, 1), std::max(accumulatorThreshold , 1), minRadius, maxRadius);
+        HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, std::max(cannyUpperThreshhold, 1), std::max(accumulatorThreshold, 1), minRadius, maxRadius);
         int closestDistance = -1;
         for (int i = 0; i < circles.size(); i++)
         {
             float x = circles[i][0];
             float y = circles[i][1];
             float pytho = x*x + y*y;
-            if (pytho < closestDistance||i == 0)
+            if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
                 Point center(cvRound(x), cvRound(y));
@@ -52,8 +52,8 @@ namespace Vision {
     void CannyHCDVision::calibrate()
     {
         TableFinder::calibrate();
-        const char * windowName = "HCDVision:" + camera->getCameraNumber();
-        const char * windowNameCanny = "HCDVision Canny:" + camera->getCameraNumber();
+        std::string windowName = "HCDVision:" + std::to_string(camera->getCameraNumber());
+        std::string windowNameCanny = "HCDVision Canny:" + std::to_string(camera->getCameraNumber());
         Vision::Position2D pos;
         Mat cameraFrame;
         Mat cannyFrame;
@@ -76,7 +76,7 @@ namespace Vision {
             }
 
             Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
-            
+
             imshow(windowName, cameraFrame);
             imshow(windowNameCanny, cannyFrame);
             //Wait till escape is 
@@ -99,26 +99,26 @@ namespace Vision {
 
     bool ColorHCDVision::locateObject(Mat &image, Position2D &position)
     {
-        
+
         //Turn To HSV colors
         cvtColor(image, image, CV_BGR2HSV);
         //Filter colors
         //Scalar in HSV: Hue(tint), Saturation(verzadiging), Value/intensity
-        inRange(image, Scalar(minHue, minSat, minInt,0), Scalar(maxHue, maxSat, maxInt, 100), image);
+        inRange(image, Scalar(minHue, minSat, minInt, 0), Scalar(maxHue, maxSat, maxInt, 100), image);
 
         GaussianBlur(image, image, Size(9, 9), 0, 0);
-        
+
         //bitwise_not(image, image);
 
         std::vector<Vec3f> circles;
-        HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, cannyUpperThreshhold+1, accumulatorThreshold+1, minRadius, maxRadius);
+        HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, cannyUpperThreshhold + 1, accumulatorThreshold + 1, minRadius, maxRadius);
         int closestDistance = -1;
         for (int i = 0; i < circles.size(); i++)
         {
             float x = circles[i][0];
             float y = circles[i][1];
             float pytho = x*x + y*y;
-            if (pytho < closestDistance || i==0)
+            if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
                 position.X = x;
@@ -137,8 +137,8 @@ namespace Vision {
     void ColorHCDVision::calibrate()
     {
         TableFinder::calibrate();
-        const char * windowName = "ColorHCDVision:" + camera->getCameraNumber();
-        const char * windowNameCanny = "ColorHCDVision Canny:" + camera->getCameraNumber();
+        std::string windowName = "ColorHCDVision:" + std::to_string(camera->getCameraNumber());
+        std::string windowNameCanny = "ColorHCDVision Canny:" + std::to_string(camera->getCameraNumber());
         Vision::Position2D pos;
         Mat cameraFrame;
         Mat cannyFrame;
@@ -166,7 +166,8 @@ namespace Vision {
             }
 
             Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
-            imshow(windowName, cameraFrame);imshow(windowNameCanny, cannyFrame);
+            imshow(windowName, cameraFrame);
+            imshow(windowNameCanny, cannyFrame);
             //Wait till escape is 
             if (waitKey(33) >= (char)27) break;
         }
