@@ -15,7 +15,7 @@ public:
 	ABCFormule();
 	virtual ~ABCFormule();
 
-	void setFormule(VisionPosition newSideView, VisionPosition oldSideView, float startValue);
+	void setFormule(VisionPosition newSideView, VisionPosition oldSideView, float startValue, bool withSpeed);
 	float getLargestXPosition(float y);
 	float getYPosition(float x);
 	float getTime(int startXValue, int endXValue);

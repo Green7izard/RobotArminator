@@ -37,7 +37,9 @@ namespace BallPosition
 	Position BallPositionCalculator::calculateHitPosition(VisionPosition newSideView, VisionPosition newTopView)
 	{
 		float yValue = calculateLiniairPosition(newTopView); // Y Coordinate of the top-view when reaching the end of the table.
-		abcCalculator.setFormule(newSideView, lastSidePosition, newSideView.X);
+
+		std::cout << "New Time: " << newSideView.time << " And old Time: " << std::endl;//oldSideView.time << std::endl;
+		abcCalculator.setFormule(newSideView, lastSidePosition, newSideView.X, true);
 		float tempXValue = abcCalculator.getLargestXPosition(0);
 		float tempYValue = abcCalculator.getYPosition((tempXValue - 1));
 		float time = 0;
@@ -51,7 +53,7 @@ namespace BallPosition
 		/*
 		TODO SET TIME!
 		*/
-		abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, std::time_t(0), SIDE), VisionPosition(tempXValue, 0, std::time_t(0), SIDE),tempXValue);
+		abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, Clock::universal_time(), SIDE), VisionPosition(tempXValue, 0, Clock::universal_time(), SIDE), tempXValue, false);
 		float zValue = abcCalculator.getYPosition(tableWidth);
 
 		//Get Time and Length

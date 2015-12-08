@@ -16,8 +16,8 @@ namespace BallPosition
 	public:
 		float tableWidth = 2740.0;
 
-		VisionPosition lastSidePosition = VisionPosition(1000, 300, Clock::universal_time(), SIDE);
-		VisionPosition lastTopPosition = VisionPosition(1000, 300, Clock::universal_time(), TOP);
+		VisionPosition lastSidePosition = VisionPosition(1750, 300, Clock::universal_time() + boost::posix_time::milliseconds(10), SIDE);
+		VisionPosition lastTopPosition = VisionPosition(1750, 400, Clock::universal_time() + boost::posix_time::milliseconds(10), TOP);
 
 		VisionPosition currentSidePosition;
 		VisionPosition currentTopPosition;
