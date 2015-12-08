@@ -11,9 +11,7 @@
 #pragma once
 #include "IRobotControl.hpp"
 #include <iostream>
-#include "Vector.hpp"
 #include "asio.hpp"
-#include "Windows.h"
 
 using namespace Robot;
 
@@ -22,16 +20,17 @@ class RobotControl : public IRobotControl
 public:
     RobotControl(std::string port, unsigned int baud_rate);
     ~RobotControl();
-    void moveArm(Vector aPosition);
-    Vector getPosition();
-    void hitBall(Vector aPosition);
+    void moveArm(Trajectory aTrajectory);
+    Trajectory getPosition();
+    void hitBall(Trajectory aTrajectory);
     void writeData(std::string aData);
     std::string readData();
-    std::string calculateAngles(Vector aPosition);
+    std::string calculateAngles(Trajectory aTrajectory);
 private:
     double getRadian(double aDegree);
     asio::io_service io;
     asio::serial_port serial;
 };
+
 
 

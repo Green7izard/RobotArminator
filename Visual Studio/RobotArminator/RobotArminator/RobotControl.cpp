@@ -2,7 +2,6 @@
 
 #include "RobotControl.hpp"
 
-
 RobotControl::RobotControl(std::string port, unsigned int baud_rate)
     : io(), serial(io, port)
 {
@@ -16,17 +15,17 @@ RobotControl::~RobotControl()
     serial.close();
 }
 
-void RobotControl::moveArm(Vector aPosition)
+void RobotControl::moveArm(Trajectory aTrajectory)
 {
 }
 
-Vector RobotControl::getPosition()
+Trajectory RobotControl::getPosition()
 {
-    return Vector();
+    return Trajectory();
 }
 
 
-void RobotControl::hitBall(Vector aPosition)
+void RobotControl::hitBall(Trajectory aTrajectory)
 {
 }
 
@@ -55,7 +54,7 @@ std::string RobotControl::readData()
     }
 }
 
-std::string RobotControl::calculateAngles(Vector aPosition)
+std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 {
     for (int j1 = -90; j1 <= 90; j1 += 180)
     {
@@ -87,7 +86,7 @@ std::string RobotControl::calculateAngles(Vector aPosition)
                             x * -1;
                         }
 
-                        if (aPosition.x >= x - 50 && aPosition.x <= x + 50 && aPosition.y >= y - 50 && aPosition.y <= y + 50)
+                        if (aTrajectory.position.x >= x - 50 && aTrajectory.position.x <= x + 50 && aTrajectory.position.y >= y - 50 && aTrajectory.position.y <= y + 50)
                         {
                             std::stringstream ss;
                             ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
