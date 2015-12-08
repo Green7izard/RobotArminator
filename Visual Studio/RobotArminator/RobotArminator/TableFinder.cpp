@@ -24,10 +24,9 @@ namespace Vision {
         {
             time = Clock::now();
             camera->getCurrentImage(cameraFrame);
-            cv::Size s = cameraFrame.size();
             if (locateObject(cameraFrame, position))
             {
-                setPosition(convertToCoordinate(position, time, s.width, s.height));
+                setPosition(convertToCoordinate(position, time));
             }
             cv::waitKey(1);
         }
@@ -45,18 +44,54 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(Position2D &position, timePoint time, int imageWidth, int imageHeight)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, timePoint time)
     {
         float X = (float)position.X;
         float Y = (float)position.Y;
-        bool robotIsLeft = (tabel.TopLeft.X > tabel.TopRight.X);
-        //TODO Change it based on the table
-        // http://math.stackexchange.com/questions/613725/a-formula-for-perspective-measurement
-        // https://en.wikipedia.org/wiki/3D_projection
+        //Whether the X axis is inverted
+        bool xShouldBeInverted = (tabel.TopLeft.X < tabel.TopRight.X);
+
+        float totalXLen;
+
+        Position2D anchor;
+        Position2D opposite;
+
+        if (xShouldBeInverted)
+        {
+            anchor = tabel.TopLeft;
+            opposite = tabel.BotRight;
+            totalXLen = std::abs(anchor.X - opposite.X);
+            X = ((X - anchor.X) / totalXLen)*tableWidth;
+        }
+        else
+        {
+           anchor = tabel.BotLeft;
+           opposite = tabel.TopRight;
+           totalXLen = std::abs(anchor.X - opposite.X);
+           X = ((anchor.X-X) / totalXLen)*tableWidth;
+        }
+        //std::fabsf(X) for always getting the positive
+        if (orientation == TOP)
+        {
+            float totalYLen = std::abs(anchor.Y - opposite.Y);
+            if (xShouldBeInverted)
+            {
+                Y = ((Y - anchor.Y) / totalYLen)*tableHeight;
+            }
+            else
+            {
+                Y = ((anchor.Y - Y) / totalYLen)*tableHeight;
+            }
+        }
+        else
+        {
+            Y = ((Y-anchor.Y) / totalXLen)*tableWidth;
+        }
+
         VisionPosition pos;
-        pos.X = (float)position.X;
-        pos.Y = (float)position.Y;
-        pos.time = time;
+        pos.X = X;
+        pos.Y = Y;
+        pos.time = time;        
         return pos;
     }
 
