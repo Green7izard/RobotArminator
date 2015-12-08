@@ -26,7 +26,7 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(unsigned int X, unsigned int Y, std::time_t time)
+    VisionPosition TableFinder::convertToCoordinate(unsigned int X, unsigned int Y, timePoint)
     {
         //TODO
         return VisionPosition();

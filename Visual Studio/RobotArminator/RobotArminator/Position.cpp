@@ -13,6 +13,11 @@ namespace RobotArminator
     {
     }
 
+	RobotArminator::Position::Position(Vector vector, int rotation) :
+		Vector(vector), rotation(rotation)
+	{
+	}
+
     RobotArminator::Position::~Position()
     {
     }

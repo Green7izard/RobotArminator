@@ -33,7 +33,7 @@ namespace Vision
         TableFinder(Orientation orientation, Camera cam);
         virtual ~TableFinder();
         Table detectTable();
-        VisionPosition convertToCoordinate(unsigned int X, unsigned int Y, std::time_t time);
+        VisionPosition convertToCoordinate(unsigned int X, unsigned int Y, timePoint time);
         virtual void locateObject() = 0;
     };
 }
