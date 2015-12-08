@@ -16,7 +16,7 @@ namespace Vision {
     {
 		//filter
 		cv::cvtColor(image, image, cv::COLOR_BGR2HSV);
-		cv::inRange(image, cv::Scalar(6 * 1.8, 80 * 2.5, 80 * 2.5), cv::Scalar(40 * 1.8, 255, 255), image);
+		cv::inRange(image, cv::Scalar(minHue , minSat, minInt), cv::Scalar(maxHue, maxSat, maxInt), image);
 		//Take out single pixel errors
 		//cv::erode(image, image, cv::Mat(), cv::Point(-1, -1), 1);
 		//cv::dilate(image, image, cv::Mat(), cv::Point(-1, -1), 1);
@@ -47,4 +47,40 @@ namespace Vision {
 		}
         return false;
     }
+
+	void PFCVision::calibrate()
+	{
+		TableFinder::calibrate();
+		const char * windowName = "Camera - " + camera->getCameraNumber() ;
+		const char * windowNameFiltered = "Filtered - " + camera->getCameraNumber();
+		Vision::Position2D pos;
+		cv::Mat cameraFrame;
+
+		std::cout << "Starting calibrating: " << windowName << endl;
+		std::cout << "Adjust the sliders in the windows and press 'esc' when the values are correct!" << endl;
+
+		cv::namedWindow(windowName, cv::WINDOW_AUTOSIZE);
+		cv::namedWindow(windowNameFiltered, cv::WINDOW_AUTOSIZE);
+
+		cv::createTrackbar("Min Hue", windowName, &minHue, 180, 0);
+		cv::createTrackbar("Max Hue", windowName, &maxHue, 180, 0);
+		cv::createTrackbar("Min Sat", windowName, &minSat, 255, 0);
+		cv::createTrackbar("Max Sat", windowName, &maxSat, 255, 0);
+		cv::createTrackbar("Min Int", windowName, &minInt, 255, 0);
+		cv::createTrackbar("Max Int", windowName, &maxInt, 255, 0);
+
+		while (true) {
+			camera->getCurrentImage(cameraFrame);
+			cv::imshow(windowName, cameraFrame);
+			if (locateObject(cameraFrame, pos))
+			{
+				cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
+			}		
+			cv::imshow(windowNameFiltered, cameraFrame);
+			//Wait till escape is 
+			if (cv::waitKey(33) >= (char)27) break;
+		}
+		cv::destroyWindow(windowName);
+		cv::destroyWindow(windowNameFiltered);
+	}
 }
