@@ -31,16 +31,41 @@ void RobotControl::hitBall(Trajectory aTrajectory)
 
 void RobotControl::writeData(std::string aData)
 {
-    asio::write(serial, asio::buffer(aData.c_str(), aData.size()));
+    asio::async_write(serial, asio::buffer(aData.c_str(), aData.size()), std::bind(&RobotControl::writeHandler,
+        this, std::placeholders::_1));
+}
+
+void RobotControl::writeHandler(
+    const asio::error_code& error)
+{
+    if (!error)
+    {
+        std::stringstream ss;
+        ss << &buffer;
+        std::cout << "Message: " << ss.str() << std::endl;
+    }
+    else
+    {
+        std::cout << "Error occurred." << std::endl;
+    }
 }
 
 std::string RobotControl::readData()
 {
-    //Reading data char by char, code is optimized for simplicity, not speed
+    /*
+    asio::async_read_until(serial, buffer, '\r', std::bind(&RobotControl::writeHandler,
+        this, std::placeholders::_1));;
+    std::ostringstream ss;
+    ss << &buffer;
 
+    std::cout << "Message: " << ss.str() << std::endl;
+    return ss.str();
+    */
+    
+    
+    //Reading data char by char, code is optimized for simplicity, not speed
     char c;
     std::string result;
-
     for (;;)
     {
         asio::read(serial, asio::buffer(&c, 1));
@@ -51,7 +76,7 @@ std::string RobotControl::readData()
         default:
             result += c;
         }
-    }
+    }    
 }
 
 std::string RobotControl::calculateAngles(Trajectory aTrajectory)
@@ -79,16 +104,8 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
                         double j5x = sin(getRadian(j2) + getRadian(j3) + getRadian(j5)) * 72;
                         double j6x = sin(getRadian(j2) + getRadian(j3) + getRadian(j5) + getRadian(j6)) * 390;
                         x = j2x + j3x + j5x + j6x;
-                        
-                        /*
-                        if (j1 > 0)
-                        {
-                            y *= -1;
-                            x *= -1;
-                        }
-                        */
 
-                        if (aTrajectory.position.x >= x - 50 && aTrajectory.position.x <= x + 50 && aTrajectory.position.y >= y - 50 && aTrajectory.position.y <= y + 50)
+                        if (aTrajectory.position.x >= x - 50 && aTrajectory.position.x <= x + 50 && aTrajectory.position.y == y/* - 50 && aTrajectory.position.y <= y + 50*/)
                         {
                             std::stringstream ss;
                             ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";

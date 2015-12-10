@@ -12,6 +12,7 @@
 
 #include "IRobotControl.hpp"
 #include <iostream>
+#include <functional>
 #include "asio.hpp"
 
 using namespace Robot;
@@ -25,10 +26,12 @@ public:
     Trajectory getPosition();
     void hitBall(Trajectory aTrajectory);
     void writeData(std::string aData);
+    void writeHandler(const asio::error_code& error);
     std::string readData();
     std::string calculateAngles(Trajectory aTrajectory);
 private:
     double getRadian(double aDegree);
+    asio::streambuf buffer;
     asio::io_service io;
     asio::serial_port serial;
 };

@@ -18,7 +18,7 @@ namespace BallPosition
 
 		VisionPosition lastSidePosition = VisionPosition(1750, 300, Clock::universal_time() + boost::posix_time::milliseconds(10), SIDE);
 		VisionPosition lastTopPosition = VisionPosition(1750, 400, Clock::universal_time() + boost::posix_time::milliseconds(10), TOP);
-
+         
 		VisionPosition currentSidePosition;
 		VisionPosition currentTopPosition;
 
