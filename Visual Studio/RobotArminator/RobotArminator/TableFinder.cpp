@@ -1,5 +1,4 @@
 #include "TableFinder.hpp"
-#include <ctime>
 
 
 namespace Vision {
