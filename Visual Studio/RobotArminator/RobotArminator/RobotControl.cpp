@@ -81,6 +81,8 @@ std::string RobotControl::readData()
 
 std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 {
+    Trajectory trajectory = adaptTrajectory(aTrajectory);
+
     for (int j1 = -90; j1 <= 90; j1 += 180)
     {
         for (int j2 = -60; j2 <= 120; j2 += 5)
@@ -105,7 +107,7 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
                         double j6x = sin(getRadian(j2) + getRadian(j3) + getRadian(j5) + getRadian(j6)) * 390;
                         x = j2x + j3x + j5x + j6x;
 
-                        if (aTrajectory.position.x >= x - 50 && aTrajectory.position.x <= x + 50 && aTrajectory.position.y == y/* - 50 && aTrajectory.position.y <= y + 50*/)
+                        if (trajectory.position.x >= x - 50 && trajectory.position.x <= x + 50 && trajectory.position.y >= y - 50 && trajectory.position.y <= y + 50)
                         {
                             std::stringstream ss;
                             ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
@@ -124,4 +126,9 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 double RobotControl::getRadian(double aDegree)
 {
     return aDegree * (3.14159265 / 180);
+}
+
+Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
+{
+    return Trajectory(Vector(aTrajectory.position.y -1525 / 2, aTrajectory.position.z - 350, 0), Vector(), 0);
 }

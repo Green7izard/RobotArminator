@@ -31,6 +31,7 @@ public:
     std::string calculateAngles(Trajectory aTrajectory);
 private:
     double getRadian(double aDegree);
+    Trajectory adaptTrajectory(Trajectory aTrajectory);
     asio::streambuf buffer;
     asio::io_service io;
     asio::serial_port serial;
