@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "IComputerVision.hpp"
 #include "Thread.hpp"
 #include "Table.hpp"

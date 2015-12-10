@@ -1,12 +1,12 @@
 #pragma once
-#include<list>
+#include "stdafx.h"
+#include <list>
 #include "IMessageBox.hpp"
 #include <mutex>
+#include "VisionPosition.hpp"
 
 namespace RobotArminator
 {
-
-    template <class T>
     class MessageSender
     {
     public:
@@ -15,7 +15,7 @@ namespace RobotArminator
         void addListener(IMessageBox * listerner);
         void removeListener(IMessageBox * listerner);
     protected:
-        void notify(T object);
+        void notify(VisionPosition object);
     private:
         std::list<IMessageBox *> listeners;
         std::mutex listenersMutex;

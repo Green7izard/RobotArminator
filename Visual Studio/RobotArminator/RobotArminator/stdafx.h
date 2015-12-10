@@ -13,8 +13,6 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 
 namespace RobotArminator {
-    //https://www.guyrutenberg.com/2013/01/27/using-stdchronohigh_resolution_clock-example/
-
     //Easy access to the high resolution clock
     typedef boost::posix_time::microsec_clock Clock;
 
