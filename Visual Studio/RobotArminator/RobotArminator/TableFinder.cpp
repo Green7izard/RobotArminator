@@ -63,14 +63,14 @@ namespace Vision {
             anchor = tabel.TopLeft;
             opposite = tabel.BotRight;
             totalXLen = std::abs(anchor.X - opposite.X);
-            X = ((X - anchor.X) / totalXLen)*tableWidth;
+            X = ((X - anchor.X) / totalXLen)*tableLength;
         }
         else
         {
             anchor = tabel.BotLeft;
             opposite = tabel.TopRight;
             totalXLen = std::abs(anchor.X - opposite.X);
-            X = ((anchor.X - X) / totalXLen)*tableWidth;
+            X = ((anchor.X - X) / totalXLen)*tableLength;
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
@@ -78,11 +78,11 @@ namespace Vision {
             float totalYLen = std::abs(anchor.Y - opposite.Y);
             if (xShouldBeInverted)
             {
-                Y = ((Y - anchor.Y) / totalYLen)*tableHeight;
+                Y = ((Y - anchor.Y) / totalYLen)*tableLength;
             }
             else
             {
-                Y = ((anchor.Y - Y) / totalYLen)*tableHeight;
+                Y = ((anchor.Y - Y) / totalYLen)*tableLength;
             }
         }
         else
@@ -278,10 +278,10 @@ namespace Vision {
         cv::destroyWindow(name);
     }
 
-    void TableFinder::updateTableSize(int width, int height)
+    void TableFinder::updateTableSize(int width, int length)
     {
         tableWidth = width;
-        tableHeight = height;
+        tableLength = length;
     }
 
 }

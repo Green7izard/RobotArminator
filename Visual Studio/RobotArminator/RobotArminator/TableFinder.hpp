@@ -40,7 +40,7 @@ namespace Vision
         //The width of the table in mm
         int tableWidth = DEFAULT_WIDTH;
         //The height of the table in mm
-        int tableHeight = DEFAULT_HEIGHT;
+        int tableLength = DEFAULT_LENGTH;
 
     protected:
 
@@ -52,7 +52,7 @@ namespace Vision
         //default width
         const static int DEFAULT_WIDTH = 1525;
         //default height
-        const static int DEFAULT_HEIGHT = 2740;
+        const static int DEFAULT_LENGTH = 2740;
 
         /**
         * Create a TableFinder
@@ -110,7 +110,7 @@ namespace Vision
         /**
         * Sets the table size in mm
         */
-        void updateTableSize(int width = DEFAULT_WIDTH, int height = DEFAULT_HEIGHT);
+        void updateTableSize(int width = DEFAULT_WIDTH, int length = DEFAULT_LENGTH);
 
         /**
         * catches mouse clicks
