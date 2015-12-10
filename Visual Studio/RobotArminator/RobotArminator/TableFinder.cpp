@@ -25,9 +25,10 @@ namespace Vision {
             time = Clock::universal_time();
             if (camera->getCurrentImage(cameraFrame))
             {
+                cv::Size s = cameraFrame.size();
                 if (locateObject(cameraFrame, position))
                 {
-                    setPosition(convertToCoordinate(position, time));
+                    setPosition(convertToCoordinate(position, time, s.width, s.height));
                 }
                 //cv::waitKey(1);
             }
@@ -46,7 +47,7 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time, int imageWidth, int imageHeight)
     {
         float X = (float)position.X;
         float Y = (float)position.Y;
@@ -63,14 +64,14 @@ namespace Vision {
             anchor = tabel.TopLeft;
             opposite = tabel.BotRight;
             totalXLen = std::abs(anchor.X - opposite.X);
-            X = ((X - anchor.X) / totalXLen)*tableLength;
+            X = ((imageWidth-(X - anchor.X)) / totalXLen)*tableLength;
         }
         else
         {
             anchor = tabel.BotLeft;
             opposite = tabel.TopRight;
             totalXLen = std::abs(anchor.X - opposite.X);
-            X = ((anchor.X - X) / totalXLen)*tableLength;
+            X = ((imageWidth-(anchor.X - X)) / totalXLen)*tableLength;
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
@@ -78,11 +79,11 @@ namespace Vision {
             float totalYLen = std::abs(anchor.Y - opposite.Y);
             if (xShouldBeInverted)
             {
-                Y = ((Y - anchor.Y) / totalYLen)*tableLength;
+                Y = ((imageHeight-(Y - anchor.Y)) / totalYLen)*tableWidth;
             }
             else
             {
-                Y = ((anchor.Y - Y) / totalYLen)*tableLength;
+                Y = ((imageHeight-(anchor.Y - Y)) / totalYLen)*tableWidth;
             }
         }
         else

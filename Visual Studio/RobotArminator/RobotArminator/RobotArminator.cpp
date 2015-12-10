@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
     char * win= "window";
     
 	//Camera aanmaken.
-    Vision::Camera cam(0);
+    Vision::Camera cam(1);
     cam.setSize(1280, 720);
     Vision::Position2D pos;
 	std::cout << "Start Camera with size " << cam.getWidth() << "x" << cam.getHeight() << std::endl;
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
         if (HCD.locateObject(cameraFrame, pos))
         {
             std::cout << "Found at: " << pos.X << "," << pos.Y << std::endl;
-            RobotArminator::VisionPosition newPos = HCD.convertToCoordinate(pos, RobotArminator::Clock::universal_time());
+            RobotArminator::VisionPosition newPos = HCD.convertToCoordinate(pos, RobotArminator::Clock::universal_time(), s.width, s.height);
             std::cout << "Converted to: " << newPos.X << "," << newPos.Y << std::endl;
         }
         else
