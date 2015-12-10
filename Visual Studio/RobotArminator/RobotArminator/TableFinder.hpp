@@ -15,17 +15,8 @@ namespace Vision
         friend class Camera;
     private:
 
-        //The Last position
-        VisionPosition lastPosition;
-
         //The tables position in the screen
         Table tabel;
-
-        /**
-        * Updates the last known position and pushes the change
-        * @param position the new VisionPosition
-        */
-        void setPosition(VisionPosition position);
 
         //Check if the table is valid
         static bool validTable(Table * table);

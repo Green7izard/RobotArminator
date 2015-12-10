@@ -28,17 +28,11 @@ namespace Vision {
                 cv::Size s = cameraFrame.size();
                 if (locateObject(cameraFrame, position))
                 {
-                    setPosition(convertToCoordinate(position, time, s.width, s.height));
+                    notify(convertToCoordinate(position, time, s.width, s.height));
                 }
                 //cv::waitKey(1);
             }
         }
-    }
-
-    void TableFinder::setPosition(VisionPosition position)
-    {
-        lastPosition = position;
-        notify(lastPosition);
     }
 
     Table TableFinder::detectTable()
@@ -64,14 +58,14 @@ namespace Vision {
             anchor = tabel.TopLeft;
             opposite = tabel.BotRight;
             totalXLen = std::abs(anchor.X - opposite.X);
-            X = ((imageWidth-(X - anchor.X)) / totalXLen)*tableLength;
+            X = ((imageWidth - (X - anchor.X)) / totalXLen)*tableLength;
         }
         else
         {
             anchor = tabel.BotLeft;
             opposite = tabel.TopRight;
             totalXLen = std::abs(anchor.X - opposite.X);
-            X = ((imageWidth-(anchor.X - X)) / totalXLen)*tableLength;
+            X = ((imageWidth - (anchor.X - X)) / totalXLen)*tableLength;
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
@@ -79,11 +73,11 @@ namespace Vision {
             float totalYLen = std::abs(anchor.Y - opposite.Y);
             if (xShouldBeInverted)
             {
-                Y = ((imageHeight-(Y - anchor.Y)) / totalYLen)*tableWidth;
+                Y = ((imageHeight - (Y - anchor.Y)) / totalYLen)*tableWidth;
             }
             else
             {
-                Y = ((imageHeight-(anchor.Y - Y)) / totalYLen)*tableWidth;
+                Y = ((imageHeight - (anchor.Y - Y)) / totalYLen)*tableWidth;
             }
         }
         else
