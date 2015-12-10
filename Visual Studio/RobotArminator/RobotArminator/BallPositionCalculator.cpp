@@ -36,33 +36,40 @@ namespace BallPosition
 
 	Position BallPositionCalculator::calculateHitPosition(VisionPosition newSideView, VisionPosition newTopView)
 	{
-		float yValue = calculateLiniairPosition(newTopView); // Y Coordinate of the top-view when reaching the end of the table.
+		float yValue;
+		Position p;
+		if (!lastTopPosition.isDefault)
+		{
+			yValue = calculateLiniairPosition(newTopView); // Y Coordinate of the top-view when reaching the end of the table.
+			std::cout << "From top-coordinates (" << lastTopPosition.X << "," << lastTopPosition.Y << ") to (" << newTopView.X << "," << newTopView.Y << ")" << std::endl;
+		}
 
-		std::cout << "New Time: " << newSideView.time << " And old Time: " << std::endl;//oldSideView.time << std::endl;
-		abcCalculator.setFormule(newSideView, lastSidePosition, newSideView.X, true);
-		float tempXValue = abcCalculator.getLargestXPosition(0);
-		float tempYValue = abcCalculator.getYPosition((tempXValue - 1));
-		float time = 0;
+		lastTopPosition = newTopView;
 
-		std::cout << "From top-coordinates (" << lastTopPosition.X << "," << lastTopPosition.Y << ") to (" << newTopView.X << "," << newTopView.Y << ")" << std::endl;
-		std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << newSideView.X << "," << newSideView.Y << ")" << std::endl;
+		if(!lastSidePosition.isDefault)
+		{
+			abcCalculator.setFormule(newSideView, lastSidePosition, newSideView.X, true);
+			float tempXValue = abcCalculator.getLargestXPosition(0);
+			float tempYValue = abcCalculator.getYPosition((tempXValue - 1));
+			float time = 0;
 
-		//Get Time and Length
-		time += abcCalculator.getTime(0, tempXValue);
+			std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << newSideView.X << "," << newSideView.Y << ")" << std::endl;
 
-		/*
-		TODO SET TIME!
-		*/
-		abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, Clock::universal_time(), SIDE), VisionPosition(tempXValue, 0, Clock::universal_time(), SIDE), tempXValue, false);
-		float zValue = abcCalculator.getYPosition(tableWidth);
+			//Get Time and Length
+			time += abcCalculator.getTime(0, tempXValue);
 
-		//Get Time and Length
-		time += abcCalculator.getTime(tempXValue + 1, tableWidth);
-		std::cout << "Time: " << time << " Milliseconds" << std::endl;
+			abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, Clock::universal_time(), SIDE), VisionPosition(tempXValue, 0, Clock::universal_time(), SIDE), tempXValue, false);
+			float zValue = abcCalculator.getYPosition(tableWidth);
 
-		std::cout << "( tableWidth , tableDepth , Height )." << std::endl;
-		std::cout << "Hit the table at: ("<< tableWidth << "," << yValue << "," << zValue << ")." << std::endl;
-		Position p = Position(Vector(tableWidth, yValue, zValue), 0);
+			//Get Time and Length
+			time += abcCalculator.getTime(tempXValue + 1, tableWidth);
+			std::cout << "Time: " << time << " Milliseconds" << std::endl;
+
+			std::cout << "( tableWidth , tableDepth , Height )." << std::endl;
+			std::cout << "Hit the table at: ("<< tableWidth << "," << yValue << "," << zValue << ")." << std::endl;
+			p = Position(Vector(tableWidth, yValue, zValue), 0);
+		}
+		lastSidePosition = newSideView;
 		return p;
 	}
 
