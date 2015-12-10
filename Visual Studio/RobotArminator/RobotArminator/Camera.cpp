@@ -34,7 +34,7 @@ namespace Vision
         {
             if (!camera.read(output))
             {
-                std::string sender ="Camera " + std::to_string( cameraNumber);
+                std::string sender = "Camera " + std::to_string(cameraNumber);
                 RobotArminator::Logger::logWarning((char *)sender.c_str(), "Camera could not read!");
                 return false;
             }
@@ -47,7 +47,7 @@ namespace Vision
         {
             std::string sender = "Camera " + std::to_string(cameraNumber);
             RobotArminator::Logger::logWarning((char *)sender.c_str(), "Camera could not be opened!");
-            return true;
+            return false;
         }
     }
 
@@ -67,7 +67,7 @@ namespace Vision
         camera.set(CV_CAP_PROP_FRAME_HEIGHT, newHeight);
     }
 
-    int Camera::getCameraNumber() 
+    int Camera::getCameraNumber()
     {
         return cameraNumber;
     }
@@ -88,5 +88,36 @@ namespace Vision
     {
         output = cv::imread(filename, 1);
         return true;
+    }
+
+
+    //VIDEO CAMERA
+    VideoCamera::VideoCamera(char * filename) :Camera(0), filename(filename)
+    {
+        camera.open(filename);
+        camera.set(CV_CAP_PROP_FRAME_WIDTH, width);
+        camera.set(CV_CAP_PROP_FRAME_HEIGHT, height);
+    }
+
+    VideoCamera::~VideoCamera() {
+
+    }
+
+    bool VideoCamera::getCurrentImage(cv::Mat& output)
+    {
+        if (camera.isOpened())
+        {
+            if (!camera.read(output))
+            {
+                std::string sender = "Video "; sender+= filename;
+                RobotArminator::Logger::logWarning((char *)sender.c_str(), "Video could not read!");
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

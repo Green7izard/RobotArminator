@@ -15,6 +15,7 @@ namespace Vision
         //If the images from the camera are mirrored
         bool mirrored;
 
+    protected:
         //The Camera
         cv::VideoCapture camera;
 
@@ -77,6 +78,25 @@ namespace Vision
         FileCamera(char * filename);
         //Deconstructor, closes the camera and terminates it
         virtual ~FileCamera();
+
+        /**
+        * Regets the image from a file
+        * @param output where to store it
+        */
+        virtual bool getCurrentImage(cv::Mat& output) override;
+    };
+
+
+    class VideoCamera : public Camera
+    {
+    private:
+        char * filename;
+
+    public:
+
+        VideoCamera(char * filename);
+        //Deconstructor, closes the camera and terminates it
+        virtual ~VideoCamera();
 
         /**
         * Regets the image from a file
