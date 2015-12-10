@@ -9,7 +9,7 @@
 namespace Vision
 {
     class TableFinder :
-        public IComputerVision, public RobotArminator::Thread
+        public IComputerVision
     {
 
         friend class Camera;
