@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 #include "IComputerVision.hpp"
 #include "Table.hpp"
 #include "Camera.hpp"
@@ -33,7 +34,7 @@ namespace Vision
         TableFinder(Orientation orientation, Camera cam);
         virtual ~TableFinder();
         Table detectTable();
-        VisionPosition convertToCoordinate(unsigned int X, unsigned int Y, timePoint time);
+        VisionPosition convertToCoordinate(unsigned int X, unsigned int Y, Time time);
         virtual void locateObject() = 0;
     };
 }

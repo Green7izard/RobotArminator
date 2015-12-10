@@ -1,5 +1,5 @@
+#include "stdafx.h"
 #include "TableFinder.hpp"
-
 
 namespace Vision {
 
@@ -26,7 +26,7 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(unsigned int X, unsigned int Y, timePoint)
+    VisionPosition TableFinder::convertToCoordinate(unsigned int X, unsigned int Y, Time timePoint)
     {
         //TODO
         return VisionPosition();

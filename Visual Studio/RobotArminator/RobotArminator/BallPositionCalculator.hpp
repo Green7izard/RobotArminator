@@ -7,13 +7,13 @@
 #include "Thread.hpp"
 #include "IMessageBox.hpp"
 #include <ctime>
-
+#include "IBallPositionCalculator.hpp"
 
 namespace BallPosition
 {
 	using namespace RobotArminator;
 
-	class BallPositionCalculator : public Thread, public IMessageBox
+	class BallPositionCalculator : public IBallPositionCalculator
 	{
 	public:
 		float tableWidth = 2740.0;

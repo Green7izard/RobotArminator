@@ -1,20 +1,20 @@
 #pragma once
-#include "MessageSender.hpp"
-#include "MessageBox.hpp"
+#include "stdafx.h"
 #include "VisionPosition.hpp"
 #include "Trajectory.hpp"
+#include "Thread.hpp"
+#include "IMessageBox.hpp"
 
 namespace BallPosition
 {
     using namespace RobotArminator;
 
-    class IBallPositionCalculator : public MessageSender<VisionPosition>, public IMessageBox <Trajectory>
+    class IBallPositionCalculator : public Thread, public IMessageBox
     {
     public:
-        
-        virtual ~IBallPositionCalculator()=0;
-    protected:
         IBallPositionCalculator();
+        virtual ~IBallPositionCalculator();
+
     };
 
 }

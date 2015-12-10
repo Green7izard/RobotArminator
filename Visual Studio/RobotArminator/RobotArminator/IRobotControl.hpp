@@ -1,12 +1,12 @@
 #pragma once
-
+#include "stdafx.h"
 #include "Vector.hpp"
-
+#include "Thread.hpp"
 namespace Robot
 {
     using namespace RobotArminator;
 
-    class IRobotControl
+    class IRobotControl : public Thread
     {
     public:
         virtual ~IRobotControl()=0;
