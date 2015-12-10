@@ -12,6 +12,7 @@ namespace RobotArminator
     VisionPosition::VisionPosition(float X, float Y, Time time, Orientation orientation)
         : X(X), Y(Y), time(time), orientation(orientation)
     {
+		isDefault = false;
     }
 
 

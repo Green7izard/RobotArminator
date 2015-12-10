@@ -11,6 +11,7 @@ namespace BallPosition
 
 	BallPositionCalculator::BallPositionCalculator()
 	{
+
 	}
 
 
@@ -21,39 +22,58 @@ namespace BallPosition
 	//run thread
 	void BallPositionCalculator::run()
 	{
+		std::cout << "Start run" << std::endl;
+		while (running)
+		{
+			if (!queueSidePosition.isDefault && !queueTopPosition.isDefault)
+			{
+				std::cout << "Start Calculator" << std::endl;
+				getPositionsFromQueue();
+				calculateHitPosition();
+			}
+		}
 	}
 
-	//start threadfunction
-	void BallPositionCalculator::startPositionCalculation()
+	void BallPositionCalculator::addToMessageBox(VisionPosition item)
 	{
+		if (item.orientation == Orientation::SIDE)
+		{
+			queueSidePosition = item;
+		}
+		else if (item.orientation == Orientation::TOP)
+		{
+			queueTopPosition = item;
+		}
 	}
 
-	VisionPosition BallPositionCalculator::getPositionsFromQueue()
+	void BallPositionCalculator::getPositionsFromQueue()
 	{
-		currentTopPosition = VisionPosition();
-		return currentTopPosition;
+		currentSidePosition = queueSidePosition;
+		queueSidePosition = VisionPosition();
+		currentTopPosition = queueTopPosition;
+		queueTopPosition = VisionPosition();
 	}
 
-	Position BallPositionCalculator::calculateHitPosition(VisionPosition newSideView, VisionPosition newTopView)
+	Position BallPositionCalculator::calculateHitPosition()
 	{
 		float yValue;
 		Position p;
 		if (!lastTopPosition.isDefault)
 		{
-			yValue = calculateLiniairPosition(newTopView); // Y Coordinate of the top-view when reaching the end of the table.
-			std::cout << "From top-coordinates (" << lastTopPosition.X << "," << lastTopPosition.Y << ") to (" << newTopView.X << "," << newTopView.Y << ")" << std::endl;
+			yValue = calculateLiniairPosition(currentTopPosition); // Y Coordinate of the top-view when reaching the end of the table.
+			std::cout << "From top-coordinates (" << lastTopPosition.X << "," << lastTopPosition.Y << ") to (" << currentTopPosition.X << "," << currentTopPosition.Y << ")" << std::endl;
 		}
 
-		lastTopPosition = newTopView;
+		lastTopPosition = currentTopPosition;
 
 		if(!lastSidePosition.isDefault)
 		{
-			abcCalculator.setFormule(newSideView, lastSidePosition, newSideView.X, true);
+			abcCalculator.setFormule(currentSidePosition, lastSidePosition, currentSidePosition.X, true);
 			float tempXValue = abcCalculator.getLargestXPosition(0);
 			float tempYValue = abcCalculator.getYPosition((tempXValue - 1));
 			float time = 0;
 
-			std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << newSideView.X << "," << newSideView.Y << ")" << std::endl;
+			std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << currentSidePosition.X << "," << currentSidePosition.Y << ")" << std::endl;
 
 			//Get Time and Length
 			time += abcCalculator.getTime(0, tempXValue);
@@ -69,7 +89,7 @@ namespace BallPosition
 			std::cout << "Hit the table at: ("<< tableWidth << "," << yValue << "," << zValue << ")." << std::endl;
 			p = Position(Vector(tableWidth, yValue, zValue), 0);
 		}
-		lastSidePosition = newSideView;
+		lastSidePosition = currentSidePosition;
 		return p;
 	}
 

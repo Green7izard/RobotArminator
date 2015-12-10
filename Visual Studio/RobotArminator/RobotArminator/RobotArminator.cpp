@@ -17,13 +17,18 @@ int main(int argc, char* argv[])
 	VisionPosition visionPositionSideView (2000, 200, Clock::universal_time() + boost::posix_time::milliseconds(60), SIDE );
 	VisionPosition visionPositionTopView (2000, 500, Clock::universal_time() + boost::posix_time::milliseconds(60), TOP );
 
-
 	VisionPosition lastSidePosition (1750, 300, Clock::universal_time() + boost::posix_time::milliseconds(10), SIDE);
 	VisionPosition lastTopPosition (1750, 400, Clock::universal_time() + boost::posix_time::milliseconds(10), TOP);
 
-	ballPositionCalculator.startPositionCalculation();
-	ballPositionCalculator.calculateHitPosition(lastSidePosition, lastTopPosition);
-	ballPositionCalculator.calculateHitPosition(visionPositionSideView, visionPositionTopView);
+	ballPositionCalculator.start();
+	std:cout << ballPositionCalculator.isRunning() << std::endl;
+	ballPositionCalculator.addToMessageBox(lastSidePosition);
+	ballPositionCalculator.addToMessageBox(lastTopPosition);
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	ballPositionCalculator.addToMessageBox(visionPositionSideView);
+	ballPositionCalculator.addToMessageBox(visionPositionTopView);
+	ballPositionCalculator.stop();
 
 	//wait for input
 	std::cin.get(); 

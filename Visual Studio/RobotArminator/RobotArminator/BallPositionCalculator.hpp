@@ -4,6 +4,8 @@
 #include "VisionPosition.hpp"
 #include "Position.hpp"
 #include "ABCFormule.hpp"
+#include "Thread.hpp"
+#include "IMessageBox.hpp"
 #include <ctime>
 
 
@@ -11,7 +13,7 @@ namespace BallPosition
 {
 	using namespace RobotArminator;
 
-	class BallPositionCalculator
+	class BallPositionCalculator : public Thread, public IMessageBox
 	{
 	public:
 		float tableWidth = 2740.0;
@@ -22,15 +24,19 @@ namespace BallPosition
 		VisionPosition currentSidePosition;
 		VisionPosition currentTopPosition;
 
+		VisionPosition queueSidePosition;
+		VisionPosition queueTopPosition;
+
 		ABCFormule abcCalculator = ABCFormule();
 
 		BallPositionCalculator();
 		virtual ~BallPositionCalculator();
 
 		void run();
-		void startPositionCalculation();
-		VisionPosition getPositionsFromQueue();
-		Position calculateHitPosition(VisionPosition newSideView, VisionPosition newTopView);
+		void addToMessageBox(VisionPosition item);
+
+		void getPositionsFromQueue();
+		Position calculateHitPosition();
 		float calculateLiniairPosition(VisionPosition pos);
 		void sendPosition();
 	};
