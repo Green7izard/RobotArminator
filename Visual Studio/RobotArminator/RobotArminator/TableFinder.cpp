@@ -82,14 +82,10 @@ namespace Vision {
         }
         else
         {
-            Y = ((Y - anchor.Y) / totalXLen)*tableWidth;
-        }
+            Y = (((imageHeight - Y)- (imageHeight - anchor.Y))/totalXLen)*tableLength;
 
-        VisionPosition pos;
-        pos.X = X;
-        pos.Y = Y;
-        pos.time = time;
-        return pos;
+        }
+        return VisionPosition(X, Y, time, orientation);
     }
 
     void TableFinder::updateImageSize(int X, int Y)
