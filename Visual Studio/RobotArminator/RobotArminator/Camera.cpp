@@ -5,7 +5,7 @@
 namespace Vision
 {
 
-    Camera::Camera(int cameraNumber, bool mirrored, unsigned int width, unsigned int height) : height(height), width(width), cameraNumber(cameraNumber), mirrored(mirrored)
+    Camera::Camera(int cameraNumber, bool mirrored, int width, int height) : height(height), width(width), cameraNumber(cameraNumber), mirrored(mirrored)
     {
         camera.open(cameraNumber);
         camera.set(CV_CAP_PROP_FRAME_WIDTH, width);
@@ -60,7 +60,7 @@ namespace Vision
         return width;
     }
 
-    void Camera::setSize(unsigned int newWidth, unsigned int newHeight)
+    void Camera::setSize(int newWidth, int newHeight)
     {
         height = newHeight;
         width = newWidth;
