@@ -6,7 +6,7 @@ namespace Vision {
 
     using namespace RobotArminator;
 
-    TableFinder::TableFinder(Orientation orientation, Camera* cam) : IComputerVision(orientation), camera(cam)
+    TableFinder::TableFinder(Orientation orientation, Camera* cam, bool forceSend) : IComputerVision(orientation), camera(cam), shouldAlwaysSend(forceSend)
     {
         //calibrate();
         //tabel = detectTable();
@@ -28,7 +28,11 @@ namespace Vision {
                 cv::Size s = cameraFrame.size();
                 if (locateObject(cameraFrame, position))
                 {
-                    notify(convertToCoordinate(position, time, s.width, s.height));
+                    VisionPosition visionPosition = convertToCoordinate(position, time, s.width, s.height);
+                    if (shouldAlwaysSend || isValidPosition(&visionPosition))
+                    {
+                        notify(visionPosition);
+                    }
                 }
                 //cv::waitKey(1);
             }
@@ -82,7 +86,7 @@ namespace Vision {
         }
         else
         {
-            Y = (((imageHeight - Y)- (imageHeight - anchor.Y))/totalXLen)*tableLength;
+            Y = (((imageHeight - Y) - (imageHeight - anchor.Y)) / totalXLen)*tableLength;
 
         }
         return VisionPosition(X, Y, time, orientation);
@@ -273,6 +277,22 @@ namespace Vision {
     {
         tableWidth = width;
         tableLength = length;
+    }
+
+    bool TableFinder::isValidPosition(VisionPosition * position)
+    {
+        if (position->X <= tableLength && position->X >= 0)
+        {
+            if (orientation == SIDE && position->Y >= 0)
+            {
+                return true;
+            }
+            else if (position->Y >= 0 && position->Y <= tableWidth)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
