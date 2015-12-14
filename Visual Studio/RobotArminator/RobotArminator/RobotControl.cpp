@@ -8,10 +8,12 @@ RobotControl::RobotControl(std::string port, unsigned int baud_rate)
     serial.set_option(asio::serial_port_base::baud_rate(baud_rate));
     serial.set_option(asio::serial_port_base::stop_bits(asio::serial_port_base::stop_bits::two));
     serial.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::even));
+    start();
 }
 
 RobotControl::~RobotControl()
 {
+    stop();
     serial.close();
 }
 
@@ -39,38 +41,23 @@ void RobotControl::writeData(std::string aData)
         this, std::placeholders::_1));
 }
 
-void RobotControl::writeHandler(
-    const asio::error_code& error)
+void RobotControl::run() 
 {
-    if (!error)
+    while (isRunning())
     {
-        std::stringstream ss;
-        ss << &buffer;
-        std::cout << "Message: " << ss.str() << std::endl;
-    }
-    else
-    {
-        std::cout << "Error occurred." << std::endl;
+        std::string result = readData();
+        //RobotArminator::Logger::logInfo( "RobotControl", (char *)result.c_str());
+        std::cout << result << std::endl;
     }
 }
 
 std::string RobotControl::readData()
 {
-    /*
-    asio::async_read_until(serial, buffer, '\r', std::bind(&RobotControl::writeHandler,
-        this, std::placeholders::_1));;
-    std::ostringstream ss;
-    ss << &buffer;
-
-    std::cout << "Message: " << ss.str() << std::endl;
-    return ss.str();
-    */
-    
-    
     //Reading data char by char, code is optimized for simplicity, not speed
     char c;
     std::string result;
     for (;;)
+
     {
         asio::read(serial, asio::buffer(&c, 1));
         switch (c)
@@ -80,8 +67,9 @@ std::string RobotControl::readData()
         default:
             result += c;
         }
-    }    
+    }
 }
+
 
 std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#define ASIO_STANDALONE 
+//#define ASIO_STANDALONE 
 #define ASIO_HAS_STD_ADDRESSOF
 #define ASIO_HAS_STD_ARRAY
 #define ASIO_HAS_CSTDINT
@@ -15,6 +15,7 @@
 #include <functional>
 #include "asio.hpp"
 #include "Thread.hpp"
+#include "Trajectory.hpp"
 
 using namespace Robot;
 
@@ -27,8 +28,9 @@ public:
     Trajectory getPosition();
     void hitBall(Trajectory aTrajectory);
     void writeData(std::string aData);
-    void writeHandler(const asio::error_code& error);
+    void writeHandler(const asio::error_code& error) {};
     std::string readData();
+    virtual void run() override;
     std::string calculateAngles(Trajectory aTrajectory);
 private:
     double getRadian(double aDegree);

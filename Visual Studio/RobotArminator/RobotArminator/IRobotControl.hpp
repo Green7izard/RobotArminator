@@ -1,8 +1,9 @@
 #pragma once
 
 #include "stdafx.h"
-#include "Vector.hpp"
+#include "Trajectory.hpp"
 #include <iostream>
+#include "Thread.hpp"
 
 namespace Robot
 {
