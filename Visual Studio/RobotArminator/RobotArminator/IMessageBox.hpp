@@ -1,18 +1,14 @@
 #pragma once
-
+#include "stdafx.h"
+#include "VisionPosition.hpp"
 namespace RobotArminator
 {
-
-    template <class T>
     class IMessageBox
     {
     public:
-        IMessageBox();
-        virtual ~IMessageBox()=0;
-        virtual void addToMessageBox(T item)=0;
+		IMessageBox();
+		virtual ~IMessageBox();
+        virtual void addToMessageBox(VisionPosition item)=0;
     };
-    template<class T>
-    inline IMessageBox<T>::IMessageBox()
-    {
-    }
+ 
 }

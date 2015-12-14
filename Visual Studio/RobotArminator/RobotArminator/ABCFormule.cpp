@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include <iostream>
 #include <math.h>
 #include <ctime>
@@ -27,12 +28,11 @@ void ABCFormule::setFormule(VisionPosition newSideView, VisionPosition oldSideVi
 	distance = sqrt(((newSideView.Y - oldSideView.Y) * (newSideView.Y - oldSideView.Y)) + ((newSideView.X - oldSideView.X) * (newSideView.X - oldSideView.X))) / 1000; //To meters
 	if (withSpeed)
 	{
-		//speed = distance / (difftime(std::time_t(newSideView.time), std::time_t(oldSideView.time)) / 1000000); //To meter/seconds
-		boost::posix_time::time_duration tempTime (newSideView.time - oldSideView.time);
+		//boost::posix_time::time_duration tempTime (newSideView.time - oldSideView.time);
 
-		std::cout << "difference: " << (float)tempTime.total_milliseconds() / 1000 << std::endl;
+		std::cout << "difference: " << (float)(newSideView.time - oldSideView.time).total_milliseconds() / 1000 << std::endl;
 		std::cout << "distance: " << distance << std::endl;
-		speed = distance / (float)(tempTime.total_milliseconds() / 1000.0); //To meter/seconds
+		speed = distance / (float)((newSideView.time - oldSideView.time).total_milliseconds() / 1000.0); //To meter/seconds
 		std::cout << "Speed: " << speed << std::endl;
 	}
 	else if (lastSpeed != NULL)

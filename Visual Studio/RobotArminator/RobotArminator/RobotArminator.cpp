@@ -1,6 +1,5 @@
 // RobotArminator.cpp : Defines the entry point for the console application.
 //
-
 #include "stdafx.h"
 #include "Controller.hpp"
 #include <iostream>

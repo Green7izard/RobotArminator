@@ -1,13 +1,14 @@
 #pragma once
 
-#include "Trajectory.hpp"
+#include "stdafx.h"
+#include "Vector.hpp"
 #include <iostream>
 
 namespace Robot
 {
     using namespace RobotArminator;
 
-    class IRobotControl
+    class IRobotControl : public Thread
     {
     public:
         virtual ~IRobotControl()=0;

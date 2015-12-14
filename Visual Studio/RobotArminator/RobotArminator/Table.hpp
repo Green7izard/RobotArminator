@@ -1,17 +1,17 @@
 #pragma once
-
+#include "stdafx.h"
 
 namespace Vision
 {
     /**
     * Specifies a corner location in the image
     */
-    struct Corner { unsigned int X; unsigned int Y; };
+    struct Position2D { int X =-1; int Y =-1; };
     /**
     * Specifies a table defined by its corners
     */
     struct Table {
-        Corner TopLeft; Corner TopRight;
-        Corner BotLeft; Corner BotRight;
+        Position2D TopLeft; Position2D TopRight;
+        Position2D BotLeft; Position2D BotRight;
     };
 }
