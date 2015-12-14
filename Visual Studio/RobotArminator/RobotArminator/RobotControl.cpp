@@ -17,6 +17,10 @@ RobotControl::~RobotControl()
 
 void RobotControl::moveArm(Trajectory aTrajectory)
 {
+    std::string angles;
+    angles = calculateAngles(aTrajectory);
+    Sleep(aTrajectory.time);
+    writeData(angles);
 }
 
 Trajectory RobotControl::getPosition()

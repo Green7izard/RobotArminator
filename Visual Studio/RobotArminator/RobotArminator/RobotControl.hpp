@@ -14,6 +14,7 @@
 #include <iostream>
 #include <functional>
 #include "asio.hpp"
+#include "Thread.hpp"
 
 using namespace Robot;
 
