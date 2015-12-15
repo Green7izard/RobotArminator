@@ -13,13 +13,13 @@ ABCFormule::~ABCFormule()
 {
 }
 
-void ABCFormule::setFormule(VisionPosition newSideView, VisionPosition oldSideView, float startValue, bool withSpeed)
+void ABCFormule::setFormule(VisionPosition newSideView, VisionPosition oldSideView, double startValue, bool withSpeed)
 {
-	float corner; //In degrees
-	float height; //In meters
-	float speed; //In meter/seconds
-	float distance; //In meters
-	float PI = 3.14159265358979;
+	double corner; //In degrees
+	double height; //In meters
+	double speed; //In meter/seconds
+	double distance; //In meters
+	double PI = 3.14159265358979;
 	startPositionX = startValue; //In mMillimeters
 
 	corner = atan((newSideView.Y - oldSideView.Y) / (newSideView.X - oldSideView.X)) * 180 / PI;
@@ -32,7 +32,7 @@ void ABCFormule::setFormule(VisionPosition newSideView, VisionPosition oldSideVi
 
 		//std::cout << "difference: " << (float)(newSideView.time - oldSideView.time).total_milliseconds() / 1000 << std::endl;
 		//std::cout << "distance: " << distance << std::endl;
-		speed = distance / (float)((newSideView.time - oldSideView.time).total_milliseconds() / 1000.0); //To meter/seconds
+		speed = distance / (double)((newSideView.time - oldSideView.time).total_milliseconds() / 1000.0); //To meter/seconds
 		//std::cout << "Speed: " << speed << std::endl;
 	}
 	else if (lastSpeed != NULL)
@@ -48,16 +48,16 @@ void ABCFormule::setFormule(VisionPosition newSideView, VisionPosition oldSideVi
 		speed = 5;
 	}
 
-	a = (-9.81 / (2 * speed * speed)) * (tan(corner * PI / 180) + 1);
+	a = (-9.81f / (2 * speed * speed)) * (tan(corner * PI / 180) + 1);
 	b = tan(corner * PI / 180);
 	c = height;
 	lastSpeed = speed;
 }
 
-float ABCFormule::getLargestXPosition(float y)
+double ABCFormule::getLargestXPositionAtYIsZero()
 {
-	float xPlus = (-b + sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To millimeters
-	float xMin = (-b - sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To millimeters
+	double xPlus = (-b + sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To millimeters
+	double xMin = (-b - sqrt((b*b) - (4 * a * c))) / (2 * a) * 1000; // To millimeters
 
 	if (xMin >= xPlus) {
 		return xMin + startPositionX;
@@ -68,14 +68,14 @@ float ABCFormule::getLargestXPosition(float y)
 	return NULL; // Return x in millimeters
 }
 
-float ABCFormule::getYPosition(float x)
+double ABCFormule::getYPosition(double x)
 {
-	float xInMeters = (x-startPositionX) / 1000;
-	float yValue = ((b * xInMeters) + (a * (xInMeters * xInMeters)) + c) * 1000;
+	double xInMeters = (x-startPositionX) / 1000;
+	double yValue = ((b * xInMeters) + (a * (xInMeters * xInMeters)) + c) * 1000;
 	return yValue; // Return y in millimeters
 }
 
-float ABCFormule::getTime(int startXValue, int endXValue)
+double ABCFormule::getTime(int startXValue, int endXValue)
 {
 	int firstY;
 	int secondY;
@@ -85,7 +85,7 @@ float ABCFormule::getTime(int startXValue, int endXValue)
 	int deltaX;
 	int deltaY;
 
-	float distance = 0;
+	double distance = 0.0;
 
 	for (int secondX = startXValue + 10; secondX < endXValue; secondX += 10)
 	{

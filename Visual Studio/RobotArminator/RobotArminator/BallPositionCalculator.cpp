@@ -81,7 +81,7 @@ namespace BallPosition
 
 	Trajectory BallPositionCalculator::calculateHitPosition()
 	{
-		float yValue;
+		double yValue;
 		Trajectory t;
 
         if (lastSidePosition.X < currentSidePosition.X && lastTopPosition.X < currentTopPosition.X)
@@ -91,19 +91,22 @@ namespace BallPosition
             
 
             abcCalculator.setFormule(currentSidePosition, lastSidePosition, currentSidePosition.X, true);
-            float tempXValue = abcCalculator.getLargestXPosition(0);
-            float tempYValue = abcCalculator.getYPosition((tempXValue - 1));
-            float time = 0;
+			double tempXValue = abcCalculator.getLargestXPositionAtYIsZero();
+			double tempYValue = abcCalculator.getYPosition((tempXValue - 1));
+			double time = 0;
 
             std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << currentSidePosition.X << "," << currentSidePosition.Y << ")" << std::endl;
 
             //Get Time and Length
             time += abcCalculator.getTime(lastSidePosition.X, tempXValue);
+			double zValue = abcCalculator.getYPosition(tableWidth + 100);
+			if (zValue < 0)
+			{
+				//   std::cout << "Time 1: " << time << " Milliseconds" << std::endl;
 
-         //   std::cout << "Time 1: " << time << " Milliseconds" << std::endl;
-
-            abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, Clock::universal_time(), SIDE), VisionPosition(tempXValue, 0, Clock::universal_time(), SIDE), tempXValue, false);
-            float zValue = abcCalculator.getYPosition(tableWidth + 100);
+				abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, Clock::universal_time(), SIDE), VisionPosition(tempXValue, 0, Clock::universal_time(), SIDE), tempXValue, false);
+				zValue = abcCalculator.getYPosition(tableWidth + 100);
+			}
          //   std::cout << "Z: " << zValue << "" << std::endl;
 
             if (zValue > 0)
@@ -124,11 +127,11 @@ namespace BallPosition
 		return t;
 	}
 
-	float BallPositionCalculator::calculateLiniairPosition(VisionPosition pos)
+	double BallPositionCalculator::calculateLiniairPosition(VisionPosition pos)
 	{
-		float multiplier = (pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
-		float startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
-		float newY = (multiplier * (tableWidth + 100)) + startValue;
+		double multiplier = (pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
+		double startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
+		double newY = (multiplier * (tableWidth + 100)) + startValue;
 		return newY;
 	}
 
