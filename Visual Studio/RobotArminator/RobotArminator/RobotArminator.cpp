@@ -19,10 +19,12 @@ int main(int argc, char* argv[])
     Vision::Position2D pos;
     std::cout << "Start Camera with size " << cam.getWidth() << "x" << cam.getHeight() << std::endl;
     cv::Mat cameraFrame;
-    //Vision::PFCVision HCD(RobotArminator::TOP, &cam);
+    Vision::PFCVision HCD(RobotArminator::SIDE, &cam);
     //Vision::CannyHCDVision HCD(RobotArminator::TOP, &cam);
-    Vision::ColorHCDVision HCD(RobotArminator::SIDE, &cam);
+    //Vision::ColorHCDVision HCD(RobotArminator::TOP, &cam);
     std::cout << "Frame Created\n";
+
+    HCD.updateTableSize(1000, 1000);
 
     cv::namedWindow(win, cv::WINDOW_AUTOSIZE);
     while (true) {
@@ -34,7 +36,14 @@ int main(int argc, char* argv[])
         {
             std::cout << "Found at: " << pos.X << "," << pos.Y << std::endl;
             RobotArminator::VisionPosition newPos = HCD.convertToCoordinate(pos, RobotArminator::Clock::universal_time(), s.width, s.height);
-            std::cout << "Converted to: " << newPos.X << "," << newPos.Y << std::endl;
+            if (HCD.isValidPosition(&newPos))
+            {
+                std::cout << "Converted to: " << newPos.X << "," << newPos.Y << std::endl;
+            }
+            else
+            {
+                std::cout << "Invalid to: " << newPos.X << "," << newPos.Y << std::endl;
+            }
         }
         else
         {

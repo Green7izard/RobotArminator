@@ -44,21 +44,21 @@ namespace Vision {
             cv::Point current = locations.at<cv::Point>(i);
             float currentXValue = current.x;
             float currentYValue = current.y;
-            float weight = ((float)defaultWeight/5);
-            
+            float weight = ((float)defaultWeight / 5);
+
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
             {
                 //calculate simple distance
-                float dist = std::abs(lastPosition.X-current.x)+ std::abs(lastPosition.Y - current.y);
-                weight += (float)weightFactor / ((dist * ((float)weightDecay/10))*10+0.00000001);
+                float dist = std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y);
+                weight += (float)weightFactor / ((dist * ((float)weightDecay / 10)) * 10 + 0.00000001);
             }
 
             totalX += currentXValue*weight;
             totalY += currentYValue*weight;
-            numberOfParticles= numberOfParticles+weight;
+            numberOfParticles = numberOfParticles + weight;
         }
-        
+
 
         //Drawing
         if (numberOfParticles > 0) {

@@ -12,6 +12,11 @@ namespace Vision {
         //tabel = detectTable();
     }
 
+    void TableFinder::setForceSend(bool shouldSend)
+    {
+        shouldAlwaysSend = shouldSend;
+    }
+
 
     TableFinder::~TableFinder() {
     }

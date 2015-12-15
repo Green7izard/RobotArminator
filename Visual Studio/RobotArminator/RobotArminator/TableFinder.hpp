@@ -42,10 +42,6 @@ namespace Vision
         //The camera wrapper that is used
         Camera* camera;
 
-
-        //Wheter the coordinate is right
-        bool isValidPosition(VisionPosition * position);
-
     public:
 
         //default width
@@ -116,6 +112,15 @@ namespace Vision
         * catches mouse clicks
         */
         static void mouseClick(int event, int x, int y, int flags, void *userdata);
+
+
+        /**
+        * Sets the value for forceAlwaysSend
+        */
+        void setForceSend(bool shouldSend = false);
+
+        //Wheter the coordinate is right
+        bool isValidPosition(VisionPosition * position);
     };
 }
 
