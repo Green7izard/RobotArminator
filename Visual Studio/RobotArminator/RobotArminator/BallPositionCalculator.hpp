@@ -6,7 +6,7 @@
 #include "ABCFormule.hpp"
 #include "Thread.hpp"
 #include "IMessageBox.hpp"
-#include <ctime>
+#include <mutex>
 #include "IBallPositionCalculator.hpp"
 
 namespace BallPosition
@@ -39,5 +39,8 @@ namespace BallPosition
 		Trajectory calculateHitPosition();
 		float calculateLiniairPosition(VisionPosition pos);
 		void sendPosition();
+    private:
+        std::mutex topMutex;
+        std::mutex sideMutex;
 	};
 }

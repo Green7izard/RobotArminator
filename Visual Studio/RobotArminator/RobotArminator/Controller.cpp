@@ -10,8 +10,8 @@ namespace RobotArminator
         std::cout << "Constructing" << std::endl;
         ballPostionCalculator = new BallPositionCalculator();
         
-        top = new Camera(1);
-        side = new Camera(0);
+        top = new Camera(0);
+        side = new Camera(1);
         std::cout << "Starting Visions" << std::endl;
         computerVisionTop = new PFCVision(Orientation::TOP, top);
         computerVisionSide = new PFCVision(Orientation::SIDE, side);
