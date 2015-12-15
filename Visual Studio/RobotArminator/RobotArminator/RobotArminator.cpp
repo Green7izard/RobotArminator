@@ -26,7 +26,8 @@ int main(int argc, char* argv[])
 
     Controller t();
     Trajectory aTrajectory(Vector(200, 400, 0), Vector(), 0);
-    robotControl.writeData(robotControl.calculateAngles(aTrajectory));
+	robotControl.moveArm(aTrajectory);
+    //robotControl.writeData(robotControl.calculateAngles(aTrajectory));
     std::cout << robotControl.readData() << std::endl;
     std::cin.get(); //wait for user input
     return 0;
