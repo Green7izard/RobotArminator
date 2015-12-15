@@ -36,7 +36,7 @@ namespace BallPosition
 		void addToMessageBox(VisionPosition item);
 
 		void getPositionsFromQueue();
-		Position calculateHitPosition();
+		Trajectory calculateHitPosition();
 		float calculateLiniairPosition(VisionPosition pos);
 		void sendPosition();
 	};

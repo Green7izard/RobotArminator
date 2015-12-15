@@ -55,10 +55,10 @@ namespace BallPosition
 		queueTopPosition = VisionPosition();
 	}
 
-	Position BallPositionCalculator::calculateHitPosition()
+	Trajectory BallPositionCalculator::calculateHitPosition()
 	{
 		float yValue;
-		Position p;
+		Trajectory t;
 		if (!lastTopPosition.isDefault)
 		{
 			yValue = calculateLiniairPosition(currentTopPosition); // Y Coordinate of the top-view when reaching the end of the table.
@@ -77,28 +77,28 @@ namespace BallPosition
 			std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << currentSidePosition.X << "," << currentSidePosition.Y << ")" << std::endl;
 
 			//Get Time and Length
-			time += abcCalculator.getTime(0, tempXValue);
+			time += abcCalculator.getTime(lastSidePosition.X, tempXValue);
 
 			abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, Clock::universal_time(), SIDE), VisionPosition(tempXValue, 0, Clock::universal_time(), SIDE), tempXValue, false);
-			float zValue = abcCalculator.getYPosition(tableWidth);
+			float zValue = abcCalculator.getYPosition(tableWidth + 100);
 
 			//Get Time and Length
-			time += abcCalculator.getTime(tempXValue + 1, tableWidth);
+			time += abcCalculator.getTime(tempXValue + 1, tableWidth + 100);
 			std::cout << "Time: " << time << " Milliseconds" << std::endl;
 
 			std::cout << "( tableWidth , tableDepth , Height )." << std::endl;
 			std::cout << "Hit the table at: ("<< tableWidth << "," << yValue << "," << zValue << ")." << std::endl;
-			p = Position(Vector(tableWidth, yValue, zValue), 0);
+			t = Trajectory(Vector(tableWidth, yValue, zValue), Clock::universal_time() + boost::posix_time::milliseconds(time));
 		}
 		lastSidePosition = currentSidePosition;
-		return p;
+		return t;
 	}
 
 	float BallPositionCalculator::calculateLiniairPosition(VisionPosition pos)
 	{
 		float multiplier = (pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
 		float startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
-		float newY = (multiplier * tableWidth) + startValue;
+		float newY = (multiplier * (tableWidth + 100)) + startValue;
 		return newY;
 	}
 
