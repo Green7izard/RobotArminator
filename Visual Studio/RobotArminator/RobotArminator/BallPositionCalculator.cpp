@@ -39,20 +39,43 @@ namespace BallPosition
 	{
 		if (item.orientation == Orientation::SIDE)
 		{
+            std::cout << "try side lock w" << std::endl;
+            sideMutex.lock();
+            std::cout << "side lock w" << std::endl;
 			queueSidePosition = item;
+            sideMutex.unlock();
+            std::cout << "side unlock w" << std::endl;
 		}
 		else if (item.orientation == Orientation::TOP)
 		{
+            std::cout << "try top lock w" << std::endl;
+            topMutex.lock();
+            std::cout << "top lock w" << std::endl;
 			queueTopPosition = item;
+            topMutex.unlock();
+            std::cout << "top unlock w" << std::endl;
 		}
 	}
 
 	void BallPositionCalculator::getPositionsFromQueue()
 	{
+        std::cout << "try side lock r" << std::endl;
+        sideMutex.lock();
+        std::cout << "side lock r" << std::endl;
+
 		currentSidePosition = queueSidePosition;
 		queueSidePosition = VisionPosition();
+        sideMutex.unlock();
+        std::cout << "side unlock r" << std::endl;
+
+        std::cout << "try top lock r" << std::endl;
+        topMutex.lock();
+        std::cout << "top lock r" << std::endl;
 		currentTopPosition = queueTopPosition;
 		queueTopPosition = VisionPosition();
+        topMutex.unlock();
+        std::cout << "top unlock r" << std::endl;
+        
 	}
 
 	Trajectory BallPositionCalculator::calculateHitPosition()
