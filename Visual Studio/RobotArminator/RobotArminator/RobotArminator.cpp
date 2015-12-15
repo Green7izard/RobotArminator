@@ -2,19 +2,14 @@
 //
 #include "stdafx.h"
 #include "Controller.hpp"
-#include "BallPositionCalculator.hpp"
-#include <chrono>
-#include <iostream>
-#include <ctime>
+
 using namespace RobotArminator;
-using namespace BallPosition;
 
 int main(int argc, char* argv[])
 {
-    Controller t();
+    Controller t = Controller();
 
-
-
+    while (1);
 	//wait for input
 	std::cin.get(); 
     //Controller controller;

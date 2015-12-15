@@ -15,6 +15,9 @@ namespace Vision
         friend class Camera;
     private:
 
+        //Whether the coordinates should always been send
+        bool shouldAlwaysSend;
+
         //The tables position in the screen
         Table tabel;
 
@@ -39,6 +42,10 @@ namespace Vision
         //The camera wrapper that is used
         Camera* camera;
 
+
+        //Wheter the coordinate is right
+        bool isValidPosition(VisionPosition * position);
+
     public:
 
         //default width
@@ -51,8 +58,9 @@ namespace Vision
         *
         * @param orientation Where the camera is located
         * @param cam the camera that is used
+        * @param forceSend whether is should force send ALL coordinates
         */
-        TableFinder(Orientation orientation, Camera* cam);
+        TableFinder(Orientation orientation, Camera* cam, bool forceSend = false);
 
         /**
         * Deconstructor: Terminates the camera

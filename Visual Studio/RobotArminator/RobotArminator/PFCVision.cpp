@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "PFCVision.hpp"
 
 
@@ -51,8 +52,8 @@ namespace Vision {
 	void PFCVision::calibrate()
 	{
 		TableFinder::calibrate();
-		const char * windowName = "Camera - " + camera->getCameraNumber() ;
-		const char * windowNameFiltered = "Filtered - " + camera->getCameraNumber();
+		std::string windowName = "Camera - " + std::to_string(camera->getCameraNumber()) ;
+		std::string windowNameFiltered = "PFC Filtered: - " + std::to_string(camera->getCameraNumber());
 		Vision::Position2D pos;
 		cv::Mat cameraFrame;
 
@@ -62,12 +63,12 @@ namespace Vision {
 		cv::namedWindow(windowName, cv::WINDOW_AUTOSIZE);
 		cv::namedWindow(windowNameFiltered, cv::WINDOW_AUTOSIZE);
 
-		cv::createTrackbar("Min Hue", windowName, &minHue, 180, 0);
-		cv::createTrackbar("Max Hue", windowName, &maxHue, 180, 0);
-		cv::createTrackbar("Min Sat", windowName, &minSat, 255, 0);
-		cv::createTrackbar("Max Sat", windowName, &maxSat, 255, 0);
-		cv::createTrackbar("Min Int", windowName, &minInt, 255, 0);
-		cv::createTrackbar("Max Int", windowName, &maxInt, 255, 0);
+		cv::createTrackbar("Min Hue", windowNameFiltered, &minHue, 180, 0);
+		cv::createTrackbar("Max Hue", windowNameFiltered, &maxHue, 180, 0);
+		cv::createTrackbar("Min Sat", windowNameFiltered, &minSat, 255, 0);
+		cv::createTrackbar("Max Sat", windowNameFiltered, &maxSat, 255, 0);
+		cv::createTrackbar("Min Int", windowNameFiltered, &minInt, 255, 0);
+		cv::createTrackbar("Max Int", windowNameFiltered, &maxInt, 255, 0);
 
 		while (true) {
 			camera->getCurrentImage(cameraFrame);

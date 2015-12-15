@@ -3,6 +3,7 @@
 #include "IBallPositionCalculator.hpp"
 #include "IComputerVision.hpp"
 #include "IRobotControl.hpp"
+#include "Camera.hpp"
 
 namespace RobotArminator
 {
@@ -17,9 +18,11 @@ namespace RobotArminator
         ~Controller();
     private:
         IBallPositionCalculator *ballPostionCalculator;
-        IComputerVision *computerVision;
+        IComputerVision *computerVisionTop;
+        IComputerVision *computerVisionSide;
         IRobotControl *robotControl;
-
+        Camera *top;
+        Camera *side;
 
     };
 }
