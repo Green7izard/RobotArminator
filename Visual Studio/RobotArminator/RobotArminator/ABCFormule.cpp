@@ -65,7 +65,6 @@ double ABCFormule::getLargestXPositionAtYIsZero()
 	else {
 		return xPlus + startPositionX;
 	}
-	return NULL; // Return x in millimeters
 }
 
 double ABCFormule::getYPosition(double x)
