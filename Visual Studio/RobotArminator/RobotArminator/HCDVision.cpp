@@ -34,6 +34,7 @@ namespace Vision {
             float y = circles[i][1];
             float pytho = x*x + y*y;
 #ifdef _DEBUG
+            Point center(cvRound(x), cvRound(y));
             int radius = cvRound(circles[i][2]);
             circle(image, center, 3, Scalar(0, 255, 0), -1, 8, 0);
             circle(image, center, radius, Scalar(0, 255, 255), 3, 8, 0);
@@ -42,9 +43,9 @@ namespace Vision {
             if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
-                Point center(cvRound(x), cvRound(y));
-                position.X = center.x;
-                position.Y = center.y;
+                
+                position.X = static_cast<int>(x);
+                position.Y = static_cast<int>(y);
             }
         }
         return circles.size() > 0;
