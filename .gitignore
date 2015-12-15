@@ -37,6 +37,8 @@
 Visual Studio/RobotArminator/.vs/*
 Visual Studio/RobotArminator/RobotArminator/.vs/*
 Visual Studio/RobotArminator/ipch/*
+
+Visual Studio/RobotArminator/RobotArminator/RobotArminator.VC.opendb
 *.sln
 *.suo
 *.vcxproj
