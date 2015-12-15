@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "Vector.hpp"
-#include <ctime>
+
 namespace RobotArminator
 {
     struct Trajectory

@@ -2,7 +2,6 @@
 //
 #include "stdafx.h"
 #include "Controller.hpp"
-<<<<<<< HEAD
 #include <iostream>
 #include <math.h>
 #include <sstream>
@@ -18,6 +17,7 @@ using namespace RobotArminator;
 
 int main(int argc, char* argv[])
 { 
+	std::cout << Clock::universal_time() << std::endl;
     RobotControl robotControl("COM3", 19200);
     Sleep(500);
 
@@ -25,24 +25,10 @@ int main(int argc, char* argv[])
     std::cout << robotControl.readData() << std::endl;
     Sleep(500);
 
-    Controller t();
-    Trajectory aTrajectory(Vector(200, 400, 0), Vector(), 0);
+    Trajectory aTrajectory(Vector(200, 400, 0), Clock::universal_time());
 	robotControl.moveArm(aTrajectory);
     //robotControl.writeData(robotControl.calculateAngles(aTrajectory));
     std::cout << robotControl.readData() << std::endl;
     std::cin.get(); //wait for user input
-=======
-
-using namespace RobotArminator;
-
-int main(int argc, char* argv[])
-{
-    Controller t = Controller();
-
-    while (1);
-	//wait for input
-	std::cin.get(); 
-    //Controller controller;
->>>>>>> origin/development
     return 0;
 }

@@ -21,7 +21,7 @@ void RobotControl::moveArm(Trajectory aTrajectory)
 {
     std::string angles;
     angles = calculateAngles(aTrajectory);
-    Sleep(aTrajectory.time);
+	Sleep(adaptTime(aTrajectory));
     writeData(angles);
 }
 
@@ -122,10 +122,10 @@ double RobotControl::getRadian(double aDegree)
 
 Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 {
-    return Trajectory(Vector(aTrajectory.position.y -1525 / 2, aTrajectory.position.z - 350, 0), Vector(), 0);
+    return Trajectory(Vector(aTrajectory.position.y -1525 / 2, aTrajectory.position.z - 350, 0), boost::posix_time::ptime());
 }
 
 int RobotControl::adaptTime(Trajectory aTrajectory)
 {
-    return aTrajectory.time;
+	return (aTrajectory.time - Clock::universal_time()).total_milliseconds();
 }

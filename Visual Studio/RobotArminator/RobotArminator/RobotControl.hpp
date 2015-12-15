@@ -16,6 +16,7 @@
 #include "asio.hpp"
 #include "Thread.hpp"
 #include "Trajectory.hpp"
+#include "stdafx.h"
 
 using namespace Robot;
 
