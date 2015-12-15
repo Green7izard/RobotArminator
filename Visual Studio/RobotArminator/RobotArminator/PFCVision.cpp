@@ -45,7 +45,7 @@ namespace Vision {
             cv::Point current = locations.at<cv::Point>(i);
             float currentXValue = current.x;
             float currentYValue = current.y;
-            float weight = ((float)defaultWeight / 5);
+            float weight = ((float)defaultWeight / 10);
 
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
@@ -86,6 +86,7 @@ namespace Vision {
         std::string windowNameFiltered = "PFC Filtered: - " + std::to_string(camera->getCameraNumber());
         Vision::Position2D pos;
         cv::Mat cameraFrame;
+        cv::Mat orignalFrame;
 
         std::cout << "Starting calibrating: " << windowName << endl;
         std::cout << "Adjust the sliders in the windows and press 'esc' when the values are correct!" << endl;
@@ -106,11 +107,16 @@ namespace Vision {
 
         while (true) {
             camera->getCurrentImage(cameraFrame);
-            cv::imshow(windowName, cameraFrame);
+            
+            cameraFrame.copyTo(orignalFrame);
+            
             if (locateObject(cameraFrame, pos))
             {
                 cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
+                cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
+                cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(0, 0, 255), 3, 8, 0);
             }
+            cv::imshow(windowName, orignalFrame);
             cv::imshow(windowNameFiltered, cameraFrame);
             //Wait till escape is 
             if (cv::waitKey(33) >= (char)27) break;
