@@ -30,10 +30,10 @@ void ABCFormule::setFormule(VisionPosition newSideView, VisionPosition oldSideVi
 	{
 		//boost::posix_time::time_duration tempTime (newSideView.time - oldSideView.time);
 
-		std::cout << "difference: " << (float)(newSideView.time - oldSideView.time).total_milliseconds() / 1000 << std::endl;
-		std::cout << "distance: " << distance << std::endl;
+		//std::cout << "difference: " << (float)(newSideView.time - oldSideView.time).total_milliseconds() / 1000 << std::endl;
+		//std::cout << "distance: " << distance << std::endl;
 		speed = distance / (float)((newSideView.time - oldSideView.time).total_milliseconds() / 1000.0); //To meter/seconds
-		std::cout << "Speed: " << speed << std::endl;
+		//std::cout << "Speed: " << speed << std::endl;
 	}
 	else if (lastSpeed != NULL)
 	{
