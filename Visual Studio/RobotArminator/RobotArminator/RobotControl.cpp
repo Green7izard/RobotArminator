@@ -124,3 +124,8 @@ Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 {
     return Trajectory(Vector(aTrajectory.position.y -1525 / 2, aTrajectory.position.z - 350, 0), Vector(), 0);
 }
+
+int RobotControl::adaptTime(Trajectory aTrajectory)
+{
+    return aTrajectory.time;
+}

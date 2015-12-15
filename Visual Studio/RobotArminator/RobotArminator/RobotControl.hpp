@@ -31,10 +31,12 @@ public:
     void writeHandler(const asio::error_code& error) {};
     std::string readData();
     virtual void run() override;
-    std::string calculateAngles(Trajectory aTrajectory);
+    
 private:
+	std::string calculateAngles(Trajectory aTrajectory);
     double getRadian(double aDegree);
     Trajectory adaptTrajectory(Trajectory aTrajectory);
+    int adaptTime(Trajectory aTrajectory);
     asio::streambuf buffer;
     asio::io_service io;
     asio::serial_port serial;
