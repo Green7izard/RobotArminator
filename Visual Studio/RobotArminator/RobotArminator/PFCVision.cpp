@@ -71,7 +71,7 @@ namespace Vision {
             position.X = (int)(totalX / numberOfParticles);
             position.Y = (int)(totalY / numberOfParticles);
 
-            std::cout << numberOfParticles << " Found: " << position.X << "," << position.Y << std::endl;
+            //std::cout << numberOfParticles << " Found: " << position.X << "," << position.Y << std::endl;
             lastPosition = position;
             return true;
         }
