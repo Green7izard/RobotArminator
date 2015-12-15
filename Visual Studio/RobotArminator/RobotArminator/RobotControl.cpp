@@ -19,17 +19,19 @@ RobotControl::~RobotControl()
 
 void RobotControl::moveArm(Trajectory aTrajectory)
 {
-    std::string angles;
-    angles = calculateAngles(aTrajectory);
-	Sleep(adaptTime(aTrajectory));
-    writeData(angles);
+	setTrajectory(aTrajectory);
+	hasTrajectory = true;
 }
 
-Trajectory RobotControl::getPosition()
+Trajectory RobotControl::getTrajectory()
 {
-    return Trajectory();
+	return trajectory;
 }
 
+void RobotControl::setTrajectory(Trajectory aTrajectory)
+{
+	trajectory = aTrajectory;
+}
 
 void RobotControl::hitBall(Trajectory aTrajectory)
 {
@@ -45,9 +47,16 @@ void RobotControl::run()
 {
     while (isRunning())
     {
+		if (hasTrajectory)
+		{
+			Sleep(adaptTime(getTrajectory()));
+			writeData(calculateAngles(getTrajectory()));
+			hasTrajectory = false;
+		}
         std::string result = readData();
         //RobotArminator::Logger::logInfo( "RobotControl", (char *)result.c_str());
         std::cout << result << std::endl;
+		
     }
 }
 
@@ -101,10 +110,13 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 
                         if (trajectory.position.x >= x - 50 && trajectory.position.x <= x + 50 && trajectory.position.y >= y - 50 && trajectory.position.y <= y + 50)
                         {
-                            std::stringstream ss;
-                            ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
-                            std::cout << ss.str() << std::endl;
-                            return ss.str();
+							if ((j1 == 90 && (j2 + j3 + j5 + 90 <= 170)) || (j1 == -90 && (j2 + j3 + j5 + -90 >= -170)))
+							{
+								std::stringstream ss;
+								ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
+								std::cout << ss.str() << std::endl;
+								return ss.str();
+							}
                         }
                     }
                 }
