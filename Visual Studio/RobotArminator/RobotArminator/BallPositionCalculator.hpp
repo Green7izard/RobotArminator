@@ -16,7 +16,7 @@ namespace BallPosition
 	class BallPositionCalculator : public IBallPositionCalculator
 	{
 	public:
-		float tableWidth = 2740.0;
+		double tableWidth = 2740.0;
 
 		VisionPosition lastSidePosition;
 		VisionPosition lastTopPosition;
@@ -37,7 +37,7 @@ namespace BallPosition
 
 		void getPositionsFromQueue();
 		Trajectory calculateHitPosition();
-		float calculateLiniairPosition(VisionPosition pos);
+		double calculateLiniairPosition(VisionPosition pos);
 		void sendPosition();
     private:
         std::mutex topMutex;
