@@ -107,7 +107,7 @@ namespace Vision {
 
             if (locateObject(cameraFrame, pos))
             {
-                cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
+                cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(0, 255, 0), -1, 8, 0);
                 cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
                 cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(0, 0, 255), 3, 8, 0);
             }
