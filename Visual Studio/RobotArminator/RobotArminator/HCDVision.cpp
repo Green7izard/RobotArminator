@@ -33,18 +33,18 @@ namespace Vision {
             float x = circles[i][0];
             float y = circles[i][1];
             float pytho = x*x + y*y;
+#ifdef _DEBUG
+            int radius = cvRound(circles[i][2]);
+            circle(image, center, 3, Scalar(0, 255, 0), -1, 8, 0);
+            circle(image, center, radius, Scalar(0, 255, 255), 3, 8, 0);
+            //std::cout << "Found: " << x << "," << y << "\n";
+#endif
             if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
                 Point center(cvRound(x), cvRound(y));
                 position.X = center.x;
                 position.Y = center.y;
-#ifdef _DEBUG
-                int radius = cvRound(circles[i][2]);
-                circle(image, center, 3, Scalar(0, 255, 0), -1, 8, 0);
-                circle(image, center, radius, Scalar(0, 255, 255), 3, 8, 0);
-                //std::cout << "Found: " << x << "," << y << "\n";
-#endif
             }
         }
         return circles.size() > 0;
@@ -120,17 +120,18 @@ namespace Vision {
             float x = circles[i][0];
             float y = circles[i][1];
             float pytho = x*x + y*y;
+
+#ifdef _DEBUG
+            int radius = cvRound(circles[i][2]);
+            circle(image, Point(static_cast<int>(x), static_cast<int>(y)), 3, Scalar(0, 255, 0), -1, 8, 0);
+            circle(image, Point(static_cast<int>(x), static_cast<int>(y)), radius, Scalar(0, 255, 255), 3, 8, 0);
+#endif
+
             if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
                 position.X = static_cast<int>(x);
                 position.Y = static_cast<int>(y);
-#ifdef _DEBUG
-                int radius = cvRound(circles[i][2]);
-                circle(image, Point(static_cast<int>(x), static_cast<int>(y)), 3, Scalar(0, 255, 0), -1, 8, 0);
-                circle(image, Point(static_cast<int>(x), static_cast<int>(y)), radius, Scalar(0, 255, 255), 3, 8, 0);
-                //std::cout << "Found: " << x << "," << y << "\n";
-#endif
             }
         }
         return circles.size() > 0;

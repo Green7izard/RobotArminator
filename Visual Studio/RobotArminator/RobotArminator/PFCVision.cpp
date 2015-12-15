@@ -66,11 +66,6 @@ namespace Vision {
 
             position.X = static_cast<int>(totalX / numberOfParticles);
             position.Y = static_cast<int>(totalY / numberOfParticles);
-#ifdef _DEBUG
-            cv::Point location(position.X, position.Y);
-            cv::circle(image, location, 3, cv::Scalar(0, 255, 0), -1, 8, 0);// circle center     
-            cv::circle(image, location, 50, cv::Scalar(0, 0, 255), 3, 8, 0);// circle outline
-#endif
             //std::cout << numberOfParticles << " Found: " << position.X << "," << position.Y << std::endl;
             lastPosition = position;
             return true;
@@ -167,8 +162,6 @@ namespace Vision {
 
         //Drawing
         if (location.x != 0 || location.y != 0) {
-            cv::circle(image, location, 3, cv::Scalar(0, 255, 0), -1, 8, 0);// circle center     
-            cv::circle(image, location, 50, cv::Scalar(0, 0, 255), 3, 8, 0);// circle outline
             position.X = location.x;
             position.Y = location.y;
             return true;
