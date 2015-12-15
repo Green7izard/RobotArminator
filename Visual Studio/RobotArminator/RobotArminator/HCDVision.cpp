@@ -116,7 +116,7 @@ namespace Vision {
         std::vector<Vec3f> circles;
         HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, cannyUpperThreshhold + 1, accumulatorThreshold + 1, minRadius, maxRadius);
         float closestDistance = -1;
-        for (int i = 0; i < circles.size(); i++)
+        for (unsigned int i = 0; i < circles.size(); i++)
         {
             float x = circles[i][0];
             float y = circles[i][1];

@@ -41,11 +41,11 @@ namespace Vision {
         cv::findNonZero(image, locations);//probably faster, but crashes
 
         float numberOfParticles = 0;
-        for (int i = 0; i < locations.total(); i++) {
+        for (unsigned int i = 0; i < locations.total(); i++) {
             cv::Point current = locations.at<cv::Point>(i);
             float currentXValue = static_cast<float>(current.x);
             float currentYValue = static_cast<float>(current.y);
-            float weight = static_cast<float>(defaultWeight / 10);
+            float weight = static_cast<float>(defaultWeight) / 10;
 
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
