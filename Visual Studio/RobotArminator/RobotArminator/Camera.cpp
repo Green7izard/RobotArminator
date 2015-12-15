@@ -110,7 +110,7 @@ namespace Vision
         {
             if (!camera.read(output))
             {
-                std::string sender = "Video "; sender+= filename;
+                std::string sender = "Video "; sender += filename;
                 RobotArminator::Logger::logWarning((char *)sender.c_str(), "Video could not read!");
                 return false;
             }

@@ -55,7 +55,7 @@ namespace Vision
         /**
         * Sets the image size
         */
-        void setSize( int width = FRAME_WIDTH,  int height = FRAME_HEIGHT);
+        void setSize(int width = FRAME_WIDTH, int height = FRAME_HEIGHT);
 
         //Gets the hight of the image
         int getHeight();

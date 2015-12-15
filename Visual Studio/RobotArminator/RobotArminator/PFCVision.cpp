@@ -43,16 +43,16 @@ namespace Vision {
         float numberOfParticles = 0;
         for (int i = 0; i < locations.total(); i++) {
             cv::Point current = locations.at<cv::Point>(i);
-            float currentXValue = current.x;
-            float currentYValue = current.y;
-            float weight = ((float)defaultWeight / 10);
+            float currentXValue = static_cast<float>(current.x);
+            float currentYValue = static_cast<float>(current.y);
+            float weight = static_cast<float>(defaultWeight / 10);
 
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
             {
                 //calculate simple distance
-                float dist = std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y);
-                weight += (float)weightFactor / ((dist * ((float)weightDecay / 10)) * 10 + 0.00000001);
+                float dist = static_cast<float>(std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y));
+                weight += static_cast<float>(weightFactor) / static_cast<float>((dist * (static_cast<float>(weightDecay) / 10)) * 10 + 0.00000001);
             }
 
             totalX += currentXValue*weight;
@@ -63,14 +63,14 @@ namespace Vision {
 
         //Drawing
         if (numberOfParticles > 0) {
+
+            position.X = static_cast<int>(totalX / numberOfParticles);
+            position.Y = static_cast<int>(totalY / numberOfParticles);
 #ifdef _DEBUG
-            cv::Point location(totalX, totalY);
+            cv::Point location(position.X, position.Y);
             cv::circle(image, location, 3, cv::Scalar(0, 255, 0), -1, 8, 0);// circle center     
             cv::circle(image, location, 50, cv::Scalar(0, 0, 255), 3, 8, 0);// circle outline
 #endif
-            position.X = (int)(totalX / numberOfParticles);
-            position.Y = (int)(totalY / numberOfParticles);
-
             //std::cout << numberOfParticles << " Found: " << position.X << "," << position.Y << std::endl;
             lastPosition = position;
             return true;
@@ -105,11 +105,11 @@ namespace Vision {
         cv::createTrackbar("Weight decay", windowNameFiltered, &weightDecay, 200, 0);
         cv::createTrackbar("Default weight", windowNameFiltered, &weightDecay, 200, 0);
 
-        while (true) {
+        while (cv::waitKey(33) != (char)27) {
             camera->getCurrentImage(cameraFrame);
-            
+
             cameraFrame.copyTo(orignalFrame);
-            
+
             if (locateObject(cameraFrame, pos))
             {
                 cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
@@ -119,7 +119,6 @@ namespace Vision {
             cv::imshow(windowName, orignalFrame);
             cv::imshow(windowNameFiltered, cameraFrame);
             //Wait till escape is 
-            if (cv::waitKey(33) >= (char)27) break;
         }
         cv::destroyWindow(windowName);
         cv::destroyWindow(windowNameFiltered);
@@ -198,7 +197,7 @@ namespace Vision {
         cv::createTrackbar("Min Int", windowNameFiltered, &minInt, 255, 0);
         cv::createTrackbar("Max Int", windowNameFiltered, &maxInt, 255, 0);
 
-        while (true) {
+        while (cv::waitKey(33) != (char)27) {
             camera->getCurrentImage(cameraFrame);
             cv::imshow(windowName, cameraFrame);
             if (locateObject(cameraFrame, pos))
@@ -206,8 +205,6 @@ namespace Vision {
                 cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
             }
             cv::imshow(windowNameFiltered, cameraFrame);
-            //Wait till escape is 
-            if (cv::waitKey(33) >= (char)27) break;
         }
         cv::destroyWindow(windowName);
         cv::destroyWindow(windowNameFiltered);

@@ -52,8 +52,8 @@ namespace Vision {
 
     VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time, int imageWidth, int imageHeight)
     {
-        float X = (float)position.X;
-        float Y = (float)position.Y;
+        float X = static_cast<float>(position.X);
+        float Y = static_cast<float>(position.Y);
         //Whether the X axis is inverted
         bool xShouldBeInverted = (tabel.TopLeft.X < tabel.TopRight.X);
 
@@ -66,27 +66,27 @@ namespace Vision {
         {
             anchor = tabel.TopLeft;
             opposite = tabel.BotRight;
-            totalXLen = std::abs(anchor.X - opposite.X);
+            totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
             X = ((imageWidth - (X - anchor.X)) / totalXLen)*tableLength;
         }
         else
         {
             anchor = tabel.BotLeft;
             opposite = tabel.TopRight;
-            totalXLen = std::abs(anchor.X - opposite.X);
+            totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
             X = ((imageWidth - (anchor.X - X)) / totalXLen)*tableLength;
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
         {
-            float totalYLen = std::abs(anchor.Y - opposite.Y);
+            float totalYLen = static_cast<float>(std::abs(anchor.Y - opposite.Y));
             if (xShouldBeInverted)
             {
-                Y = ((imageHeight - (Y - anchor.Y)) / totalYLen)*tableWidth;
+                Y = ((imageHeight - (Y - anchor.Y)) / totalYLen) * tableWidth;
             }
             else
             {
-                Y = ((imageHeight - (anchor.Y - Y)) / totalYLen)*tableWidth;
+                Y = ((imageHeight - (anchor.Y - Y)) / totalYLen) * tableWidth;
             }
         }
         else
@@ -247,7 +247,7 @@ namespace Vision {
         cv::namedWindow(name, cv::WINDOW_AUTOSIZE);
 
         cv::setMouseCallback(name, &Vision::TableFinder::mouseClick, &big);
-        while (true) {
+        while (cv::waitKey(33) != static_cast<char>(27) || !validTable(&tabel)) {
             if (camera->getCurrentImage(cameraFrame))
             {
                 if (validPoint(&tabel.TopLeft))
@@ -272,8 +272,6 @@ namespace Vision {
                 }
                 cv::imshow(name, cameraFrame);
             }
-            //Wait till escape is 
-            if (cv::waitKey(33) >= (char)27 && validTable(&tabel)) break;
         }
         cv::destroyWindow(name);
     }
