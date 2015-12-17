@@ -12,23 +12,23 @@
 #include "Vector.hpp"
 #include <chrono>
 #include <iostream>
-#include <ctime>
 using namespace RobotArminator;
 
 int main(int argc, char* argv[])
 { 
-	std::cout << Clock::universal_time() << std::endl;
     RobotControl robotControl("COM3", 19200);
     Sleep(500);
-
-    robotControl.writeData("PRN 1,(0,0,0,0,0,0)\r");
-    std::cout << robotControl.readData() << std::endl;
-    Sleep(500);
-
-    Trajectory aTrajectory(Vector(200, 400, 0), Clock::universal_time());
+	BOOST_LOG_TRIVIAL(info) << "Setup complete";
+	robotControl.resetPositions();
+	Sleep(500);
+	//Trajectory beginTrajectory(Vector(0, 762, 350), Clock::universal_time());
+	//robotControl.moveArm(beginTrajectory);
+    //Sleep(1000);
+    Trajectory aTrajectory(Vector(0, 762, 550), Clock::universal_time() + boost::posix_time::seconds(1));
 	robotControl.moveArm(aTrajectory);
     //robotControl.writeData(robotControl.calculateAngles(aTrajectory));
-    std::cout << robotControl.readData() << std::endl;
+
+	BOOST_LOG_TRIVIAL(info) << "Info";
     std::cin.get(); //wait for user input
     return 0;
 }
