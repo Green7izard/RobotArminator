@@ -45,14 +45,14 @@ namespace Vision {
             cv::Point current = locations.at<cv::Point>(i);
             float currentXValue = static_cast<float>(current.x);
             float currentYValue = static_cast<float>(current.y);
-            float weight = static_cast<float>(defaultWeight) / 10.0;
+            float weight = static_cast<float>(defaultWeight) / 10.f;
 
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
             {
                 //calculate simple distance
                 float dist = static_cast<float>(std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y));
-                weight += static_cast<float>(weightFactor) / static_cast<float>((dist * (static_cast<float>(weightDecay) / 10.0)) * 10.0 + 1.0);
+                weight += static_cast<float>(weightFactor) / static_cast<float>((dist * (static_cast<float>(weightDecay) / 10.f)) * 10.f + 1.f);
             }
 
             totalX += currentXValue*weight;
@@ -107,7 +107,7 @@ namespace Vision {
 
             if (locateObject(cameraFrame, pos))
             {
-                cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(0, 255, 0), -1, 8, 0);
+                cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(100, 255, 255), 2, 8, 0);
                 cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
                 cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(0, 0, 255), 3, 8, 0);
             }

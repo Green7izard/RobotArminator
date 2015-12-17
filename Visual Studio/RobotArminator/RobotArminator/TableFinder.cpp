@@ -37,6 +37,17 @@ namespace Vision {
                     if (shouldAlwaysSend || isValidPosition(&visionPosition))
                     {
                         notify(visionPosition);
+                        if (orientation == TOP)
+                            std::cout << "TOP Send at: " << visionPosition.time << std::endl;
+                        else
+                            std::cout << "BOT Send at: " << visionPosition.time << std::endl;
+                    }
+                    else
+                    {
+                        if (orientation == TOP)
+                            std::cout << "TOP WRONG at: " << visionPosition.time << std::endl;
+                        else
+                            std::cout << "BOT WRONG at: " << visionPosition.time << std::endl;
                     }
                 }
                 //cv::waitKey(1);
@@ -64,17 +75,24 @@ namespace Vision {
 
         if (xShouldBeInverted)
         {
-            anchor = tabel.TopLeft;
-            opposite = tabel.BotRight;
+            anchor = tabel.BotRight;
+            opposite = tabel.TopLeft;
             totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
-            X = ((imageWidth - (X - anchor.X)) / totalXLen)*tableLength;
+            X = (anchor.X - X)*(tableLength / totalXLen);
         }
         else
         {
-            anchor = tabel.BotLeft;
-            opposite = tabel.TopRight;
+            anchor = tabel.TopRight;
+            opposite = tabel.BotLeft;
             totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
-            X = ((imageWidth - (anchor.X - X)) / totalXLen)*tableLength;
+            X = (X - anchor.X)*(tableLength / totalXLen);
+        }
+        if (orientation == TOP) {
+            std::cout << "START: " << position.X << endl;
+            std::cout << "Anchor " << anchor.X << endl;
+            cout << "Opposite " << opposite.X << endl;
+            cout << "Result " << X << endl;
+
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
@@ -284,8 +302,10 @@ namespace Vision {
 
     bool TableFinder::isValidPosition(VisionPosition * position)
     {
+
         if (position->X <= tableLength && position->X >= 0)
         {
+
             if (orientation == SIDE && position->Y >= 0)
             {
                 return true;
