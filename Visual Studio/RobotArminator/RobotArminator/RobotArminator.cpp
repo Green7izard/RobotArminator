@@ -8,11 +8,11 @@ using namespace RobotArminator;
 int main(int argc, char* argv[])
 {
     Controller t = Controller();
-
-    while (1);
-	//wait for input
-	std::cin.get(); 
+    std::string command;
+    do
+    {
+        cin >> command;
+    } while (command.compare("quit") != 0);
     //Controller controller;
     return 0;
 }
-

@@ -7,18 +7,18 @@ using namespace RobotArminator;
 class ABCFormule
 {
 public:
-	float a;
-	float b;
-	float c;
-	float startPositionX;
-	float lastSpeed;
+	double a;
+	double b;
+	double c;
+	double startPositionX;
+	double lastSpeed;
 
 	ABCFormule();
 	virtual ~ABCFormule();
 
-	void setFormule(VisionPosition newSideView, VisionPosition oldSideView, float startValue, bool withSpeed);
-	float getLargestXPosition(float y);
-	float getYPosition(float x);
-	float getTime(int startXValue, int endXValue);
+	void setFormule(VisionPosition newSideView, VisionPosition oldSideView, double startValue, bool withSpeed);
+	double getLargestXPositionAtYIsZero();
+	double getYPosition(double x);
+	double getTime(int startXValue, int endXValue);
 };
 
