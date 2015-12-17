@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "PFCVision.hpp"
-
+#include "configuration.hpp"
+#include <sstream>
+#include <iostream>
+#include <map>
+#include <string>
 
 namespace Vision {
 
@@ -93,6 +97,13 @@ namespace Vision {
 
         cv::namedWindow(windowName, cv::WINDOW_AUTOSIZE);
         cv::namedWindow(windowNameFiltered, cv::WINDOW_AUTOSIZE);
+
+		/**/
+		ConfigFile cfg("CameraConfig.cfg");
+		minHue = cfg.getValueOfKey<int>("minHue");
+		minSat = cfg.getValueOfKey<int>("minSat");
+		minInt = cfg.getValueOfKey<int>("minInt");
+		/**/
 
         cv::createTrackbar("Min Hue", windowNameFiltered, &minHue, 180, 0);
         cv::createTrackbar("Max Hue", windowNameFiltered, &maxHue, 180, 0);
