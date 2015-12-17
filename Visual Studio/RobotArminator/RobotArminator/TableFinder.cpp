@@ -30,24 +30,12 @@ namespace Vision {
             time = Clock::universal_time();
             if (camera->getCurrentImage(cameraFrame))
             {
-                cv::Size s = cameraFrame.size();
                 if (locateObject(cameraFrame, position))
                 {
-                    VisionPosition visionPosition = convertToCoordinate(position, time, s.width, s.height);
+                    VisionPosition visionPosition = convertToCoordinate(position, time);
                     if (shouldAlwaysSend || isValidPosition(&visionPosition))
                     {
                         notify(visionPosition);
-                        if (orientation == TOP)
-                            std::cout << "TOP Send at: " << visionPosition.time << std::endl;
-                        else
-                            std::cout << "BOT Send at: " << visionPosition.time << std::endl;
-                    }
-                    else
-                    {
-                        if (orientation == TOP)
-                            std::cout << "TOP WRONG at: " << visionPosition.time << std::endl;
-                        else
-                            std::cout << "BOT WRONG at: " << visionPosition.time << std::endl;
                     }
                 }
                 //cv::waitKey(1);
@@ -61,7 +49,7 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time, int imageWidth, int imageHeight)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time)
     {
         float X = static_cast<float>(position.X);
         float Y = static_cast<float>(position.Y);
@@ -87,30 +75,23 @@ namespace Vision {
             totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
             X = (X - anchor.X)*(tableLength / totalXLen);
         }
-        if (orientation == TOP) {
-            std::cout << "START: " << position.X << endl;
-            std::cout << "Anchor " << anchor.X << endl;
-            cout << "Opposite " << opposite.X << endl;
-            cout << "Result " << X << endl;
-
-        }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
-        {
+        {                
             float totalYLen = static_cast<float>(std::abs(anchor.Y - opposite.Y));
             if (xShouldBeInverted)
             {
-                Y = ((imageHeight - (Y - anchor.Y)) / totalYLen) * tableWidth;
+                Y = (anchor.Y - Y)*(tableWidth / totalYLen);
             }
             else
             {
-                Y = ((imageHeight - (anchor.Y - Y)) / totalYLen) * tableWidth;
+                Y = (Y -anchor.Y)*(tableWidth / totalYLen);
             }
+            
         }
         else
         {
-            Y = (((imageHeight - Y) - (imageHeight - anchor.Y)) / totalXLen)*tableLength;
-
+            Y = (( anchor.Y - Y) / totalXLen)*tableLength;
         }
         return VisionPosition(X, Y, time, orientation);
     }

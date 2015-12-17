@@ -79,11 +79,9 @@ namespace Vision
         *
         * @param position the location in the screen
         * @param time the systemtime
-        * @param imageWidth the wdith for the current image in pixels
-        * @param imageHeight the height fo the current image in pixels
         * @return VisionPosition in the worldspace
         */
-        VisionPosition convertToCoordinate(Position2D &position, Time time, int imageWidth, int imageHeight);
+        VisionPosition convertToCoordinate(Position2D &position, Time time);
 
         /**
         * Function for finding the ball.
