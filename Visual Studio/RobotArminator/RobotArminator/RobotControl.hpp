@@ -26,19 +26,20 @@ public:
     RobotControl(std::string port, unsigned int baud_rate);
     ~RobotControl();
     void moveArm(Trajectory aTrajectory);
-    void hitBall(Trajectory aTrajectory);
-    void writeData(std::string aData);
-    void writeHandler(const asio::error_code& error) {};
-    std::string readData();
+	void resetPositions();
     virtual void run() override;
-    
 private:
+	void hitBall(Trajectory aTrajectory);
+	void writeData(std::string aData);
+	std::string readData();
+	void writeHandler(const asio::error_code& error) {};
 	std::string calculateAngles(Trajectory aTrajectory);
     double getRadian(double aDegree);
 	Trajectory getTrajectory();
 	void setTrajectory(Trajectory aTrajectory);
     Trajectory adaptTrajectory(Trajectory aTrajectory);
     int adaptTime(Trajectory aTrajectory);
+	int globalj1;
     asio::streambuf buffer;
     asio::io_service io;
     asio::serial_port serial;

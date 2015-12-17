@@ -20,7 +20,6 @@ RobotControl::~RobotControl()
 void RobotControl::moveArm(Trajectory aTrajectory)
 {
 	setTrajectory(aTrajectory);
-	hasTrajectory = true;
 }
 
 Trajectory RobotControl::getTrajectory()
@@ -31,10 +30,25 @@ Trajectory RobotControl::getTrajectory()
 void RobotControl::setTrajectory(Trajectory aTrajectory)
 {
 	trajectory = aTrajectory;
+	hasTrajectory = true;
 }
 
 void RobotControl::hitBall(Trajectory aTrajectory)
 {
+	Sleep(adaptTime(getTrajectory()));
+	if (globalj1 == -90)
+	{
+		writeData("PRN 2,(0,0,0,0,0,15)\r");
+	}
+	else if (globalj1 == 90)
+	{
+		writeData("PRN 2,(0,0,0,0,0,-15)\r");
+	}
+
+	BOOST_LOG_TRIVIAL(info) << readData();
+	
+
+	///TODO:if j1 == -90, j6 += 15 else j6 -= 15
 }
 
 void RobotControl::writeData(std::string aData)
@@ -47,16 +61,14 @@ void RobotControl::run()
 {
     while (isRunning())
     {
-		if (hasTrajectory)
+		if (hasTrajectory == true)
 		{
-			Sleep(adaptTime(getTrajectory()));
+
 			writeData(calculateAngles(getTrajectory()));
+			BOOST_LOG_TRIVIAL(info) << readData();
+			hitBall(getTrajectory());
 			hasTrajectory = false;
 		}
-        std::string result = readData();
-        //RobotArminator::Logger::logInfo( "RobotControl", (char *)result.c_str());
-        std::cout << result << std::endl;
-		
     }
 }
 
@@ -77,6 +89,11 @@ std::string RobotControl::readData()
             result += c;
         }
     }
+}
+
+void RobotControl::resetPositions()
+{
+	writeData("PRN 1,(0,0,0,0,0,0)\r");
 }
 
 
@@ -110,11 +127,14 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 
                         if (trajectory.position.x >= x - 50 && trajectory.position.x <= x + 50 && trajectory.position.y >= y - 50 && trajectory.position.y <= y + 50)
                         {
-							if ((j1 == 90 && (j2 + j3 + j5 + 90 <= 170)) || (j1 == -90 && (j2 + j3 + j5 + -90 >= -170)))
+							if ((j1 == 90 && x <= 10 && (j2 + j3 + j5 <= 90)) || (j1 == -90 && x >= -10 && (j2 + j3 + j5 >= -90)))
 							{
+								globalj1 = j1;
+								
 								std::stringstream ss;
 								ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
-								std::cout << ss.str() << std::endl;
+								//std::cout << ss.str() << std::endl;
+								
 								return ss.str();
 							}
                         }
@@ -123,7 +143,7 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
             }
         }
     }
-    std::cout << "Not found." << std::endl;
+	BOOST_LOG_TRIVIAL(warning) << "No possible position found.";
     return "PRN 1,(0,0,0,0,0,0)\r";
 }
 
@@ -134,7 +154,7 @@ double RobotControl::getRadian(double aDegree)
 
 Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 {
-    return Trajectory(Vector(aTrajectory.position.y -1525 / 2, aTrajectory.position.z - 350, 0), boost::posix_time::ptime());
+    return Trajectory(Vector(aTrajectory.position.y - (1525 / 2), aTrajectory.position.z - 350, 0), aTrajectory.time);
 }
 
 int RobotControl::adaptTime(Trajectory aTrajectory)
