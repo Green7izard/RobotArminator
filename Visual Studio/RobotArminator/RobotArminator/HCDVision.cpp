@@ -27,24 +27,25 @@ namespace Vision {
 
         std::vector<Vec3f> circles;
         HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, std::max(cannyUpperThreshhold, 1), std::max(accumulatorThreshold, 1), minRadius, maxRadius);
-        int closestDistance = -1;
-        for (int i = 0; i < circles.size(); i++)
+        float closestDistance = -1;
+        for (unsigned int i = 0; i < circles.size(); i++)
         {
             float x = circles[i][0];
             float y = circles[i][1];
             float pytho = x*x + y*y;
+#ifdef _DEBUG
+            Point center(cvRound(x), cvRound(y));
+            int radius = cvRound(circles[i][2]);
+            circle(image, center, 3, Scalar(0, 255, 0), -1, 8, 0);
+            circle(image, center, radius, Scalar(0, 255, 255), 3, 8, 0);
+            //std::cout << "Found: " << x << "," << y << "\n";
+#endif
             if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
-                Point center(cvRound(x), cvRound(y));
-                position.X = center.x;
-                position.Y = center.y;
-#ifdef _DEBUG
-                int radius = cvRound(circles[i][2]);
-                circle(image, center, 3, Scalar(0, 255, 0), -1, 8, 0);
-                circle(image, center, radius, Scalar(0, 255, 255), 3, 8, 0);
-                //std::cout << "Found: " << x << "," << y << "\n";
-#endif
+                
+                position.X = static_cast<int>(x);
+                position.Y = static_cast<int>(y);
             }
         }
         return circles.size() > 0;
@@ -68,7 +69,7 @@ namespace Vision {
         createTrackbar("Max Radius", windowName, &maxRadius, 500, 0);
         createTrackbar("Canny Threshhold", windowNameCanny, &cannyUpperThreshhold, 400, 0);
         createTrackbar("accumulator threshold", windowName, &accumulatorThreshold, 100, 0);
-        while (true) {
+        while (waitKey(33) != (char)27) {
             if (camera->getCurrentImage(cameraFrame))
             {
 
@@ -82,8 +83,6 @@ namespace Vision {
                 imshow(windowName, cameraFrame);
                 imshow(windowNameCanny, cannyFrame);
             }
-            //Wait till escape is 
-            if (waitKey(33) >= (char)27) break;
 
         }
         destroyWindow(windowName);
@@ -116,23 +115,24 @@ namespace Vision {
 
         std::vector<Vec3f> circles;
         HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, cannyUpperThreshhold + 1, accumulatorThreshold + 1, minRadius, maxRadius);
-        int closestDistance = -1;
-        for (int i = 0; i < circles.size(); i++)
+        float closestDistance = -1;
+        for (unsigned int i = 0; i < circles.size(); i++)
         {
             float x = circles[i][0];
             float y = circles[i][1];
             float pytho = x*x + y*y;
+
+#ifdef _DEBUG
+            int radius = cvRound(circles[i][2]);
+            circle(image, Point(static_cast<int>(x), static_cast<int>(y)), 3, Scalar(0, 255, 0), -1, 8, 0);
+            circle(image, Point(static_cast<int>(x), static_cast<int>(y)), radius, Scalar(0, 255, 255), 3, 8, 0);
+#endif
+
             if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
-                position.X = x;
-                position.Y = y;
-#ifdef _DEBUG
-                int radius = cvRound(circles[i][2]);
-                circle(image, Point(x, y), 3, Scalar(0, 255, 0), -1, 8, 0);
-                circle(image, Point(x, y), radius, Scalar(0, 255, 255), 3, 8, 0);
-                //std::cout << "Found: " << x << "," << y << "\n";
-#endif
+                position.X = static_cast<int>(x);
+                position.Y = static_cast<int>(y);
             }
         }
         return circles.size() > 0;
@@ -162,7 +162,7 @@ namespace Vision {
         createTrackbar("Max Radius", windowName, &maxRadius, 500, 0);
         createTrackbar("Canny Threshhold", windowNameCanny, &cannyUpperThreshhold, 300, 0);
         createTrackbar("accumulator threshold", windowName, &accumulatorThreshold, 100, 0);
-        while (true) {
+        while (waitKey(33) != static_cast<char>(27)) {
             if (camera->getCurrentImage(cameraFrame))
             {
                 if (locateObject(cameraFrame, pos))
@@ -173,8 +173,6 @@ namespace Vision {
                 Canny(cameraFrame, cannyFrame, cannyUpperThreshhold / 3, cannyUpperThreshhold, 3);
                 imshow(windowName, cameraFrame);
                 imshow(windowNameCanny, cannyFrame);
-                //Wait till escape is 
-                if (waitKey(33) >= (char)27) break;
             }
         }
         destroyWindow(windowName);
