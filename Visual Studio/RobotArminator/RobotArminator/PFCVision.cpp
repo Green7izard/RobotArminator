@@ -45,14 +45,14 @@ namespace Vision {
             cv::Point current = locations.at<cv::Point>(i);
             float currentXValue = static_cast<float>(current.x);
             float currentYValue = static_cast<float>(current.y);
-            float weight = static_cast<float>(defaultWeight) / 10;
+            float weight = static_cast<float>(defaultWeight) / 10.0;
 
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
             {
                 //calculate simple distance
                 float dist = static_cast<float>(std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y));
-                weight += static_cast<float>(weightFactor) / static_cast<float>((dist * (static_cast<float>(weightDecay) / 10)) * 10 + 0.00000001);
+                weight += static_cast<float>(weightFactor) / static_cast<float>((dist * (static_cast<float>(weightDecay) / 10.0)) * 10.0 + 1.0);
             }
 
             totalX += currentXValue*weight;
