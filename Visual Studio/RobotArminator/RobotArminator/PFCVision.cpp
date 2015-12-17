@@ -31,6 +31,11 @@ namespace Vision {
     {
         //filter
         cv::cvtColor(image, image, cv::COLOR_BGR2HSV);
+
+		if (erodeDilate > 0) {
+			cv::erode(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+			cv::dilate(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+		}
         cv::inRange(image, cv::Scalar(minHue, minSat, minInt), cv::Scalar(maxHue, maxSat, maxInt), image);
 
         float totalX = 0;
@@ -100,6 +105,7 @@ namespace Vision {
         cv::createTrackbar("Max Sat", windowNameFiltered, &maxSat, 255, 0);
         cv::createTrackbar("Min Int", windowNameFiltered, &minInt, 255, 0);
         cv::createTrackbar("Max Int", windowNameFiltered, &maxInt, 255, 0);
+		cv::createTrackbar("Erode/Dilate", windowNameFiltered, &erodeDilate, 20, 0);
 
         cv::createTrackbar("Weight for center", windowNameFiltered, &weightFactor, 200, 0);
         cv::createTrackbar("Weight decay", windowNameFiltered, &weightDecay, 200, 0);
