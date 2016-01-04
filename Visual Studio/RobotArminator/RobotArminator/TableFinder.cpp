@@ -36,6 +36,7 @@ namespace Vision {
                     if (shouldAlwaysSend || isValidPosition(&visionPosition))
                     {
                         notify(visionPosition);
+                        //std::cout << "Found frame: " << visionPosition.X << "," << visionPosition.Y << "\t" << visionPosition.orientation << std::endl;
                     }
                 }
                 //cv::waitKey(1);

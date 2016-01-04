@@ -32,6 +32,8 @@ namespace BallPosition
         BallPositionCalculator(double tableLength);
         virtual ~BallPositionCalculator();
 
+
+
         void run();
         void addToMessageBox(VisionPosition item);
 
@@ -39,6 +41,18 @@ namespace BallPosition
         Trajectory calculateHitPosition();
         double calculateLiniairPosition(VisionPosition pos);
         void sendPosition();
+
+
+        double TimeBeforeTableEnd(double startX, double speedX, double startTime);
+        double CalculateXSpeed(VisionPosition p1, VisionPosition p2);
+        double CalculateYSpeed(VisionPosition p1, VisionPosition p2);
+        double CalculateXFromTime(double start, double speed, double time);
+        double CalculateTimeWhenZero(double StartHeight, double upwardSpeedInMS);
+        double CalculateYSpeed(double currentSpeed, double time);
+        double CalculateHeightForT(double timeInS, double StartHeight, double upwardSpeedInMS);
+        void calculateSide(VisionPosition p1, VisionPosition p2);
+        void calculateTop(VisionPosition p1, VisionPosition p2);
+
     private:
         std::mutex topMutex;
         std::mutex sideMutex;
