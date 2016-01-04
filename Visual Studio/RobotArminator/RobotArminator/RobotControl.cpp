@@ -1,14 +1,24 @@
-
-
 #include "RobotControl.hpp"
 
+/*** Public functions ***/
 RobotControl::RobotControl(std::string port, unsigned int baud_rate)
     : io(), serial(io, port)
 {
-    serial.set_option(asio::serial_port_base::baud_rate(baud_rate));
-    serial.set_option(asio::serial_port_base::stop_bits(asio::serial_port_base::stop_bits::two));
-    serial.set_option(asio::serial_port_base::parity(asio::serial_port_base::parity::even));
-    start();
+	try {
+		serial.set_option(boost::asio::serial_port_base::baud_rate(baud_rate));
+		serial.set_option(boost::asio::serial_port_base::character_size(8));
+		serial.set_option(boost::asio::serial_port_base::flow_control(boost::asio::serial_port_base::flow_control::none));
+		serial.set_option(boost::asio::serial_port_base::stop_bits(boost::asio::serial_port_base::stop_bits::two));
+		serial.set_option(boost::asio::serial_port_base::parity(boost::asio::serial_port_base::parity::even));
+		Sleep(500);
+		resetPositions();
+		Sleep(500);
+		start();
+		BOOST_LOG_TRIVIAL(info) << "RobotControl setup complete";
+	}
+	catch (int e){
+		BOOST_LOG_TRIVIAL(error) << "Unable to setup robotcontrol: " << e;
+	}
 }
 
 RobotControl::~RobotControl()
@@ -22,41 +32,15 @@ void RobotControl::moveArm(Trajectory aTrajectory)
 	setTrajectory(aTrajectory);
 }
 
-Trajectory RobotControl::getTrajectory()
+void RobotControl::resetPositions()
 {
-	return trajectory;
+	writeData("PRN 1,(0,0,0,0,0,0)\r");
 }
 
-void RobotControl::setTrajectory(Trajectory aTrajectory)
+void RobotControl::run()
 {
-	trajectory = aTrajectory;
-	hasTrajectory = true;
-}
-
-void RobotControl::hitBall(Trajectory aTrajectory)
-{
-	Sleep(adaptTime(getTrajectory()));
-	if (globalj1 == -90)
+	while (isRunning())
 	{
-		writeData("PRN 2,(0,0,0,0,0,15)\r");
-	}
-	else if (globalj1 == 90)
-	{
-		writeData("PRN 2,(0,0,0,0,0,-15)\r");
-	}
-	BOOST_LOG_TRIVIAL(info) << readData();
-}
-
-void RobotControl::writeData(std::string aData)
-{
-    asio::async_write(serial, asio::buffer(aData.c_str(), aData.size()), std::bind(&RobotControl::writeHandler,
-        this, std::placeholders::_1));
-}
-
-void RobotControl::run() 
-{
-    while (isRunning())
-    {
 		if (hasTrajectory == true)
 		{
 
@@ -65,33 +49,47 @@ void RobotControl::run()
 			hitBall(getTrajectory());
 			hasTrajectory = false;
 		}
-    }
+	}
+}
+
+/*** Private functions ***/
+void RobotControl::hitBall(Trajectory aTrajectory)
+{
+	Sleep(adaptTime(getTrajectory()));
+	if (globalj1 == -90)
+	{
+		writeData("PRN 2,(0,0,0,0,0,30)\r");
+	}
+	else if (globalj1 == 90)
+	{
+		writeData("PRN 2,(0,0,0,0,0,-30)\r");
+	}
+	BOOST_LOG_TRIVIAL(info) << readData();
+}
+
+void RobotControl::writeData(std::string aData)
+{
+	boost::asio::async_write(serial, boost::asio::buffer(aData.c_str(), aData.size()), std::bind(&RobotControl::writeHandler,
+		this, std::placeholders::_1));
 }
 
 std::string RobotControl::readData()
 {
-    //Reading data char by char, code is optimized for simplicity, not speed
-    char c;
-    std::string result;
-    for (;;)
-
-    {
-        asio::read(serial, asio::buffer(&c, 1));
-        switch (c)
-        {
-        case '\r':
-            return result;
-        default:
-            result += c;
-        }
-    }
+	//Reading data char by char, code is optimized for simplicity, not speed
+	char c;
+	std::string result;
+	for (;;)
+	{
+		boost::asio::read(serial, boost::asio::buffer(&c, 1));
+		switch (c)
+		{
+		case '\r':
+			return result;
+		default:
+			result += c;
+		}
+	}
 }
-
-void RobotControl::resetPositions()
-{
-	writeData("PRN 1,(0,0,0,0,0,0)\r");
-}
-
 
 std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 {
@@ -107,19 +105,17 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
                 {
                     for (int j6 = -90; j6 <= 90; j6 += 180)
                     {
-                        int x;
-                        int y;
                         double j2y = cos(getRadian(j2)) * 250;
                         double j3y = cos(getRadian(j2) + getRadian(j3)) * 160;
                         double j5y = cos(getRadian(j2) + getRadian(j3) + getRadian(j5)) * 72;
                         double j6y = cos(getRadian(j2) + getRadian(j3) + getRadian(j5) + getRadian(j6)) * 390;
-                        y = j2y + j3y + j5y + j6y;
+                        int y = (int) (j2y + j3y + j5y + j6y);
 
                         double j2x = sin(getRadian(j2)) * 250;
                         double j3x = sin(getRadian(j2) + getRadian(j3)) * 160;
                         double j5x = sin(getRadian(j2) + getRadian(j3) + getRadian(j5)) * 72;
                         double j6x = sin(getRadian(j2) + getRadian(j3) + getRadian(j5) + getRadian(j6)) * 390;
-                        x = j2x + j3x + j5x + j6x;
+                        int x = (int) (j2x + j3x + j5x + j6x);
 
                         if (trajectory.position.x >= x - 50 && trajectory.position.x <= x + 50 && trajectory.position.y >= y - 50 && trajectory.position.y <= y + 50)
                         {
@@ -139,13 +135,24 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
             }
         }
     }
-	BOOST_LOG_TRIVIAL(warning) << "No possible position found.";
+	BOOST_LOG_TRIVIAL(info) << "No possible position found.";
     return "PRN 1,(0,0,0,0,0,0)\r";
 }
 
 double RobotControl::getRadian(double aDegree)
 {
     return aDegree * (3.14159265 / 180);
+}
+
+Trajectory RobotControl::getTrajectory()
+{
+	return trajectory;
+}
+
+void RobotControl::setTrajectory(Trajectory aTrajectory)
+{
+	trajectory = aTrajectory;
+	hasTrajectory = true;
 }
 
 Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
@@ -155,5 +162,5 @@ Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 
 int RobotControl::adaptTime(Trajectory aTrajectory)
 {
-	return (aTrajectory.time - Clock::universal_time()).total_milliseconds();
+	return (int) (aTrajectory.time - Clock::universal_time()).total_milliseconds();
 }
