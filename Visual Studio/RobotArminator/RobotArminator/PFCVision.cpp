@@ -99,10 +99,20 @@ namespace Vision {
         cv::namedWindow(windowNameFiltered, cv::WINDOW_AUTOSIZE);
 
 		/**/
-		ConfigFile cfg("CameraConfig.cfg");
-		minHue = cfg.getValueOfKey<int>("minHue");
-		minSat = cfg.getValueOfKey<int>("minSat");
-		minInt = cfg.getValueOfKey<int>("minInt");
+        if (orientation == TOP) {
+            ConfigFile cfg("CameraConfigTop.cfg");
+            minHue = cfg.getValueOfKey<int>("minHue");
+            maxHue = cfg.getValueOfKey<int>("maxHue");
+            minSat = cfg.getValueOfKey<int>("minSat");
+            minInt = cfg.getValueOfKey<int>("minInt");
+        }
+        else {
+            ConfigFile cfg("CameraConfigSide.cfg");
+            minHue = cfg.getValueOfKey<int>("minHue");
+            maxHue = cfg.getValueOfKey<int>("maxHue");
+            minSat = cfg.getValueOfKey<int>("minSat");
+            minInt = cfg.getValueOfKey<int>("minInt");
+        }
 		/**/
 
         cv::createTrackbar("Min Hue", windowNameFiltered, &minHue, 180, 0);
