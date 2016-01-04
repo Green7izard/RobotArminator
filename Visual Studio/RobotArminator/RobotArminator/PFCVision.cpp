@@ -5,7 +5,7 @@
 namespace Vision {
 
 
-    PFCVision::PFCVision(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
+    PFCVision::PFCVision(Orientation orientation, Camera* cam, double  tableLength, double tableWidth) :TableFinder(orientation, cam, tableLength, tableWidth)
     {
         resetPosition();
         calibrate();
@@ -33,26 +33,26 @@ namespace Vision {
         cv::cvtColor(image, image, cv::COLOR_BGR2HSV);
         cv::inRange(image, cv::Scalar(minHue, minSat, minInt), cv::Scalar(maxHue, maxSat, maxInt), image);
 
-        float totalX = 0;
-        float totalY = 0;
+        double totalX = 0;
+        double totalY = 0;
         //cv::minMaxLoc(image, 0, 0, 0, &location);
 
         cv::Mat locations;   // output, locations of non-zero pixels
         cv::findNonZero(image, locations);//probably faster, but crashes
 
-        float numberOfParticles = 0;
+        double numberOfParticles = 0;
         for (unsigned int i = 0; i < locations.total(); i++) {
             cv::Point current = locations.at<cv::Point>(i);
-            float currentXValue = static_cast<float>(current.x);
-            float currentYValue = static_cast<float>(current.y);
-            float weight = static_cast<float>(defaultWeight) / 10.f;
+            double currentXValue = static_cast<double>(current.x);
+            double currentYValue = static_cast<double>(current.y);
+            double weight = static_cast<double>(defaultWeight) / 10.0;
 
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
             {
                 //calculate simple distance
-                float dist = static_cast<float>(std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y));
-                weight += static_cast<float>(weightFactor) / static_cast<float>((dist * (static_cast<float>(weightDecay) / 10.f)) * 10.f + 1.f);
+                double dist = static_cast<double>(std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y));
+                weight += static_cast<double>(weightFactor) / static_cast<double>((dist * (static_cast<double>(weightDecay) / 10.0)) * 10.0 + 1.0);
             }
 
             totalX += currentXValue*weight;
@@ -125,7 +125,7 @@ namespace Vision {
 
 
 
-    ColorFilter::ColorFilter(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
+    ColorFilter::ColorFilter(Orientation orientation, Camera* cam, double tableLength, double tableWidth) :TableFinder(orientation, cam, tableLength, tableWidth)
     {
         calibrate();
     }

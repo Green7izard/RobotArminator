@@ -7,7 +7,7 @@ using namespace RobotArminator;
 
 int main(int argc, char* argv[])
 {
-    Controller t = Controller();
+    Controller t = Controller(1400, 700);
     std::string command;
     do
     {

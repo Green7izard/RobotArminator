@@ -5,16 +5,16 @@
 namespace RobotArminator
 {
 
-    Controller::Controller()
+    Controller::Controller(double tableLength, double tableWidth)
     {
         std::cout << "Constructing" << std::endl;
-        ballPostionCalculator = new BallPositionCalculator();
-        
+        ballPostionCalculator = new BallPositionCalculator(tableLength);
+
         top = new Camera(1);
         side = new Camera(0);
         std::cout << "Starting Visions" << std::endl;
-        computerVisionTop = new PFCVision(Orientation::TOP, top);
-        computerVisionSide = new PFCVision(Orientation::SIDE, side);
+        computerVisionTop = new PFCVision(Orientation::TOP, top, tableLength, tableWidth);
+        computerVisionSide = new PFCVision(Orientation::SIDE, side, tableLength, tableWidth);
         computerVisionTop->addListener(ballPostionCalculator);
         computerVisionSide->addListener(ballPostionCalculator);
 

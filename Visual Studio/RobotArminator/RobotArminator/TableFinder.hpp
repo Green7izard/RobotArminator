@@ -33,9 +33,9 @@ namespace Vision
         };
 
         //The width of the table in mm
-        int tableWidth = DEFAULT_WIDTH;
+        double tableWidth = DEFAULT_WIDTH;
         //The height of the table in mm
-        int tableLength = DEFAULT_LENGTH;
+        double tableLength = DEFAULT_LENGTH;
 
     protected:
 
@@ -44,11 +44,6 @@ namespace Vision
 
     public:
 
-        //default width
-        const static int DEFAULT_WIDTH = 1525;
-        //default height
-        const static int DEFAULT_LENGTH = 2740;
-
         /**
         * Create a TableFinder
         *
@@ -56,7 +51,7 @@ namespace Vision
         * @param cam the camera that is used
         * @param forceSend whether is should force send ALL coordinates
         */
-        TableFinder(Orientation orientation, Camera* cam, bool forceSend = false);
+        TableFinder(Orientation orientation, Camera* cam, double length, double width, bool forceSend = false);
 
         /**
         * Deconstructor: Terminates the camera
@@ -104,7 +99,7 @@ namespace Vision
         /**
         * Sets the table size in mm
         */
-        void updateTableSize(int width = DEFAULT_WIDTH, int length = DEFAULT_LENGTH);
+        void updateTableSize(double width = DEFAULT_WIDTH, double length = DEFAULT_LENGTH);
 
         /**
         * catches mouse clicks

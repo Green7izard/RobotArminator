@@ -11,36 +11,36 @@
 
 namespace BallPosition
 {
-	using namespace RobotArminator;
+    using namespace RobotArminator;
 
-	class BallPositionCalculator : public IBallPositionCalculator
-	{
-	public:
-		double tableWidth = 2740.0;
+    class BallPositionCalculator : public IBallPositionCalculator
+    {
+    public:
+        double tableWidth;
 
-		VisionPosition lastSidePosition;
-		VisionPosition lastTopPosition;
+        VisionPosition lastSidePosition;
+        VisionPosition lastTopPosition;
 
-		VisionPosition currentSidePosition;
-		VisionPosition currentTopPosition;
+        VisionPosition currentSidePosition;
+        VisionPosition currentTopPosition;
 
-		VisionPosition queueSidePosition;
-		VisionPosition queueTopPosition;
+        VisionPosition queueSidePosition;
+        VisionPosition queueTopPosition;
 
-		ABCFormule abcCalculator = ABCFormule();
+        ABCFormule abcCalculator = ABCFormule();
 
-		BallPositionCalculator();
-		virtual ~BallPositionCalculator();
+        BallPositionCalculator(double tableLength);
+        virtual ~BallPositionCalculator();
 
-		void run();
-		void addToMessageBox(VisionPosition item);
+        void run();
+        void addToMessageBox(VisionPosition item);
 
-		void getPositionsFromQueue();
-		Trajectory calculateHitPosition();
-		double calculateLiniairPosition(VisionPosition pos);
-		void sendPosition();
+        void getPositionsFromQueue();
+        Trajectory calculateHitPosition();
+        double calculateLiniairPosition(VisionPosition pos);
+        void sendPosition();
     private:
         std::mutex topMutex;
         std::mutex sideMutex;
-	};
+    };
 }

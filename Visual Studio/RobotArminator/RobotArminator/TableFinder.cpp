@@ -6,7 +6,7 @@ namespace Vision {
 
     using namespace RobotArminator;
 
-    TableFinder::TableFinder(Orientation orientation, Camera* cam, bool forceSend) : IComputerVision(orientation), camera(cam), shouldAlwaysSend(forceSend)
+    TableFinder::TableFinder(Orientation orientation, Camera* cam, double tableLength, double tableWidth, bool forceSend) : IComputerVision(orientation), camera(cam), shouldAlwaysSend(forceSend), tableWidth(tableWidth), tableLength(tableLength)
     {
         //calibrate();
         //tabel = detectTable();
@@ -51,12 +51,12 @@ namespace Vision {
 
     VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time)
     {
-        float X = static_cast<float>(position.X);
-        float Y = static_cast<float>(position.Y);
+        double X = static_cast<double>(position.X);
+        double Y = static_cast<double>(position.Y);
         //Whether the X axis is inverted
         bool xShouldBeInverted = (tabel.TopLeft.X < tabel.TopRight.X);
 
-        float totalXLen;
+        double totalXLen;
 
         Position2D anchor;
         Position2D opposite;
@@ -65,33 +65,33 @@ namespace Vision {
         {
             anchor = tabel.BotRight;
             opposite = tabel.TopLeft;
-            totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
+            totalXLen = static_cast<double>(std::abs(anchor.X - opposite.X));
             X = (anchor.X - X)*(tableLength / totalXLen);
         }
         else
         {
             anchor = tabel.TopRight;
             opposite = tabel.BotLeft;
-            totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
+            totalXLen = static_cast<double>(std::abs(anchor.X - opposite.X));
             X = (X - anchor.X)*(tableLength / totalXLen);
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
-        {                
-            float totalYLen = static_cast<float>(std::abs(anchor.Y - opposite.Y));
+        {
+            double totalYLen = static_cast<double>(std::abs(anchor.Y - opposite.Y));
             if (xShouldBeInverted)
             {
                 Y = (anchor.Y - Y)*(tableWidth / totalYLen);
             }
             else
             {
-                Y = (Y -anchor.Y)*(tableWidth / totalYLen);
+                Y = (Y - anchor.Y)*(tableWidth / totalYLen);
             }
-            
+
         }
         else
         {
-            Y = (( anchor.Y - Y) / totalXLen)*tableLength;
+            Y = ((anchor.Y - Y) / totalXLen)*tableLength;
         }
         return VisionPosition(X, Y, time, orientation);
     }
@@ -275,7 +275,7 @@ namespace Vision {
         cv::destroyWindow(name);
     }
 
-    void TableFinder::updateTableSize(int width, int length)
+    void TableFinder::updateTableSize(double width, double length)
     {
         tableWidth = width;
         tableLength = length;

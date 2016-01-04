@@ -13,6 +13,12 @@
 #include "boost/date_time/posix_time/posix_time.hpp"
 
 namespace RobotArminator {
+
+    //default width
+    const static double DEFAULT_WIDTH = 1525.0;
+    //default height
+    const static double DEFAULT_LENGTH = 2740.0;
+
     //Easy access to the high resolution clock
     typedef boost::posix_time::microsec_clock Clock;
 

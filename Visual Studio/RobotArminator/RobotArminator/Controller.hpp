@@ -14,7 +14,7 @@ namespace RobotArminator
     class Controller
     {
     public:
-        Controller();
+        Controller(double tableLength = DEFAULT_LENGTH, double tableWidth = DEFAULT_WIDTH);
         ~Controller();
     private:
         IBallPositionCalculator *ballPostionCalculator;

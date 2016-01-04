@@ -9,7 +9,7 @@ namespace Vision {
         public TableFinder
     {
     public:
-        PFCVision(Orientation orientation, Camera* cam);
+        PFCVision(Orientation orientation, Camera* cam, double length, double width);
         virtual ~PFCVision();
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
         virtual void calibrate() override;
@@ -43,7 +43,7 @@ namespace Vision {
         public TableFinder
     {
     public:
-        ColorFilter(Orientation orientation, Camera* cam);
+        ColorFilter(Orientation orientation, Camera* cam, double length, double width);
         virtual ~ColorFilter();
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
         virtual void calibrate() override;
