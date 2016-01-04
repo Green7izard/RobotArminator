@@ -1,7 +1,10 @@
 #pragma once
+
 #include "stdafx.h"
-#include "Vector.hpp"
+#include "Trajectory.hpp"
+#include <iostream>
 #include "Thread.hpp"
+
 namespace Robot
 {
     using namespace RobotArminator;
@@ -10,11 +13,11 @@ namespace Robot
     {
     public:
         virtual ~IRobotControl()=0;
-        virtual void moveArm(Vector position)=0;
-        virtual Vector getPosition()=0;
-        virtual void hitBall(Vector position)=0;
+        virtual void moveArm(Trajectory aTrajectory)=0;
+        virtual void hitBall(Trajectory aTrajectory)=0;
     protected:
         IRobotControl();
     };
-
+    inline IRobotControl::IRobotControl() {};
+    inline IRobotControl::~IRobotControl() {};
 }
