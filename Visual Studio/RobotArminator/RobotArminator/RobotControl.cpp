@@ -162,5 +162,8 @@ Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 
 int RobotControl::adaptTime(Trajectory aTrajectory)
 {
-	return (int) (aTrajectory.time - Clock::universal_time()).total_milliseconds();
+	if (Clock::universal_time().total_milliseconds() <= aTrajectory.time)
+	{
+		return (int)(aTrajectory.time - Clock::universal_time()).total_milliseconds();
+	}
 }
