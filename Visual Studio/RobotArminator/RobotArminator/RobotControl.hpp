@@ -1,12 +1,15 @@
 #pragma once
 
 #include "IRobotControl.hpp"
-#include <iostream>
+
 #include <functional>
+#include <iostream>
+
+#include "boost/asio.hpp"
 #include "Thread.hpp"
 #include "Trajectory.hpp"
 #include "stdafx.h"
-#include "boost/asio.hpp"
+
 
 using namespace Robot;
 
