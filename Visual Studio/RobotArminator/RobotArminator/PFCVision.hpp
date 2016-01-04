@@ -9,7 +9,7 @@ namespace Vision {
         public TableFinder
     {
     public:
-        PFCVision(Orientation orientation, Camera* cam);
+        PFCVision(Orientation orientation, Camera* cam, double length, double width);
         virtual ~PFCVision();
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
         virtual void calibrate() override;
@@ -22,13 +22,13 @@ namespace Vision {
         Position2D lastPosition;
 
         //Hue/Color 0-180
-        int minHue = 10;				// 6 * 1.8, 80 * 2.5, 80 * 2.5
-        int maxHue = 72;			//40 * 1.8, 255, 255
+        int minHue = 10;
+        int maxHue = 21;
         //Saturation 0-255
-        int minSat = 200;
+        int minSat = 88;
         int maxSat = 255;
         //Value/Intensity 0-255
-        int minInt = 200;
+        int minInt = 220;
         int maxInt = 255;
 
         //Weight at the exact point
@@ -37,13 +37,14 @@ namespace Vision {
         int weightDecay = 10;
         //Default Weight
         int defaultWeight = 5;
+		int erodeDilate = 0;
     };
 
     class ColorFilter :
         public TableFinder
     {
     public:
-        ColorFilter(Orientation orientation, Camera* cam);
+        ColorFilter(Orientation orientation, Camera* cam, double length, double width);
         virtual ~ColorFilter();
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
         virtual void calibrate() override;

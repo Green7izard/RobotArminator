@@ -7,7 +7,7 @@ namespace Vision {
     using namespace cv;
 
     //Canny Edge Detection
-    CannyHCDVision::CannyHCDVision(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
+    CannyHCDVision::CannyHCDVision(Orientation orientation, Camera* cam, double tableLength, double tableWidth) :TableFinder(orientation, cam, tableLength, tableWidth)
     {
         calibrate();
     }
@@ -27,12 +27,12 @@ namespace Vision {
 
         std::vector<Vec3f> circles;
         HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, std::max(cannyUpperThreshhold, 1), std::max(accumulatorThreshold, 1), minRadius, maxRadius);
-        float closestDistance = -1;
+        double closestDistance = -1;
         for (unsigned int i = 0; i < circles.size(); i++)
         {
-            float x = circles[i][0];
-            float y = circles[i][1];
-            float pytho = x*x + y*y;
+            double x = circles[i][0];
+            double y = circles[i][1];
+            double pytho = x*x + y*y;
 #ifdef _DEBUG
             Point center(cvRound(x), cvRound(y));
             int radius = cvRound(circles[i][2]);
@@ -43,7 +43,7 @@ namespace Vision {
             if (pytho < closestDistance || i == 0)
             {
                 closestDistance = pytho;
-                
+
                 position.X = static_cast<int>(x);
                 position.Y = static_cast<int>(y);
             }
@@ -90,7 +90,7 @@ namespace Vision {
     }
 
     //Color Filter
-    ColorHCDVision::ColorHCDVision(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
+    ColorHCDVision::ColorHCDVision(Orientation orientation, Camera* cam, double tableLength, double tableWidth) :TableFinder(orientation, cam, tableLength, tableWidth)
     {
         calibrate();
     }
@@ -115,12 +115,12 @@ namespace Vision {
 
         std::vector<Vec3f> circles;
         HoughCircles(image, circles, CV_HOUGH_GRADIENT, 1, image.rows / 8, cannyUpperThreshhold + 1, accumulatorThreshold + 1, minRadius, maxRadius);
-        float closestDistance = -1;
+        double closestDistance = -1;
         for (unsigned int i = 0; i < circles.size(); i++)
         {
-            float x = circles[i][0];
-            float y = circles[i][1];
-            float pytho = x*x + y*y;
+            double x = circles[i][0];
+            double y = circles[i][1];
+            double pytho = x*x + y*y;
 
 #ifdef _DEBUG
             int radius = cvRound(circles[i][2]);

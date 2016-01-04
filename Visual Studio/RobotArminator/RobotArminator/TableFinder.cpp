@@ -6,7 +6,7 @@ namespace Vision {
 
     using namespace RobotArminator;
 
-    TableFinder::TableFinder(Orientation orientation, Camera* cam, bool forceSend) : IComputerVision(orientation), camera(cam), shouldAlwaysSend(forceSend)
+    TableFinder::TableFinder(Orientation orientation, Camera* cam, double tableLength, double tableWidth, bool forceSend) : IComputerVision(orientation), camera(cam), shouldAlwaysSend(forceSend), tableWidth(tableWidth), tableLength(tableLength)
     {
         //calibrate();
         //tabel = detectTable();
@@ -30,10 +30,9 @@ namespace Vision {
             time = Clock::universal_time();
             if (camera->getCurrentImage(cameraFrame))
             {
-                cv::Size s = cameraFrame.size();
                 if (locateObject(cameraFrame, position))
                 {
-                    VisionPosition visionPosition = convertToCoordinate(position, time, s.width, s.height);
+                    VisionPosition visionPosition = convertToCoordinate(position, time);
                     if (shouldAlwaysSend || isValidPosition(&visionPosition))
                     {
                         notify(visionPosition);
@@ -50,49 +49,49 @@ namespace Vision {
         return Table();
     }
 
-    VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time, int imageWidth, int imageHeight)
+    VisionPosition TableFinder::convertToCoordinate(Position2D &position, Time time)
     {
-        float X = static_cast<float>(position.X);
-        float Y = static_cast<float>(position.Y);
+        double X = static_cast<double>(position.X);
+        double Y = static_cast<double>(position.Y);
         //Whether the X axis is inverted
         bool xShouldBeInverted = (tabel.TopLeft.X < tabel.TopRight.X);
 
-        float totalXLen;
+        double totalXLen;
 
         Position2D anchor;
         Position2D opposite;
 
         if (xShouldBeInverted)
         {
-            anchor = tabel.TopLeft;
-            opposite = tabel.BotRight;
-            totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
-            X = ((imageWidth - (X - anchor.X)) / totalXLen)*tableLength;
+            anchor = tabel.BotRight;
+            opposite = tabel.TopLeft;
+            totalXLen = static_cast<double>(std::abs(anchor.X - opposite.X));
+            X = (anchor.X - X)*(tableLength / totalXLen);
         }
         else
         {
-            anchor = tabel.BotLeft;
-            opposite = tabel.TopRight;
-            totalXLen = static_cast<float>(std::abs(anchor.X - opposite.X));
-            X = ((imageWidth - (anchor.X - X)) / totalXLen)*tableLength;
+            anchor = tabel.TopRight;
+            opposite = tabel.BotLeft;
+            totalXLen = static_cast<double>(std::abs(anchor.X - opposite.X));
+            X = (X - anchor.X)*(tableLength / totalXLen);
         }
         //std::fabsf(X) for always getting the positive
         if (orientation == TOP)
         {
-            float totalYLen = static_cast<float>(std::abs(anchor.Y - opposite.Y));
+            double totalYLen = static_cast<double>(std::abs(anchor.Y - opposite.Y));
             if (xShouldBeInverted)
             {
-                Y = ((imageHeight - (Y - anchor.Y)) / totalYLen) * tableWidth;
+                Y = (anchor.Y - Y)*(tableWidth / totalYLen);
             }
             else
             {
-                Y = ((imageHeight - (anchor.Y - Y)) / totalYLen) * tableWidth;
+                Y = (Y - anchor.Y)*(tableWidth / totalYLen);
             }
+
         }
         else
         {
-            Y = (((imageHeight - Y) - (imageHeight - anchor.Y)) / totalXLen)*tableLength;
-
+            Y = ((anchor.Y - Y) / totalXLen)*tableLength;
         }
         return VisionPosition(X, Y, time, orientation);
     }
@@ -276,7 +275,7 @@ namespace Vision {
         cv::destroyWindow(name);
     }
 
-    void TableFinder::updateTableSize(int width, int length)
+    void TableFinder::updateTableSize(double width, double length)
     {
         tableWidth = width;
         tableLength = length;
@@ -284,8 +283,10 @@ namespace Vision {
 
     bool TableFinder::isValidPosition(VisionPosition * position)
     {
+
         if (position->X <= tableLength && position->X >= 0)
         {
+
             if (orientation == SIDE && position->Y >= 0)
             {
                 return true;

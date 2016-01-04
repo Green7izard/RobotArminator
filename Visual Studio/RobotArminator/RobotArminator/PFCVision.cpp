@@ -1,11 +1,15 @@
 #include "stdafx.h"
 #include "PFCVision.hpp"
-
+#include "configuration.hpp"
+#include <sstream>
+#include <iostream>
+#include <map>
+#include <string>
 
 namespace Vision {
 
 
-    PFCVision::PFCVision(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
+    PFCVision::PFCVision(Orientation orientation, Camera* cam, double  tableLength, double tableWidth) :TableFinder(orientation, cam, tableLength, tableWidth)
     {
         resetPosition();
         calibrate();
@@ -31,28 +35,33 @@ namespace Vision {
     {
         //filter
         cv::cvtColor(image, image, cv::COLOR_BGR2HSV);
+
+		if (erodeDilate > 0) {
+			cv::erode(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+			cv::dilate(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+		}
         cv::inRange(image, cv::Scalar(minHue, minSat, minInt), cv::Scalar(maxHue, maxSat, maxInt), image);
 
-        float totalX = 0;
-        float totalY = 0;
+        double totalX = 0;
+        double totalY = 0;
         //cv::minMaxLoc(image, 0, 0, 0, &location);
 
         cv::Mat locations;   // output, locations of non-zero pixels
         cv::findNonZero(image, locations);//probably faster, but crashes
 
-        float numberOfParticles = 0;
+        double numberOfParticles = 0;
         for (unsigned int i = 0; i < locations.total(); i++) {
             cv::Point current = locations.at<cv::Point>(i);
-            float currentXValue = static_cast<float>(current.x);
-            float currentYValue = static_cast<float>(current.y);
-            float weight = static_cast<float>(defaultWeight) / 10.0;
+            double currentXValue = static_cast<double>(current.x);
+            double currentYValue = static_cast<double>(current.y);
+            double weight = static_cast<double>(defaultWeight) / 10.0;
 
             //If there is a last position try to change the weight
             if (isFilled(lastPosition))
             {
                 //calculate simple distance
-                float dist = static_cast<float>(std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y));
-                weight += static_cast<float>(weightFactor) / static_cast<float>((dist * (static_cast<float>(weightDecay) / 10.0)) * 10.0 + 1.0);
+                double dist = static_cast<double>(std::abs(lastPosition.X - current.x) + std::abs(lastPosition.Y - current.y));
+                weight += static_cast<double>(weightFactor) / static_cast<double>((dist * (static_cast<double>(weightDecay) / 10.0)) * 10.0 + 1.0);
             }
 
             totalX += currentXValue*weight;
@@ -89,12 +98,20 @@ namespace Vision {
         cv::namedWindow(windowName, cv::WINDOW_AUTOSIZE);
         cv::namedWindow(windowNameFiltered, cv::WINDOW_AUTOSIZE);
 
+		/**/
+		ConfigFile cfg("CameraConfig.cfg");
+		minHue = cfg.getValueOfKey<int>("minHue");
+		minSat = cfg.getValueOfKey<int>("minSat");
+		minInt = cfg.getValueOfKey<int>("minInt");
+		/**/
+
         cv::createTrackbar("Min Hue", windowNameFiltered, &minHue, 180, 0);
         cv::createTrackbar("Max Hue", windowNameFiltered, &maxHue, 180, 0);
         cv::createTrackbar("Min Sat", windowNameFiltered, &minSat, 255, 0);
         cv::createTrackbar("Max Sat", windowNameFiltered, &maxSat, 255, 0);
         cv::createTrackbar("Min Int", windowNameFiltered, &minInt, 255, 0);
         cv::createTrackbar("Max Int", windowNameFiltered, &maxInt, 255, 0);
+		cv::createTrackbar("Erode/Dilate", windowNameFiltered, &erodeDilate, 20, 0);
 
         cv::createTrackbar("Weight for center", windowNameFiltered, &weightFactor, 200, 0);
         cv::createTrackbar("Weight decay", windowNameFiltered, &weightDecay, 200, 0);
@@ -107,7 +124,7 @@ namespace Vision {
 
             if (locateObject(cameraFrame, pos))
             {
-                cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(0, 255, 0), -1, 8, 0);
+                cv::circle(cameraFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(100, 255, 255), 2, 8, 0);
                 cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 10, cv::Scalar(0, 255, 0), -1, 8, 0);
                 cv::circle(orignalFrame, cv::Point(pos.X, pos.Y), 50, cv::Scalar(0, 0, 255), 3, 8, 0);
             }
@@ -125,7 +142,7 @@ namespace Vision {
 
 
 
-    ColorFilter::ColorFilter(Orientation orientation, Camera* cam) :TableFinder(orientation, cam)
+    ColorFilter::ColorFilter(Orientation orientation, Camera* cam, double tableLength, double tableWidth) :TableFinder(orientation, cam, tableLength, tableWidth)
     {
         calibrate();
     }

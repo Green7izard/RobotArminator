@@ -19,11 +19,11 @@ namespace Vision {
         int maxRadius = 300;
         int minRadius = 10;
 
-        float lastX = 0;
-        float lastY = 0;
+        double lastX = 0;
+        double lastY = 0;
 
     public:
-        CannyHCDVision(Orientation orientation, Camera* cam);
+        CannyHCDVision(Orientation orientation, Camera* cam, double length, double width);
         virtual ~CannyHCDVision();
 
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
@@ -57,7 +57,7 @@ namespace Vision {
         int minRadius = 10;
 
 
-        ColorHCDVision(Orientation orientation, Camera* cam);
+        ColorHCDVision(Orientation orientation, Camera* cam, double length, double width);
         virtual ~ColorHCDVision();
 
         virtual bool locateObject(cv::Mat &image, Position2D &position) override;
