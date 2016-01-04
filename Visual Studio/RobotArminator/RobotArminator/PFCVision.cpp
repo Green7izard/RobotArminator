@@ -186,7 +186,7 @@ namespace Vision {
     {
         TableFinder::calibrate();
         std::string windowName = "Camera - " + std::to_string(camera->getCameraNumber());
-        std::string windowNameFiltered = "PFC Filtered: - " + std::to_string(camera->getCameraNumber());
+        std::string windowNameFiltered = "Color Filtered: - " + std::to_string(camera->getCameraNumber());
         Vision::Position2D pos;
         cv::Mat cameraFrame;
 

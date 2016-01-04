@@ -22,7 +22,6 @@ namespace Vision {
     }
 
     void TableFinder::run() {
-        cv::Mat cameraFrame;
         Position2D position;
         Time time;
         while (isRunning())
@@ -39,7 +38,6 @@ namespace Vision {
                         //std::cout << "Found frame: " << visionPosition.X << "," << visionPosition.Y << "\t" << visionPosition.orientation << std::endl;
                     }
                 }
-                //cv::waitKey(1);
             }
         }
     }
@@ -298,6 +296,11 @@ namespace Vision {
             }
         }
         return false;
+    }
+
+    cv::Mat * TableFinder::getCurrentScreen()
+    {
+        return &cameraFrame;
     }
 
 }
