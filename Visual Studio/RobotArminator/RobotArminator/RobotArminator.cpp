@@ -2,17 +2,25 @@
 //
 #include "stdafx.h"
 #include "Controller.hpp"
-
+#include <iostream>
+#include <math.h>
+#include <sstream>
+#include <chrono>
+#include "RobotControl.hpp"
+#include "BallPositionCalculator.hpp"
+#include "Trajectory.hpp"
+#include "Vector.hpp"
+#include <chrono>
+#include <iostream>
 using namespace RobotArminator;
 
 int main(int argc, char* argv[])
-{
-    Controller t = Controller(1400, 700);
-    std::string command;
-    do
-    {
-        cin >> command;
-    } while (command.compare("quit") != 0);
-    //Controller controller;
+{ 
+    RobotControl robotControl("COM3", 19200);
+    
+    Trajectory aTrajectory(Vector(0, 762, 550), Clock::universal_time() + boost::posix_time::seconds(1));
+	robotControl.moveArm(aTrajectory);
+
+    std::cin.get(); //wait for user input
     return 0;
 }
