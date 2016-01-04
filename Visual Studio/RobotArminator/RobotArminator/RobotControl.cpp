@@ -44,11 +44,7 @@ void RobotControl::hitBall(Trajectory aTrajectory)
 	{
 		writeData("PRN 2,(0,0,0,0,0,-15)\r");
 	}
-
 	BOOST_LOG_TRIVIAL(info) << readData();
-	
-
-	///TODO:if j1 == -90, j6 += 15 else j6 -= 15
 }
 
 void RobotControl::writeData(std::string aData)
