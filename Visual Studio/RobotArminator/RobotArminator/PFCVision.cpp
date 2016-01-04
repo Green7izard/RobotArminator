@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "PFCVision.hpp"
-
+#include "configuration.hpp"
+#include <sstream>
+#include <iostream>
+#include <map>
+#include <string>
 
 namespace Vision {
 
@@ -31,6 +35,11 @@ namespace Vision {
     {
         //filter
         cv::cvtColor(image, image, cv::COLOR_BGR2HSV);
+
+		if (erodeDilate > 0) {
+			cv::erode(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+			cv::dilate(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+		}
         cv::inRange(image, cv::Scalar(minHue, minSat, minInt), cv::Scalar(maxHue, maxSat, maxInt), image);
 
         double totalX = 0;
@@ -89,12 +98,20 @@ namespace Vision {
         cv::namedWindow(windowName, cv::WINDOW_AUTOSIZE);
         cv::namedWindow(windowNameFiltered, cv::WINDOW_AUTOSIZE);
 
+		/**/
+		ConfigFile cfg("CameraConfig.cfg");
+		minHue = cfg.getValueOfKey<int>("minHue");
+		minSat = cfg.getValueOfKey<int>("minSat");
+		minInt = cfg.getValueOfKey<int>("minInt");
+		/**/
+
         cv::createTrackbar("Min Hue", windowNameFiltered, &minHue, 180, 0);
         cv::createTrackbar("Max Hue", windowNameFiltered, &maxHue, 180, 0);
         cv::createTrackbar("Min Sat", windowNameFiltered, &minSat, 255, 0);
         cv::createTrackbar("Max Sat", windowNameFiltered, &maxSat, 255, 0);
         cv::createTrackbar("Min Int", windowNameFiltered, &minInt, 255, 0);
         cv::createTrackbar("Max Int", windowNameFiltered, &maxInt, 255, 0);
+		cv::createTrackbar("Erode/Dilate", windowNameFiltered, &erodeDilate, 20, 0);
 
         cv::createTrackbar("Weight for center", windowNameFiltered, &weightFactor, 200, 0);
         cv::createTrackbar("Weight decay", windowNameFiltered, &weightDecay, 200, 0);

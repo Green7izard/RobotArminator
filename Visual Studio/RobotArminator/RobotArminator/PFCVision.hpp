@@ -37,6 +37,7 @@ namespace Vision {
         int weightDecay = 10;
         //Default Weight
         int defaultWeight = 5;
+		int erodeDilate = 0;
     };
 
     class ColorFilter :
