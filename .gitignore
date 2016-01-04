@@ -36,7 +36,7 @@
 
 Visual Studio/RobotArminator/.vs/*
 Visual Studio/RobotArminator/RobotArminator/.vs/*
-Visual Studio/RobotArminator/ipch/*
+Visual Studio/**/ipch/*
 
 Visual Studio/RobotArminator/RobotArminator/RobotArminator.VC.opendb
 *.sln
@@ -44,8 +44,8 @@ Visual Studio/RobotArminator/RobotArminator/RobotArminator.VC.opendb
 *.vcxproj
 *.vcxproj.filters
 **/*.sdf
-Visual Studio/RobotArminator/**/Debug/*
-Visual Studio/RobotArminator/**/Release/*
+Visual Studio/**/Debug/*
+Visual Studio/**/Release/*
 Visual Studio/RobotArminator/RobotArminator/x64/*
 Visual Studio/RobotArminator/Debug/*
 Visual Studio/RobotArminator/RobotArminator/packages/*
@@ -53,6 +53,6 @@ Visual Studio/RobotArminator/RobotArminator/packages/*
 
 *.vcxproj.user
 *.aps
-Visual Studio/RobotArminator/packages/*
+Visual Studio/**/packages/*
 Cosimir/RV-2AJ/RV-2AJ.INI
 *RV-2AJ.INI
