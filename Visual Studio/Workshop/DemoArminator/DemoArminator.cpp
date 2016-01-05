@@ -10,7 +10,7 @@ using namespace Robot;
 int main()
 {
     Robot::TCPRobot robot;
-
+    cout << "Enter your commands. Typ 'quit' to exit program"<<endl;
     string command;
     do {
         cin >> command;
