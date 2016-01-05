@@ -122,6 +122,8 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
                         {
 							if ((j1 == 90 && x <= 10 && (j2 + j3 + j5 <= 90)) || (j1 == -90 && x >= -10 && (j2 + j3 + j5 >= -90)))
 							{
+                                if (trajectory.position.x > 0)
+                                    j1 *= -1;
 								globalj1 = j1;
 								
 								std::stringstream ss;

@@ -193,6 +193,7 @@ namespace BallPosition
                  std::cout << "Sending: " << X  << "\t" << Y << "\t" << Z << "\t" << theTime << "\t" << std::endl;
                  robotControl->moveArm(Trajectory(Vector(X, Y, Z), theTime));
                  updated = false;
+
              }
 		}
 	}
