@@ -12,26 +12,34 @@ using namespace Robot;
 //TODO THIS FUNCTION
 void handleCommand(string command, IRobotControl &robotControl, TCPRobot &robot)
 {
+
+    //The content of this function can be changed to stay in here, endless loop, or run predefined programs!
     //TEST SETTING THE ARM WITH A COMMAND!
 
-    //Only set the values that are not 0
-    robot.sendMessage("PRN 2,(150, 90, 0 ,0, 0, 0)\r");
-    Sleep(2000);
 
+    cout << "Received: " << command<<endl;
 
     //Set all the angles!
     //NOTE, there is no 5th point
     robot.sendMessage("PRN 1,(-150, -90, 58 ,-13, 0, 7)\r");
-    Sleep(4000);
+    cout << "Send 1" << endl;
+    Sleep(2000);
+
+    //Only set the values that are not 0
+    robot.sendMessage("PRN 2,(150, 90, 0 ,0, 0, 0)\r");
+    cout << "Send 2" << endl;
+    Sleep(4000);   
 
     //Reset the position on the controller
     robotControl.resetPositions();
+    cout << "Send 3" << endl;
     Sleep(2000);
 
     //Set the position using a Trajectory
     Vector v(200, 1525, 200);
     Trajectory t(v);
     robotControl.moveArm(t);
+    cout << "Send 4" << endl;
 }
 
 bool shouldStopException(exception& e) {
