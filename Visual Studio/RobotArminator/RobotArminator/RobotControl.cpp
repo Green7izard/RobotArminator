@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "RobotControl.hpp"
 
 /*** Public functions ***/
@@ -46,7 +47,7 @@ void RobotControl::run()
 
 			writeData(calculateAngles(getTrajectory()));
 			BOOST_LOG_TRIVIAL(info) << readData();
-			hitBall(getTrajectory());
+			//hitBall(getTrajectory());
 			hasTrajectory = false;
 		}
 	}
@@ -157,13 +158,16 @@ void RobotControl::setTrajectory(Trajectory aTrajectory)
 
 Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 {
-    return Trajectory(Vector(aTrajectory.position.y - (1525 / 2), aTrajectory.position.z - 350, 0), aTrajectory.time);
+    return Trajectory(Vector(aTrajectory.position.y - (1400 / 2), aTrajectory.position.z - 350, 0), aTrajectory.time);
 }
 
 int RobotControl::adaptTime(Trajectory aTrajectory)
 {
-	if (Clock::universal_time().total_milliseconds() <= aTrajectory.time)
+	if (Clock::universal_time() <= aTrajectory.time)
 	{
-		return (int)(aTrajectory.time - Clock::universal_time()).total_milliseconds();
+        int ret = (int)(aTrajectory.time - Clock::universal_time()).total_milliseconds();
+        std::cout << "Waiting: " << ret << std::endl;
+		return ret;
 	}
+    return 500;
 }

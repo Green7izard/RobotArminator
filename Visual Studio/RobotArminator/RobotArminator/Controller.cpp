@@ -8,7 +8,8 @@ namespace RobotArminator
     Controller::Controller(double tableLength, double tableWidth)
     {
         std::cout << "Constructing" << std::endl;
-        ballPostionCalculator = new BallPositionCalculator(tableLength);
+        robotControl = new RobotControl("COM3", 19200);
+        ballPostionCalculator = new BallPositionCalculator(tableLength, robotControl);
 
         top = new Camera(1);
         side = new Camera(0);

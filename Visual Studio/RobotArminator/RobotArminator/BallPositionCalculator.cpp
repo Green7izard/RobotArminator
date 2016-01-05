@@ -10,7 +10,7 @@ namespace BallPosition
 
 	using namespace RobotArminator;
 
-	BallPositionCalculator::BallPositionCalculator(double tableLength) : tableWidth(tableLength)
+	BallPositionCalculator::BallPositionCalculator(double tableLength, IRobotControl* robot) : tableWidth(tableLength), robotControl(robot)
 	{
 
 	}
@@ -84,6 +84,8 @@ namespace BallPosition
     {
         std::cout << "Side view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
 
+        if (p1.X > p2.X || p1.isDefault || p2.isDefault )
+            return;
 
         double ySpeed = CalculateYSpeed(p1, p2);
         double xSpeed = CalculateXSpeed(p1, p2);      
@@ -122,20 +124,36 @@ namespace BallPosition
 
             double tableEndY = CalculateHeightForT(tableEndTime, p2.Y/1000.0, ySpeed) * 1000;
             std::cout << "tableEndY: " << tableEndY << std::endl;
+            Time endTime = p2.time + boost::posix_time::seconds(tableEndTime);
+            theTime = endTime;
+            Z = tableEndY;
+            updated = true;
+            sideDone = true;
         }
 
-        std::cout << std::endl << std::endl << std::endl << std::endl;
+      //  std::cout << std::endl << std::endl << std::endl << std::endl;
     }
 
     void BallPositionCalculator::calculateTop(VisionPosition p1, VisionPosition p2)
     {
         std::cout << "Top view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
-        double xdist = (p2.X - p1.X);
+
+
+        if (p1.X > p2.X || p1.isDefault || p2.isDefault)
+            return;
+
+         double xdist = (p2.X - p1.X);
         double vspeed = (p2.Y - p1.Y) / xdist;
         double endy = p2.Y + (tableWidth - p2.X) * vspeed;
         double endx = tableWidth;
         std::cout << "Endy: " << endy << std::endl;
         std::cout << "Endx: " << endx << std::endl;
+
+        X = endx;
+        Y = endy;
+        updated = true;
+        topDone = true;
+
     }
  
 	//run thread
@@ -169,6 +187,13 @@ namespace BallPosition
                 lastTopPosition = currentTopPosition;
 
 			}
+
+             if (sideDone && topDone && updated)
+             {
+                 std::cout << "Sending: " << X  << "\t" << Y << "\t" << Z << "\t" << theTime << "\t" << std::endl;
+                 robotControl->moveArm(Trajectory(Vector(X, Y, Z), theTime));
+                 updated = false;
+             }
 		}
 	}
 
@@ -195,73 +220,6 @@ namespace BallPosition
         }
     }
 
-    void BallPositionCalculator::getPositionsFromQueue()
-    {
-        //  std::cout << "try side lock r" << std::endl;
-     
-        //       std::cout << "top unlock r" << std::endl;
-
-    }
-
-    Trajectory BallPositionCalculator::calculateHitPosition()
-    {
-        double yValue;
-        Trajectory t;
-
-        if (lastSidePosition.X < currentSidePosition.X && lastTopPosition.X < currentTopPosition.X)
-        {
-            yValue = calculateLiniairPosition(currentTopPosition); // Y Coordinate of the top-view when reaching the end of the table.
-            std::cout << "From top-coordinates (" << lastTopPosition.X << "," << lastTopPosition.Y << ") to (" << currentTopPosition.X << "," << currentTopPosition.Y << ")" << std::endl;
-            std::cout << "Time -> " << currentTopPosition.time << std::endl;
-
-            abcCalculator.setFormule(currentSidePosition, lastSidePosition, currentSidePosition.X, true);
-            double tempXValue = abcCalculator.getLargestXPositionAtYIsZero();
-            double tempYValue = abcCalculator.getYPosition((tempXValue - 1));
-            double time = 0;
-
-            std::cout << "From side-coordinates (" << lastSidePosition.X << "," << lastSidePosition.Y << ") to (" << currentSidePosition.X << "," << currentSidePosition.Y << ")" << std::endl;
-            std::cout << "Time -> " << currentSidePosition.time << std::endl;
-
-            //Get Time and Length
-            time += abcCalculator.getTime(lastSidePosition.X, tempXValue);
-            double zValue = abcCalculator.getYPosition(tableWidth + 100);
-            if (zValue < 0)
-            {
-                std::cout << "Time 1: " << time << " Milliseconds" << std::endl;
-
-                abcCalculator.setFormule(VisionPosition((tempXValue + 1), tempYValue, Clock::universal_time(), SIDE), VisionPosition(tempXValue, 0, Clock::universal_time(), SIDE), tempXValue, false);
-                zValue = abcCalculator.getYPosition(tableWidth + 100);
-            }
-            std::cout << "Z: " << zValue << "" << std::endl;
-
-            if (zValue > 0)
-            {
-                //Get Time and Length
-                //time += abcCalculator.getTime(tempXValue + 1, tableWidth + 100);
-                std::cout << "Time: " << time << " Milliseconds" << std::endl;
-
-                std::cout << "( tableWidth , tableDepth , Height )." << std::endl;
-                std::cout << "\tHit the table at: (" << tableWidth << "," << yValue << "," << zValue << ")." << std::endl;
-                t = Trajectory(Vector(tableWidth, yValue, zValue), Clock::universal_time() + boost::posix_time::milliseconds(time));
-            }
-        }
-
-        lastSidePosition = currentSidePosition;
-        lastTopPosition = currentTopPosition;
-
-        return t;
-    }
-
-    double BallPositionCalculator::calculateLiniairPosition(VisionPosition pos)
-    {
-        double multiplier = (pos.Y - lastTopPosition.Y) / (pos.X - lastTopPosition.X);
-        double startValue = lastTopPosition.Y - (lastTopPosition.X * multiplier);
-        double newY = (multiplier * (tableWidth + 100)) + startValue;
-        return newY;
-    }
-
-    void BallPositionCalculator::sendPosition()
-    {
-    }
+  
 
 }
