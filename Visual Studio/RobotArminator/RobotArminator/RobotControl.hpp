@@ -19,7 +19,7 @@ public:
 	RobotControl(std::string port, unsigned int baud_rate);
 	~RobotControl();
 	void moveArm(Trajectory aTrajectory);
-	void resetPositions();
+	virtual void resetPositions() override;
 	virtual void run() override;
 private:
 	void hitBall(Trajectory aTrajectory);
