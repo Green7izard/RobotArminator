@@ -84,6 +84,8 @@ namespace BallPosition
     {
         std::cout << "Side view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
 
+        if (p1.X > p2.X || p1.isDefault || p2.isDefault )
+            return;
 
         double ySpeed = CalculateYSpeed(p1, p2);
         double xSpeed = CalculateXSpeed(p1, p2);      
@@ -129,13 +131,18 @@ namespace BallPosition
             sideDone = true;
         }
 
-        std::cout << std::endl << std::endl << std::endl << std::endl;
+      //  std::cout << std::endl << std::endl << std::endl << std::endl;
     }
 
     void BallPositionCalculator::calculateTop(VisionPosition p1, VisionPosition p2)
     {
         std::cout << "Top view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
-        double xdist = (p2.X - p1.X);
+
+
+        if (p1.X > p2.X || p1.isDefault || p2.isDefault)
+            return;
+
+         double xdist = (p2.X - p1.X);
         double vspeed = (p2.Y - p1.Y) / xdist;
         double endy = p2.Y + (tableWidth - p2.X) * vspeed;
         double endx = tableWidth;
