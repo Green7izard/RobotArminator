@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "Thread.hpp"
 #include "Trajectory.hpp"
 #include <iostream>
 
@@ -8,7 +9,7 @@ namespace Robot
 {
     using namespace RobotArminator;
 
-    class IRobotControl
+    class IRobotControl : public Thread
     {
     public:
         virtual ~IRobotControl()=0;
