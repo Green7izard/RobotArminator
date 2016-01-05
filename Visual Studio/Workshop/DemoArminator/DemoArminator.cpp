@@ -13,22 +13,30 @@ using namespace Robot;
 void handleCommand(string command, IRobotControl &robotControl, TCPRobot &robot)
 {
 
+    //ROBOT LIMITS:
+    // J1 Lower rotator : -150  +150
+    // j2 Lower elbow   : -60   +120
+    // j3 Middle elbow  : -110  +120
+    // j4: DOES NOT EXIST
+    // j5 end elbow     : -90   +90
+    // j6 head rotator  : -200  +200
+
     //The content of this function can be changed to stay in here, endless loop, or run predefined programs!
     //TEST SETTING THE ARM WITH A COMMAND!
 
 
-    cout << "Received: " << command<<endl;
+
+    cout << "Received: " << command << endl;
 
     //Set all the angles!
-    //NOTE, there is no 5th point
-    robot.sendMessage("PRN 1,(-150, -90, 58 ,-13, 0, 7)\r");
+    robot.sendMessage("PRN 1,(-150,-60,-110,0,-90,200)\r");
     cout << "Send 1" << endl;
     Sleep(2000);
 
     //Only set the values that are not 0
-    robot.sendMessage("PRN 2,(150, 90, 0 ,0, 0, 0)\r");
+    robot.sendMessage("PRN 2,(150,120,0,0,0,0)\r");
     cout << "Send 2" << endl;
-    Sleep(4000);   
+    Sleep(4000);
 
     //Reset the position on the controller
     robotControl.resetPositions();
@@ -40,6 +48,13 @@ void handleCommand(string command, IRobotControl &robotControl, TCPRobot &robot)
     Trajectory t(v);
     robotControl.moveArm(t);
     cout << "Send 4" << endl;
+
+    //Compare a command!
+    if (command.compare("reset") == 0)
+    {
+        Sleep(2000);
+        robotControl.resetPositions();
+    }
 }
 
 bool shouldStopException(exception& e) {
