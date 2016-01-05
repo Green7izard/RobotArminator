@@ -65,7 +65,6 @@ void RobotControl::hitBall(Trajectory aTrajectory)
 	{
 		writeData("PRN 2,(0,0,0,0,0,-30)\r");
 	}
-	BOOST_LOG_TRIVIAL(info) << readData();
 }
 
 void RobotControl::writeData(std::string aData)
@@ -139,7 +138,6 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
             }
         }
     }
-	BOOST_LOG_TRIVIAL(info) << "No possible position found.";
     return "PRN 1,(0,0,0,0,0,0)\r";
 }
 
@@ -161,13 +159,10 @@ void RobotControl::setTrajectory(Trajectory aTrajectory)
 
 Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 {
-    return Trajectory(Vector(aTrajectory.position.y - (1525 / 2), aTrajectory.position.z - 350, 0), aTrajectory.time);
+    return Trajectory(Vector(aTrajectory.position.y - (1525 / 2), aTrajectory.position.z - 350, 0));
 }
 
 int RobotControl::adaptTime(Trajectory aTrajectory)
 {
-	if (Clock::universal_time() <= aTrajectory.time)
-	{
-		return (int)(aTrajectory.time - Clock::universal_time()).total_milliseconds();
-	}
+    return 0;
 }

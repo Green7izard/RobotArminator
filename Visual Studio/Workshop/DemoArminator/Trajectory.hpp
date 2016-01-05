@@ -8,9 +8,8 @@ namespace RobotArminator
     {
     public:
         Trajectory();
-		Trajectory(Vector position, Time time);
+		Trajectory(Vector position);
         ~Trajectory();
         Vector position;
-		Time time;
     };
 }
