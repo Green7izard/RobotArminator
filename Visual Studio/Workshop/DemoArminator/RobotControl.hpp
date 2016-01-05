@@ -14,14 +14,14 @@ using namespace Robot;
 class RobotControl : public IRobotControl
 {
 public:
-    RobotControl(std::string ipAdress = "127.0.0.1", int port = 63258);
+    RobotControl(TCPRobot * robot);
     ~RobotControl();
     void moveArm(Trajectory aTrajectory);
-    void resetPositions();
+    virtual void resetPositions() override;
     virtual void run();
 private:
 
-    TCPRobot robot;
+    TCPRobot * robot;
 
     void writeData(std::string aData);
     std::string readData();

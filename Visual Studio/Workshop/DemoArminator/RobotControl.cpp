@@ -2,7 +2,7 @@
 #include "RobotControl.hpp"
 
 /*** Public functions ***/
-RobotControl::RobotControl(std::string ipAdress, int port) : robot(ipAdress, port), hasTrajectory(false)
+RobotControl::RobotControl(TCPRobot * robot) : robot(robot), hasTrajectory(false)
 {
 
 }
@@ -36,12 +36,12 @@ void RobotControl::run()
 
 void RobotControl::writeData(std::string aData)
 {
-    robot.sendMessage(aData);
+    robot->sendMessage(aData);
 }
 
 std::string RobotControl::readData()
 {
-    return robot.readMessage();
+    return robot->readMessage();
 }
 
 std::string RobotControl::calculateAngles(Trajectory aTrajectory)

@@ -3,7 +3,7 @@
 
 namespace Robot
 {
-    TCPRobot::TCPRobot(std::string ipAdress, int port)
+    TCPRobot::TCPRobot(std::string ipAdress, int port) throw(std::ios_base::failure)
     {
 
         //Start up Winsock…
