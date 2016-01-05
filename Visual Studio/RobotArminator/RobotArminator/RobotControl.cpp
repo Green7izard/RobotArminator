@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "RobotControl.hpp"
 
 /*** Public functions ***/
@@ -162,7 +163,7 @@ Trajectory RobotControl::adaptTrajectory(Trajectory aTrajectory)
 
 int RobotControl::adaptTime(Trajectory aTrajectory)
 {
-	if (Clock::universal_time().total_milliseconds() <= aTrajectory.time)
+	if (Clock::universal_time() <= aTrajectory.time)
 	{
 		return (int)(aTrajectory.time - Clock::universal_time()).total_milliseconds();
 	}

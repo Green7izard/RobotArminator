@@ -2,16 +2,17 @@
 #include "stdafx.h"
 
 #include "VisionPosition.hpp"
-#include "Position.hpp"
 #include "ABCFormule.hpp"
 #include "Thread.hpp"
 #include "IMessageBox.hpp"
 #include <mutex>
 #include "IBallPositionCalculator.hpp"
+#include "RobotControl.hpp"
 
 namespace BallPosition
 {
     using namespace RobotArminator;
+    using namespace Robot;
 
     class BallPositionCalculator : public IBallPositionCalculator
     {
@@ -27,21 +28,22 @@ namespace BallPosition
         VisionPosition queueSidePosition;
         VisionPosition queueTopPosition;
 
-        ABCFormule abcCalculator = ABCFormule();
+        double Y;
+        double X;
+        double Z;
+        Time theTime;
+        bool updated = false;
+        bool sideDone = false;
+        bool topDone = false;
 
-        BallPositionCalculator(double tableLength);
+
+        BallPositionCalculator(double tableLength, IRobotControl* robot);
         virtual ~BallPositionCalculator();
 
-
+        IRobotControl *robotControl;
 
         void run();
         void addToMessageBox(VisionPosition item);
-
-        void getPositionsFromQueue();
-        Trajectory calculateHitPosition();
-        double calculateLiniairPosition(VisionPosition pos);
-        void sendPosition();
-
 
         double TimeBeforeTableEnd(double startX, double speedX, double startTime);
         double CalculateXSpeed(VisionPosition p1, VisionPosition p2);
