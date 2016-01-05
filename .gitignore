@@ -39,16 +39,17 @@ Visual Studio/RobotArminator/RobotArminator/.vs/*
 Visual Studio/**/ipch/*
 
 Visual Studio/RobotArminator/RobotArminator/RobotArminator.VC.opendb
-*.sln
-*.suo
-*.vcxproj
-*.vcxproj.filters
+Visual Studio/RobotArminator/*.sln
+Visual Studio/RobotArminator/*.suo
+Visual Studio/RobotArminator/*.vcxproj
+Visual Studio/RobotArminator/*.vcxproj.filters
 **/*.sdf
 Visual Studio/**/Debug/*
 Visual Studio/**/Release/*
 Visual Studio/RobotArminator/RobotArminator/x64/*
 Visual Studio/RobotArminator/Debug/*
 Visual Studio/RobotArminator/RobotArminator/packages/*
+Visual Studio/Workshop/DemoArminator/.vs/*
 *.opensdf
 
 *.vcxproj.user
