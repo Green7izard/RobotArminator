@@ -3,7 +3,7 @@
 
 namespace Robot
 {
-    TCPRobot::TCPRobot(std::string ipAdress, int port) throw(std::ios_base::failure)
+    TCPRobot::TCPRobot(std::string ipAdress, unsigned short port)
     {
 
         //Start up Winsock…
@@ -51,7 +51,7 @@ namespace Robot
 
     std::string TCPRobot::readMessage() {
         char buffer[128];
-        int bytesReceived = recv(connection, buffer, sizeof(buffer), 0);
+        recv(connection, buffer, sizeof(buffer), 0);
         return std::string(buffer);
     }
 }

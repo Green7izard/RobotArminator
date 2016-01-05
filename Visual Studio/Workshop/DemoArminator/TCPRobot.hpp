@@ -12,7 +12,7 @@ namespace Robot
         SOCKET connection;
     public:
         //Construct
-        TCPRobot(std::string ipAdress = "127.0.0.1", int port = 63258);
+        TCPRobot(std::string ipAdress = "127.0.0.1", unsigned short port = 63258);
         //Close the connection
         virtual ~TCPRobot();
 
