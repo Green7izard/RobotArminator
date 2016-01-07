@@ -19,12 +19,14 @@ public:
     void moveArm(Trajectory aTrajectory);
     virtual void resetPositions() override;
     virtual void run();
+    virtual void writeData(std::string aData) override;
+    virtual std::string readData() override;
 private:
 
     TCPRobot * robot;
 
-    void writeData(std::string aData);
-    std::string readData();
+    
+    
     //void writeHandler(const boost::system::error_code& error) {};
     std::string calculateAngles(Trajectory aTrajectory);
     double getRadian(double aDegree);

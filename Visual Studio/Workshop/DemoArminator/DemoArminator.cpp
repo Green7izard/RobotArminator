@@ -5,57 +5,13 @@
 #include "TCPRobot.hpp"
 #include "RobotControl.hpp"
 #include "Trajectory.hpp"
+#include "RobotPositionSetter.cpp"
+#include <sstream>
 
 using namespace std;
 using namespace Robot;
 
-//TODO THIS FUNCTION
-void handleCommand(string command, IRobotControl &robotControl, TCPRobot &robot)
-{
 
-    //ROBOT LIMITS:
-    // J1 Lower rotator : -150  +150
-    // j2 Lower elbow   : -60   +120
-    // j3 Middle elbow  : -110  +120
-    // j4: DOES NOT EXIST
-    // j5 end elbow     : -90   +90
-    // j6 head rotator  : -200  +200
-
-    //The content of this function can be changed to stay in here, endless loop, or run predefined programs!
-    //TEST SETTING THE ARM WITH A COMMAND!
-
-
-
-    cout << "Received: " << command << endl;
-
-    //Set all the angles!
-    robot.sendMessage("PRN 1,(-150,-60,-110,0,-90,200)\r");
-    cout << "Send 1" << endl;
-    Sleep(2000);
-
-    //Only set the values that are not 0
-    robot.sendMessage("PRN 2,(150,120,0,0,0,0)\r");
-    cout << "Send 2" << endl;
-    Sleep(4000);
-
-    //Reset the position on the controller
-    robotControl.resetPositions();
-    cout << "Send 3" << endl;
-    Sleep(2000);
-
-    //Set the position using a Trajectory
-    Vector v(200, 1525, 200);
-    Trajectory t(v);
-    robotControl.moveArm(t);
-    cout << "Send 4" << endl;
-
-    //Compare a command!
-    if (command.compare("reset") == 0)
-    {
-        Sleep(2000);
-        robotControl.resetPositions();
-    }
-}
 
 bool shouldStopException(exception& e) {
     string command;
@@ -73,7 +29,20 @@ bool shouldStopException(exception& e) {
     }
 }
 
-int main()
+Vector toVector(string input)
+{
+    cout << "Received: " << input << endl;
+    std::stringstream ss(input);
+
+    int x, y, z;
+    ss >> x;
+    ss >> y;
+    ss >> z;
+    cout << "X=" << x << " Y=" << y << " Z=" << z << endl;
+    return Vector(x, y, z);
+}
+
+void commandHandler()
 {
     string command;
     IRobotControl* controller = nullptr;
@@ -87,33 +56,32 @@ int main()
         {
             if (shouldStopException(e))
             {
-                return -1;
+                return;
             }
         }
         catch (std::ios_base::failure * e)
         {
             if (shouldStopException(*e))
             {
-                return -1;
+                return;
             }
         }
     } while (controller == nullptr || robot == nullptr);
     controller->start();
+
+    RobotPositionSetter setter;
     cout << "Enter your commands. Typ 'quit' to exit program" << endl;
 
     for (;;)
     {
-        cin >> command;
-        if (command.compare("quit") == 0)
-        {
-            break;
-        }
-        else
-        {
-            handleCommand(command, *controller, *robot);
-        }
+       setter.handleCommand(toVector(controller->readData()), *controller);
     }
-    return 0;
+    
+}
 
+int main()
+{
+    commandHandler();
+    return 0;
 }
 

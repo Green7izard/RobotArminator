@@ -12,9 +12,11 @@ namespace Robot
     class IRobotControl : public Thread
     {
     public:
-        virtual ~IRobotControl()=0;
-        virtual void moveArm(Trajectory aTrajectory)=0;
+        virtual ~IRobotControl() = 0;
+        virtual void moveArm(Trajectory aTrajectory) = 0;
         virtual void resetPositions() = 0;
+        virtual void writeData(std::string aData) = 0;
+        virtual std::string readData() = 0;
     protected:
         IRobotControl();
     };
