@@ -36,9 +36,13 @@ Vector toVector(string input)
 
     int x, y, z;
     ss >> x;
+    if (ss.peek() == ';')
+        ss.ignore();
     ss >> y;
+    if (ss.peek() == ';')
+        ss.ignore();
     ss >> z;
-    cout << "X=" << x << " Y=" << y << " Z=" << z << endl;
+    cout << "Next Command: X=" << x << " Y=" << y << " Z=" << z << endl;
     return Vector(x, y, z);
 }
 
@@ -70,7 +74,7 @@ void commandHandler()
     controller->start();
 
     RobotPositionSetter setter;
-    cout << "Enter your commands. Typ 'quit' to exit program" << endl;
+    cout << "Waiting for the next command! Choose the coordinate in the processing screen!" << endl;
 
     for (;;)
     {
