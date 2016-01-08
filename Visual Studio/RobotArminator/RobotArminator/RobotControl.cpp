@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "RobotControl.hpp"
+#include <limits> 
 
 /*** Public functions ***/
 RobotControl::RobotControl(std::string port, unsigned int baud_rate)
@@ -44,9 +45,12 @@ void RobotControl::run()
 	{
 		if (hasTrajectory == true)
 		{
-
-			writeData(calculateAngles(getTrajectory()));
+            Time startTime = Clock::universal_time();       
+         	writeData(calculateAngles(getTrajectory()));
 			BOOST_LOG_TRIVIAL(info) << readData();
+            std::cout << "Tijd tot de response: " << (Clock::universal_time() - startTime).total_milliseconds() << "ms" << std::endl << std::endl << std::endl << std::endl << std::endl << std::endl;
+
+
 			//hitBall(getTrajectory());
 			hasTrajectory = false;
 		}
@@ -94,15 +98,25 @@ std::string RobotControl::readData()
 
 std::string RobotControl::calculateAngles(Trajectory aTrajectory)
 {
+    Time startTime = Clock::universal_time();
+
     Trajectory trajectory = adaptTrajectory(aTrajectory);
+   
+    int weight = std::numeric_limits<int>::max();
+
+    int bestJ1 = lastJ1;
+    int bestJ2 = lastJ2;
+    int bestJ3 = lastJ3;
+    int bestJ5 = lastJ5;
+    int bestJ6 = lastJ6;
 
     for (int j1 = -90; j1 <= 90; j1 += 180)
     {
-        for (int j2 = -60; j2 <= 120; j2 += 5)
+        for (int j2 = -60; j2 <= 120; j2 += 10)
         {
-            for (int j3 = -110; j3 <= 120; j3 += 5)
+            for (int j3 = -110; j3 <= 120; j3 += 10)
             {
-                for (int j5 = -90; j5 <= 90; j5 += 5)
+                for (int j5 = -90; j5 <= 90; j5 += 10)
                 {
                     for (int j6 = -90; j6 <= 90; j6 += 180)
                     {
@@ -126,11 +140,27 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
                                     j1 *= -1;
 								globalj1 = j1;
 								
-								std::stringstream ss;
-								ss << "PRN 1,(" << j1 << "," << j2 << "," << j3 << ",0," << j5 << "," << j6 - 90 << ")\r";
-								//std::cout << ss.str() << std::endl;
+                                j6 = j6 - 90;
+
+                                int solWeight = std::abs(lastJ1 - j1) + std::abs(lastJ2 - j2) + std::abs(lastJ3 - j3) + std::abs(lastJ5 - j5) + std::abs(lastJ6 - j6);
+
+                           //     std::cout << "Weight is: " << weight << " , " << solWeight << std::endl;
+                                
+                            //    std::cout << "cor is: " << j1 << " , " << j2 << " , " << j3 << " , " << j5 << " , " << j6 << std::endl;
+
+                                if (solWeight < weight)
+                                {
+                                  //  std::cout << "Setting new pos: " << std::endl;
+                                    weight = solWeight;
+                                    bestJ1 = j1;
+                                    bestJ2 = j2;
+                                    bestJ3 = j3;
+                                    bestJ5 = j5;
+                                    bestJ6 = j6;
+                                }
+
+							    //   std::cout << "Calculating angles took: " << (Clock::universal_time() - startTime).total_milliseconds() << "ms" << std::endl;
 								
-								return ss.str();
 							}
                         }
                     }
@@ -138,8 +168,15 @@ std::string RobotControl::calculateAngles(Trajectory aTrajectory)
             }
         }
     }
-	BOOST_LOG_TRIVIAL(info) << "No possible position found.";
-    return "PRN 1,(0,0,0,0,0,0)\r";
+	//BOOST_LOG_TRIVIAL(info) << "No possible position found.";
+  
+    std::stringstream ss;
+
+    ss << "PRN 1,(" << bestJ1 << "," << bestJ2 << "," << bestJ3 << ",0," << bestJ5 << "," << bestJ6 << ")\r";
+   // std::cout << ss.str() << std::endl;
+  //  std::cout << "Calculating angles took: " << (Clock::universal_time() - startTime).total_milliseconds() << "ms" << std::endl;
+
+    return ss.str();
 }
 
 double RobotControl::getRadian(double aDegree)
@@ -171,5 +208,5 @@ int RobotControl::adaptTime(Trajectory aTrajectory)
         std::cout << "Waiting: " << ret << std::endl;
 		return ret;
 	}
-    return 500;
+    return 0;
 }

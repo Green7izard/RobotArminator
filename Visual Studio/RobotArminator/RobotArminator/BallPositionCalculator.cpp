@@ -27,14 +27,14 @@ namespace BallPosition
 
     double BallPositionCalculator::CalculateXSpeed(VisionPosition p1, VisionPosition p2)
     {
-        std::cout << "Timex: " << ((p2.time - p1.time).total_milliseconds() / 1000.0) << std::endl;
+       // std::cout << "Timex: " << ((p2.time - p1.time).total_milliseconds() / 1000.0) << std::endl;
 
         return (p2.X - p1.X) / ((p2.time - p1.time).total_milliseconds() / 1000.0) / 1000;
     }
 
     double BallPositionCalculator::CalculateYSpeed(VisionPosition p1, VisionPosition p2)
     {
-        std::cout << "Timey: " << (p2.time - p1.time).total_milliseconds() / 1000.0 << std::endl;
+    //    std::cout << "Timey: " << (p2.time - p1.time).total_milliseconds() / 1000.0 << std::endl;
 
 
         double add = 9.81 * ((p2.time - p1.time).total_milliseconds() / 1000.0);
@@ -82,7 +82,7 @@ namespace BallPosition
    
     void BallPositionCalculator::calculateSide(VisionPosition p1, VisionPosition p2)
     {
-        std::cout << "Side view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
+      //  std::cout << "Side view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
 
         if (p1.X > p2.X || p1.isDefault || p2.isDefault )
             return;
@@ -90,53 +90,69 @@ namespace BallPosition
         double ySpeed = CalculateYSpeed(p1, p2);
         double xSpeed = CalculateXSpeed(p1, p2);      
 
-        std::cout << "Speed: " << xSpeed << "," << ySpeed << std::endl;
+     //   std::cout << "Speed: " << xSpeed << "," << ySpeed << std::endl;
 
         double hitGroundTime = CalculateTimeWhenZero(p2.Y, ySpeed);
-        std::cout << "hitGroundTime: " << hitGroundTime << std::endl;
+     //   std::cout << "hitGroundTime: " << hitGroundTime << std::endl;
 
         double hitTableX = CalculateXFromTime(p2.X, xSpeed, hitGroundTime);
 
         if (hitTableX <= tableWidth)
         {
-           /* double bounceXSpeed = xSpeed * 0.8;
-            std::cout << "bounceXSpeed: " << bounceXSpeed << std::endl;
+            double bounceXSpeed = xSpeed;
+      //      std::cout << "bounceXSpeed: " << bounceXSpeed << std::endl;
 
             double impactSpeed = CalculateYSpeed(ySpeed, hitGroundTime);
-            double bounceYSpeed = abs(impactSpeed * 0.8);
-            std::cout << "bounceYSpeed: " << bounceYSpeed << std::endl;
+     //       std::cout << "impactSpeed: " << impactSpeed << std::endl;
+
+            double bounceYSpeed = impactSpeed * -0.7;
+     //       std::cout << "bounceYSpeed: " << bounceYSpeed << std::endl;
 
             double tableEndTime = TimeBeforeTableEnd(hitTableX, bounceXSpeed, hitGroundTime);
-            std::cout << "tableEndTime: " << tableEndTime << std::endl;
+         //   std::cout << "tableEndTime: " << tableEndTime << std::endl;
 
 
-            double tableEndY = CalculateHeightForT((tableEndTime - hitGroundTime) , 0, bounceYSpeed);
-            std::cout << "tableEndY: " << tableEndY << std::endl;*/
+            double tableEndY = CalculateHeightForT((tableEndTime - hitGroundTime), 0, bounceYSpeed) * 1000;
+     //       std::cout << "tableEndY: " << tableEndY << std::endl;
 
-            std::cout << "No calc" << std::endl;
+            if (tableEndY >= 0)
+            {
+         //       std::cout << "With stuit" << std::endl;
+                Time endTime = p2.time + boost::posix_time::seconds(tableEndTime);
+                theTime = endTime;
+                Z = tableEndY;
+                updated = true;
+                sideDone = true;
+            }
+            else
+            {
+                //std::cout << "Falls on table" << std::endl;
+            }
+
+           
         }
         else
         {
-            std::cout << "geen stuit" << std::endl;
+         //   std::cout << "geen stuit" << std::endl;
             double tableEndTime = TimeBeforeTableEnd(p2.X, xSpeed, 0);
-            std::cout << "tableEndTime: " << tableEndTime << std::endl;
+        //    std::cout << "tableEndTime: " << tableEndTime << std::endl;
 
 
             double tableEndY = CalculateHeightForT(tableEndTime, p2.Y/1000.0, ySpeed) * 1000;
-            std::cout << "tableEndY: " << tableEndY << std::endl;
+        //    std::cout << "tableEndY: " << tableEndY << std::endl;
             Time endTime = p2.time + boost::posix_time::seconds(tableEndTime);
             theTime = endTime;
             Z = tableEndY;
             updated = true;
             sideDone = true;
         }
-
+     //   std::cout << "\thoogte: " << Z << std::endl;
       //  std::cout << std::endl << std::endl << std::endl << std::endl;
     }
 
     void BallPositionCalculator::calculateTop(VisionPosition p1, VisionPosition p2)
     {
-        std::cout << "Top view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
+      //  std::cout << "Top view: " << "(" << p1.X << "," << p1.Y << ")" << "(" << p2.X << "," << p2.Y << ")" << std::endl;
 
 
         if (p1.X > p2.X || p1.isDefault || p2.isDefault)
@@ -146,8 +162,8 @@ namespace BallPosition
         double vspeed = (p2.Y - p1.Y) / xdist;
         double endy = p2.Y + (tableWidth - p2.X) * vspeed;
         double endx = tableWidth;
-        std::cout << "Endy: " << endy << std::endl;
-        std::cout << "Endx: " << endx << std::endl;
+      //  std::cout << "Endy: " << endy << std::endl;
+      //  std::cout << "Endx: " << endx << std::endl;
 
         X = endx;
         Y = endy;
@@ -169,7 +185,9 @@ namespace BallPosition
                 queueSidePosition = VisionPosition();
                 sideMutex.unlock();
 
+                Time startTime = Clock::universal_time();
                 calculateSide(lastSidePosition, currentSidePosition);
+                std::cout << "Calculating side took: " << (Clock::universal_time() - startTime).total_milliseconds() << "ms" << std::endl;
                 lastSidePosition = currentSidePosition;
             }
                 
@@ -181,17 +199,21 @@ namespace BallPosition
                 currentTopPosition = queueTopPosition;
                 queueTopPosition = VisionPosition();
                 topMutex.unlock();
-               
+                Time startTime = Clock::universal_time();
+         
                 calculateTop(lastTopPosition, currentTopPosition);
                
+                std::cout << "Calculating top took: " << (Clock::universal_time() - startTime).total_milliseconds() << "ms" << std::endl;
                 lastTopPosition = currentTopPosition;
 
 			}
 
              if (sideDone && topDone && updated)
              {
-                 std::cout << "Sending: " << X  << "\t" << Y << "\t" << Z << "\t" << theTime << "\t" << std::endl;
+              //  std::cout << "Sending: " << X  << "\t" << Y << "\t" << Z << "\t" << theTime << "\t" << std::endl;
                  robotControl->moveArm(Trajectory(Vector(X, Y, Z), theTime));
+                 std::this_thread::sleep_for(std::chrono::milliseconds(10000));
+
                  updated = false;
 
              }
