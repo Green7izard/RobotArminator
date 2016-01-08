@@ -38,6 +38,11 @@ private:
 	boost::asio::serial_port serial;
 	Trajectory trajectory;
 	bool hasTrajectory = false;
+    int lastJ1 = 0;
+    int lastJ2 = 0;
+    int lastJ3 = 0;
+    int lastJ5 = 0;
+    int lastJ6 = 0;
 };
 
 
