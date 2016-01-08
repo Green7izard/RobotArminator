@@ -32,7 +32,6 @@ private:
     double getRadian(double aDegree);
     Trajectory getTrajectory();
     void setTrajectory(Trajectory aTrajectory);
-    Trajectory adaptTrajectory(Trajectory aTrajectory);
     int globalj1;
     Trajectory trajectory;
     bool hasTrajectory;

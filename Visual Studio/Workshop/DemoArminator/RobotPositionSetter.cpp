@@ -43,25 +43,19 @@ public:
 
 
         //Set all the angles!
-        robotControl.writeData("PRN 1,(-150,-60,-110,0,-90,200)\r");
-        cout << "Send 1" << endl;
-        Sleep(2000);
-
-        //Only set the values that are not 0
-        robotControl.writeData("PRN 2,(150,120,0,0,0,0)\r");
-        cout << "Send 2" << endl;
-        Sleep(4000);
+        //robotControl.writeData("PRN 1,(-150,-60,90,0,-29,0)\r");
+        //cout << "Send 1" << endl;
+        //Sleep(2000);
 
         //Reset the position on the controller
-        robotControl.resetPositions();
-        cout << "Send 3" << endl;
-        Sleep(2000);
+       // robotControl.resetPositions();
+        //cout << "Send 2" << endl;
+        //Sleep(2000);
 
         //Set the position using a Trajectory
-        Vector v(200, 1525, 200);
-        Trajectory t(v);
+        Trajectory t(command);
         robotControl.moveArm(t);
-        cout << "Send 4" << endl;
+        cout << "Send 3" << endl;
 
 
         cout << "DONE!" << endl;
