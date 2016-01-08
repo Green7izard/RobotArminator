@@ -18,6 +18,9 @@ namespace Vision
         //Whether the coordinates should always been send
         bool shouldAlwaysSend;
 
+        //The current screen of the camera
+        cv::Mat cameraFrame;
+
         //The tables position in the screen
         Table tabel;
 
@@ -114,6 +117,8 @@ namespace Vision
 
         //Wheter the coordinate is right
         bool isValidPosition(VisionPosition * position);
+
+        cv::Mat* getCurrentScreen();
     };
 }
 

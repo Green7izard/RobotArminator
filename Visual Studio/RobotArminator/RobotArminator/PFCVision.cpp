@@ -36,10 +36,10 @@ namespace Vision {
         //filter
         cv::cvtColor(image, image, cv::COLOR_BGR2HSV);
 
-		if (erodeDilate > 0) {
-			cv::erode(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
-			cv::dilate(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
-		}
+        if (erodeDilate > 0) {
+            cv::erode(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+            cv::dilate(image, image, cv::Mat(), cv::Point(-1, -1), erodeDilate);
+        }
         cv::inRange(image, cv::Scalar(minHue, minSat, minInt), cv::Scalar(maxHue, maxSat, maxInt), image);
 
         double totalX = 0;
@@ -98,7 +98,6 @@ namespace Vision {
         cv::namedWindow(windowName, cv::WINDOW_AUTOSIZE);
         cv::namedWindow(windowNameFiltered, cv::WINDOW_AUTOSIZE);
 
-		/**/
         if (orientation == TOP) {
             ConfigFile cfg("CameraConfigTop.cfg");
             minHue = cfg.getValueOfKey<int>("minHue");
@@ -113,7 +112,6 @@ namespace Vision {
             minSat = cfg.getValueOfKey<int>("minSat");
             minInt = cfg.getValueOfKey<int>("minInt");
         }
-		/**/
 
         cv::createTrackbar("Min Hue", windowNameFiltered, &minHue, 180, 0);
         cv::createTrackbar("Max Hue", windowNameFiltered, &maxHue, 180, 0);
@@ -121,7 +119,7 @@ namespace Vision {
         cv::createTrackbar("Max Sat", windowNameFiltered, &maxSat, 255, 0);
         cv::createTrackbar("Min Int", windowNameFiltered, &minInt, 255, 0);
         cv::createTrackbar("Max Int", windowNameFiltered, &maxInt, 255, 0);
-		cv::createTrackbar("Erode/Dilate", windowNameFiltered, &erodeDilate, 20, 0);
+        cv::createTrackbar("Erode/Dilate", windowNameFiltered, &erodeDilate, 20, 0);
 
         cv::createTrackbar("Weight for center", windowNameFiltered, &weightFactor, 200, 0);
         cv::createTrackbar("Weight decay", windowNameFiltered, &weightDecay, 200, 0);
@@ -175,18 +173,6 @@ namespace Vision {
         cv::Point location;
         cv::minMaxLoc(image, 0, 0, 0, &location);
 
-        /*
-        cv::vector<cv::Point> locations;   // output, locations of non-zero pixels
-        if (cv::countNonZero(image) > 0) {
-            cv::findNonZero(filteredFrame, locations);//probably faster, but crashes
-            location = locations[0];
-        }
-        else {
-            return false;
-        }
-        */
-
-
         //Drawing
         if (location.x != 0 || location.y != 0) {
             position.X = location.x;
@@ -200,7 +186,7 @@ namespace Vision {
     {
         TableFinder::calibrate();
         std::string windowName = "Camera - " + std::to_string(camera->getCameraNumber());
-        std::string windowNameFiltered = "PFC Filtered: - " + std::to_string(camera->getCameraNumber());
+        std::string windowNameFiltered = "Color Filtered: - " + std::to_string(camera->getCameraNumber());
         Vision::Position2D pos;
         cv::Mat cameraFrame;
 
